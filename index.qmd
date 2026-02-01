@@ -1,0 +1,124 @@
+---
+title: "Taller 1. Econometría Avanzada"
+author: 
+  - "Daniel Ricardo Amaya Alba"
+format: 
+  html:
+    theme: flatly
+    toc: true
+    code-fold: true
+    self-contained: true
+---
+# **Primer Ejercicio**
+
+Desde la perspectiva del capital humano, estudios como el de Cunha & Heckma (2007) encuentran que las intervenciones durante los primeros años de escolaridad son fundamentales para el desarrollo temprano de habilidades y, con ello, para la trayectoria de aprendizaje posterior de los individuos. Una forma de evaluar el éxito de estas intervenciones es mediante el nivel de habilidades cognitivas que desarrollan los estudiantes, dado que estas capacidades constituyen la base de cualquier aprendizaje futuro.
+
+En este contexto, los gobiernos suelen mostrar interés por los programas de digitalización, ya que prometen acelerar el desarrollo del razonamiento y facilitar la adaptación al mundo moderno. Con base en lo anterior, la pregunta de investigación que guiará este ejercicio, inspirada en Cristia et al. (2012), es: ¿cuál es el efecto de participar en un programa de tecnología educativa sobre el desarrollo de habilidades cognitivas de razonamiento abstracto?
+
+Para responder esta pregunta, usted analizará una política implementada por la Secretaría de Educación de Macondo en conjunto con el colegio Sonrisas, ubicado en una zona rural del país. La iniciativa buscaba transformar el modelo educativo tradicional mediante la entrega de laptops diseñadas específicamente para el aprendizaje autodidacta en entornos con limitaciones severas de infraestructura. El programa se enfocó exclusivamente en estudiantes de tercer grado de primaria, nivel que en este colegio cuenta con dos salones. El programa seleccionaba un salón para convertirlo en Aula Tecnológica.
+
+Los estudiantes asignados al Aula Tecnológica realizaban actividades guiadas tres veces por semana utilizando las laptops. Estas actividades se desarrollaban únicamente durante el horario de clases, las cuales fueron adaptadas para incluir ejercicios lógicos y juegos de asociación visual orientados a fortalecer el razonamiento abstracto. Cada actividad estaba vinculada con el tema correspondiente a la clase del día. Adicionalmente, los estudiantes no podían llevar las laptops a sus hogares. Los estudiantes del otro salón, por su parte, continuaron con sus clases de manera habitual.
+
+Considere una muestra de N estudiantes observados en un diseño de corte transversal. Defina $Y_i$ como el puntaje del estudiante i en un test de habilidades cognitivas de razonamiento abstracto. Este test se aplica anualmente a nivel nacional a estudiantes de tercer grado, está definido por el Ministerio de Educación y sus puntajes oscilan entre 0 y 100. Por otro lado, $Di$ es una variable dicotómica que toma el valor de 1 si el estudiante $i$ fue asignado al Aula Tecnológica y 0 en caso contrario.
+
+Para comenzar, suponga que el mecanismo de asignación al tratamiento es desconocido; es decir, no se conocen los criterios que determinaron la elección de un salón sobre el otro ni la forma en que los estudiantes son asignados a cada salón.
+
+# **1 Describa el problema de estimación utilizando el lenguaje de resultados potenciales**
+
+**a) Teniendo en cuenta el contexto presentado, defina formalmente los resultados potenciales $Y_i(1)$ y $Y_i(0)$. Luego, describa el problema de inferencia causal en este contexto.**
+
+**R/:** En este caso el resultado potencial $Y_i(1)$ se define como el puntaje que obtendría el estudiante $i$ dado que fue asigando al aula tecnologica. Por su parte el resultado potencial $Y_i(0)$ es el resultado que obtendría el estudiante $i$ dado que no fue asignado al aula tecnologica.
+
+Para recuperar el efecto causal de la participación en las aulas tecnologicas en el puntaje obtenido por el estudiante $i$, nos gustaria ver la dferencia en sus resultados potenciales, es decir de sus puntajes dado que participio en el aula y que no participo en el aula:
+
+  $$τ_i=Y_i(1)-Y_i(0) $$
+
+Sin embargo, acá nos encontramos con el problema de la inferencia causal. En nuestra muestra $N$ para el estudiante $i$ solo se puede observar uno de los dos caminos, o el estudiante fue asignado ($D_i=1$) o no fue asignado ($D_i=0$). Es decir, lo que realmente tenemos en nuestra base de datos es:
+
+$$Y_i=Y_i(1)D_i+(1-D_i)Y_i(0) $$
+
+De tal manera que el resultado observado $Y_i $ para el estudiante con $D_i = 1$ sera su resultado potencial dado que participó $Y_i(1)$ y para el estudiante con $D_i = 0$ observaremos su resultado potencial dado que no participó $Y_i(0)$. Pero nunca seremos capaces de ver para el mismo estudiante $i$ su resultado dado que participo $D_i = 1$ y su contrafactual $D_i = 0$.
+
+Es por lo anterior que para trabajar con nuestra muestra utilizaremos no el resultado del inddividuo $i$ sino que trabajaremos con el promedio de los resultados potenciales, es decir buscaremos estumar los efectos promedio, bien sea el efecto promedio del tramaiento $ATE$, el efecto promedio del tratamiento en los tratados $ATT$ y el efecto promedio del tratamiento en los no tratados $ATU$.
+
+**b) Define en lenguaje matemático el $ATE$, el $ATT$ y el $ATU$. Interprete cada uno de estos conceptos de acuerdo al contexto del caso**
+
+**R/:**
+
+El $ATE$ se define como el efectro promedio del tratamiento:
+
+$$τ_{ATE} = E[Y_i(1)-Y_i(0)]$$
+$$τ_{ATE} = E[Y_i(1)]-E[Y_i(0)]$$
+
+Que para el caso de nuestra investigación representa la diferencia entre el puntaje promedio en el test de habilidad cognitivas si toda la población de estudiantes de tercer grado hubieran asistido a  las aulas tecnológicas, frente al promedio si ninguno hubiera asisitido a dichas aulas.
+
+El $ATT$ se define como el efectro promedio del tratamiento en los tratados:
+
+$$τ_{ATT} = E[Y_i(1)-Y_i(0)| D_i= 1]$$
+$$τ_{ATT} = E[Y_i(1)| D_i=1]-E[Y_i(0)| D_i=1]$$
+
+En este caso representa la diferencia en el puntaje promedio del test de habilidades cognitivas del salon que fue asignado a las aulas tecnológicas y el resultado que esos mismos estudiantes hubieran obtenido  si no hubieran sido asignados. Es decir, en este caso estamos restringiendo el efecto promedio al grupo que fue tratado.
+
+
+El $ATU$ se define como el efectro promedio del tratamiento en los no tratados:
+
+$$τ_{ATU} = E[Y_i(1)-Y_i(0)| D_i= 0]$$
+$$τ_{ATU} = E[Y_i(1)| D_i=0]-E[Y_i(0)| D_i=0]$$
+
+En este caso representa la diferencia en el puntaje promedio del test de habilidades cognitivas del salon que no fue asignado a las aulas tecnológicas y el resultado que esos mismos estudiantes hubieran obtenido  si hubieran sido asignados. Es decir, en este caso estamos restringiendo el efecto promedio al grupo que no fue tratado.
+
+**2.Usted se encuentra interesada en estimar el siguiente efecto causal:**
+
+$$τ = E[Y_i(1)]-E[Y_i(0)]$$
+
+Para esto plantea una diferencia de medias ingenua:
+
+$$τ_{naive} = E[Y_i | D_i=1]-E[Y_i|D_i =0]$$
+
+**a). Muestre formalmente que:**
+
+$$τ_{naive} = ATT + E[Y_i(0) | D_i=1]-E[Y_i (0)|D_i =0]$$
+
+**R/:**
+$$
+\begin{aligned}
+\tau_{naive} &= E[Y_i | D_i=1] - E[Y_i | D_i=0] \\
+\tau_{naive} &= E[Y_i(1) | D_i=1] - E[Y_i(0) | D_i=0] + \color{red}{E[Y_i(0) | D_i=1]} - \color{red}{E[Y_i(0) | D_i=1]}\\
+\tau_{naive} &= \underbrace{E[Y_i(1) | D_i=1]- \color{red}{E[Y_i(0) | D_i=1]}}_{ATT} +\color{red}{E[Y_i(0) | D_i=1]} - E[Y_i(0) | D_i=0]\\
+\tau_{naive} &= ATT  +\color{red}{E[Y_i(0) | D_i=1]} - E[Y_i(0) | D_i=0]
+\end{aligned}
+$$
+
+**b). Muestre formalmente que:**
+
+$$\tau_{naive} = ATU + E[Y_i(1) | D_i=1]-E[Y_i (1)|D_i =0]$$
+
+**R/:**
+$$
+\begin{aligned}
+\tau_{naive} &= E[Y_i | D_i=1] - E[Y_i | D_i=0] \\
+\tau_{naive} &= E[Y_i(1) |D_i=1] - E[Y_i(0)| D_i=0]+\color{red}{E[Y_i(1)| D_i=0]}-\\
+\color{red}{E[Y_i(1)| D_i=0]}\\
+\tau_{naive} &= \underbrace{\color{red}{E[Y_i(1)| D_i=0]} - E[Y_i(0)| D_i=0]}_{ATU} + \\
+E[Y_i(1)|D_i=1]-\color{red}{E[Y_i(1)| D_i=0]}\\
+\tau_{naive}&= ATU+ E[Y_i(1)|D_i=1]-\color{red}{E[Y_i(1)| D_i=0]}
+\end{aligned}
+$$
+
+**c). Muestre formalmente que:**
+
+$$ ATE = \pi ATT + (1-\pi) ATU$$
+
+**R/:**
+Esta demostración es diferente a las anteriores, es menos intuitiva. Sin embargo, podemos aplicar la ley de esperanzas iteradas a la definición de $ATE$:
+
+$$
+\begin{aligned}
+\tau_{ATE}&= E[Y_i(1)] - E[Y_i(0)]\\
+\tau_{ATE}&= E[E[Y_i(1) -Y_i(0)|D_i]]\\
+\tau_{ATE}&= E[Y_i(1)- Y_i(0) | D_i=1] P(D_i=1) + E[Y_i(1)- Y_i(0) | D_i=0] P(D_i=0)
+\end{aligned}
+$$
+
+**Donde:**
+$$\tau_{ATE} = \underbrace{E[Y_i(1) - Y_i(0) | D_i=1]}_{ATT} ⋅\underbrace{P(D_i=1)}_{\pi} + \underbrace{E[Y_i(1)- Y_i(0)| D_i=0]}_{ATU} ⋅ \underbrace{P(D_i=0)}_{(1-\pi)}$$
