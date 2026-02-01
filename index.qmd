@@ -122,3 +122,17 @@ $$
 
 **Donde:**
 $$\tau_{ATE} = \underbrace{E[Y_i(1) - Y_i(0) | D_i=1]}_{ATT} ⋅\underbrace{P(D_i=1)}_{\pi} + \underbrace{E[Y_i(1)- Y_i(0)| D_i=0]}_{ATU} ⋅ \underbrace{P(D_i=0)}_{(1-\pi)}$$
+
+**Interpretando cada expresión:**
+
+**a).** 
+
+$$\tau_{naive}= ATT + \underbrace{E[Y_i(0) | D_i=1]-E[Y_i (0)|D_i =0]}_{\text{Selection Bias}} $$
+
+Esta expresión indica que el $\tau_{naive}$ recupera el efecto causal sobre los tratados ($ATT$) si y solo si el sesgo de selección es igual a cero. Esto ocurre cuando el resultado promedio contrafactual del grupo tratado es idéntico al resultado promedio observado del grupo de control. Para que esto se cumpla la composición de los salones debería ser homogénea o el proceso de asignación debería haber sido aleatorio, garantizando que no existan diferencias pre-existentes entre ambos grupos.
+
+**b).**
+
+$$\tau_{naive} = ATU + \underbrace{E[Y_i(1) | D_i=1]-E[Y_i (1)|D_i =0]}_{\text{Heterogeneity Bias}}$$
+
+Por tro lado esta expresión nos indica que el $\tau_{naive}$  recupera el efecto promedio causal sobre los no tratado ($ATU$) si y solo si el sesgo de heterogeneidad en resultados del tratamiento es igual a cero. Esto ocurre cuando el resultado promedio de los estudiantes tratados $E[Y_i(1)|D_i=1]$ es igual al resultado promedio que hubieran obtenido los estudiantes del grupo de control si se les hubiera asignado el tratamiento $E[Y_i(1)|D_i=0]$. Esto quiere decir que el efecto de las computadoras sería el mismo, independientemente dle salon que hubiera sido seleccionado. 
