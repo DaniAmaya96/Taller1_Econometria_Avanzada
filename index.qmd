@@ -1,7 +1,7 @@
 ---
 title: "Taller 1. Econometría Avanzada"
 author: 
-  - "Daniel Ricardo Amaya Alba"
+  - "Daniel Ricardo Amaya Alba y Ellie :)" 
 format: 
   html:
     theme: flatly
