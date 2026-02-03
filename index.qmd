@@ -67,7 +67,7 @@ $$τ_{ATU} = E[Y_i(1)| D_i=0]-E[Y_i(0)| D_i=0]$$
 
 En este caso representa la diferencia en el puntaje promedio del test de habilidades cognitivas del salon que no fue asignado a las aulas tecnológicas y el resultado que esos mismos estudiantes hubieran obtenido  si hubieran sido asignados. Es decir, en este caso estamos restringiendo el efecto promedio al grupo que no fue tratado.
 
-**2.Usted se encuentra interesada en estimar el siguiente efecto causal:**
+# **2.Usted se encuentra interesada en estimar el siguiente efecto causal:**
 
 $$τ = E[Y_i(1)]-E[Y_i(0)]$$
 
@@ -167,4 +167,165 @@ $$
 $$
 Por lo tanto en nuestro caso , es posible que el salón elegido fuera comparable inicialmente al de control (sin sesgo de selección), pero que las laptops tengan un retorno mayor en el salón tratado debido a factores específicos del grupo o del profesor. Por lo tanto para que $ATE=ATT=ATU$ necesitamos tener ausencia del sesgo de hterogeneidad y de selección. 
 
+# **3. Para encontrar el efecto causal promedio de participar en el programa de tecnología educativa sobre el resultado en el test, considere el siguiente modelo lineal:**
 
+$$
+Y_i=\beta_0+ \tau D_i+ U_i
+$$
+
+**Demuestre que el estimador $\hat\tau_{MCO}$ coincide con la diferencia de medias entre el grupo de tratados y el grupo de no tratados. Es decir, pruebe que $\hat\tau_{MCO} = \hat\tau_{DM}$, donde:**
+
+$$
+\hat\tau_{\scriptsize DM}
+:= \frac{1}{N_1}\sum_{\{i : D_i = 1\}} Y_i
+- \frac{1}{N_0}\sum_{\{i : D_i = 0\}} Y_i,
+$$
+
+y donde $N_1=\sum_i D_i$; $N_0=\sum_i (1-D_i)$.
+
+
+
+**R/:**
+
+Para demostrar que $\hat\tau_{MCO}=\hat\tau_{DM}$.
+
+Podemos tomar dos caminos, uno es utilizando el método de momentos y otro haciendo la minimización de cuadrados.
+
+De la clase sabemos que el estimador de $MCO$ es el análogo muestral de los estimadores poblacionales de la $CEF$, entonces hagamos lo siguiente: tomemos el valor esperado de nuestra regresión.
+
+$$
+E[Y_i \mid D_i=0]= \beta_0
+$$
+
+$$
+E[Y_i \mid D_i=1]= \beta_0+\tau
+$$
+
+Por lo tanto, si aplicamos la diferencia de medias:
+
+$$
+E[Y_i \mid D_i=1]- E[Y_i \mid D_i=0]
+= (\beta_0+\tau)- \beta_0
+$$
+
+$$
+E[Y_i \mid D_i=1]- E[Y_i \mid D_i=0]
+= \tau
+$$
+
+Si tomamos el momento muestral, tendríamos que:
+
+$$
+\frac{1}{N_1}\sum_{\{i : D_i = 1\}} Y_i
+- \frac{1}{N_0}\sum_{\{i : D_i = 0\}} Y_i
+= \hat\tau_{MCO}
+$$
+
+
+
+La segunda forma de llegar a la respuesta es aplicando la minimización de cuadrados a los residuos de nuestro modelo de regresión:
+
+$$
+\min_{\hat\beta_0,\hat\tau}
+\sum_{i=1}^N (Y_i-\hat\beta_0-\hat\tau D_i)^2
+$$
+
+
+
+**FOC respecto de $\hat\beta_0$:**
+
+$$
+-2\sum_{i=1}^N (Y_i-\hat\beta_0-\hat\tau D_i) = 0
+$$
+
+$$
+\sum_{i=1}^{N}Y_i- N\hat\beta_0 -\hat\tau \sum_{i=1}^{N}D_i =0
+$$
+
+$$
+N\bar{Y} - N\hat\beta_0 - \hat\tau N_1 =0
+$$
+
+Despejando $\beta_0$:
+
+$$
+\beta_0= \bar{Y}-\hat\tau \frac{N1}{N}
+$$
+
+
+
+**FOC respecto de $\hat\tau$:**
+
+$$
+-2\sum_{i=1}^N (Y_i-\hat\beta_0-\hat\tau D_i)D_i = 0
+$$
+
+Para que la sumatoria exista $D_i=1$:
+
+$$
+\sum_{i:D_i=1}(Y_i-\hat\beta_0-\hat\tau)=0
+$$
+
+$$
+\sum_{i:D_i=1}Y_i - N_1\hat\beta_0 - N_1\hat\tau=0
+$$
+
+Despejando $\hat\tau$:
+
+$$
+\hat\tau=\frac{1}{N_1}\sum_{i:D_i=1}Y_i - \hat\beta_0
+$$
+
+$$
+\hat\tau=\bar{Y_1} - \hat\beta_0
+$$
+
+Reemplazamos el $\beta_0$ que obtuvimos:
+
+$$
+\hat\tau=\bar{Y_1} -\left(\bar{Y} - \hat{\tau}\,\frac{N_1}{N}\right)
+$$
+
+$$
+\hat\tau - \hat\tau\frac{N1}{N}=\bar{Y_1}- \bar{Y}
+$$
+
+$$
+\hat\tau\left(1 - \frac{N_1}{N}\right)=\bar{Y_1}- \bar{Y}
+$$
+
+Si $\frac{N_1}{N}$ es la proporción de tratados, $1 - \frac{N_1}{N}$ es la proporción de controles:
+
+$$
+\hat\tau\left(\frac{N_0}{N}\right)=\bar{Y_1}- \bar{Y}
+$$
+
+El promedio es la suma del promedio de los grupos ponderado:
+
+$$
+\hat\tau\left(\frac{N_0}{N}\right)
+= \bar{Y_1}
+- \left(\bar{Y_1}\frac{N_1}{N}+\bar{Y_0}\frac{N_0}{N}\right)
+$$
+
+$$
+\hat\tau\left(\frac{N_0}{N}\right)
+= \bar{Y_1}\left(1- \frac{N_1}{N}\right)-\bar{Y_0}\frac{N_0}{N}
+$$
+
+$$
+\hat\tau\left(\frac{N_0}{N}\right)
+= \bar{Y_1}\left(\frac{N_0}{N}\right)-\bar{Y_0}\left(\frac{N_0}{N}\right)
+$$
+
+$$
+\hat\tau_{MCO}=\bar{Y_1}-\bar{Y_0}
+$$
+
+$$
+\hat\tau_{MCO}
+=\frac{1}{N_1}\sum_{\{i : D_i = 1\}} Y_i
+- \frac{1}{N_0}\sum_{\{i : D_i = 0\}} Y_i
+$$
+
+Cómo vemos, $\hat\tau_{MCO} = \hat\tau_{DM}$.

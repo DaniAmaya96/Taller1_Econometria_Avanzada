@@ -3192,6 +3192,8 @@ window.Quarto = {
   <ul>
   <li><a href="#primer-ejercicio" id="toc-primer-ejercicio" class="nav-link active" data-scroll-target="#primer-ejercicio"><strong>Primer Ejercicio</strong></a></li>
   <li><a href="#describa-el-problema-de-estimación-utilizando-el-lenguaje-de-resultados-potenciales" id="toc-describa-el-problema-de-estimación-utilizando-el-lenguaje-de-resultados-potenciales" class="nav-link" data-scroll-target="#describa-el-problema-de-estimación-utilizando-el-lenguaje-de-resultados-potenciales"><strong>1 Describa el problema de estimación utilizando el lenguaje de resultados potenciales</strong></a></li>
+  <li><a href="#usted-se-encuentra-interesada-en-estimar-el-siguiente-efecto-causal" id="toc-usted-se-encuentra-interesada-en-estimar-el-siguiente-efecto-causal" class="nav-link" data-scroll-target="#usted-se-encuentra-interesada-en-estimar-el-siguiente-efecto-causal"><strong>2.Usted se encuentra interesada en estimar el siguiente efecto causal:</strong></a></li>
+  <li><a href="#para-encontrar-el-efecto-causal-promedio-de-participar-en-el-programa-de-tecnología-educativa-sobre-el-resultado-en-el-test-considere-el-siguiente-modelo-lineal" id="toc-para-encontrar-el-efecto-causal-promedio-de-participar-en-el-programa-de-tecnología-educativa-sobre-el-resultado-en-el-test-considere-el-siguiente-modelo-lineal" class="nav-link" data-scroll-target="#para-encontrar-el-efecto-causal-promedio-de-participar-en-el-programa-de-tecnología-educativa-sobre-el-resultado-en-el-test-considere-el-siguiente-modelo-lineal"><strong>3. Para encontrar el efecto causal promedio de participar en el programa de tecnología educativa sobre el resultado en el test, considere el siguiente modelo lineal:</strong></a></li>
   </ul>
 </nav>
 </div>
@@ -3252,7 +3254,9 @@ window.Quarto = {
 <p>El <span class="math inline">\(ATU\)</span> se define como el efectro promedio del tratamiento en los no tratados:</p>
 <p><span class="math display">\[τ_{ATU} = E[Y_i(1)-Y_i(0)| D_i= 0]\]</span> <span class="math display">\[τ_{ATU} = E[Y_i(1)| D_i=0]-E[Y_i(0)| D_i=0]\]</span></p>
 <p>En este caso representa la diferencia en el puntaje promedio del test de habilidades cognitivas del salon que no fue asignado a las aulas tecnológicas y el resultado que esos mismos estudiantes hubieran obtenido si hubieran sido asignados. Es decir, en este caso estamos restringiendo el efecto promedio al grupo que no fue tratado.</p>
-<p><strong>2.Usted se encuentra interesada en estimar el siguiente efecto causal:</strong></p>
+</section>
+<section id="usted-se-encuentra-interesada-en-estimar-el-siguiente-efecto-causal" class="level1">
+<h1><strong>2.Usted se encuentra interesada en estimar el siguiente efecto causal:</strong></h1>
 <p><span class="math display">\[τ = E[Y_i(1)]-E[Y_i(0)]\]</span></p>
 <p>Para esto plantea una diferencia de medias ingenua:</p>
 <p><span class="math display">\[τ_{naive} = E[Y_i | D_i=1]-E[Y_i|D_i =0]\]</span></p>
@@ -3316,6 +3320,118 @@ E[Y_i(1)|D_i=1]-\color{red}{E[Y_i(1)| D_i=0]}\\
 \tau_{naive} &amp;= ATE+ \underbrace{(1-\pi).(ATT-ATU)}_{\text{Heterogenity Bias}} + \underbrace{E[Y_i(0) | D_i=1]-E[Y_i (0)|D_i =0]}_{\text{Selection Bias}}
 \end{aligned}
 \]</span> Por lo tanto en nuestro caso , es posible que el salón elegido fuera comparable inicialmente al de control (sin sesgo de selección), pero que las laptops tengan un retorno mayor en el salón tratado debido a factores específicos del grupo o del profesor. Por lo tanto para que <span class="math inline">\(ATE=ATT=ATU\)</span> necesitamos tener ausencia del sesgo de hterogeneidad y de selección.</p>
+</section>
+<section id="para-encontrar-el-efecto-causal-promedio-de-participar-en-el-programa-de-tecnología-educativa-sobre-el-resultado-en-el-test-considere-el-siguiente-modelo-lineal" class="level1">
+<h1><strong>3. Para encontrar el efecto causal promedio de participar en el programa de tecnología educativa sobre el resultado en el test, considere el siguiente modelo lineal:</strong></h1>
+<p><span class="math display">\[
+Y_i=\beta_0+ \tau D_i+ U_i
+\]</span></p>
+<p><strong>Demuestre que el estimador <span class="math inline">\(\hat\tau_{MCO}\)</span> coincide con la diferencia de medias entre el grupo de tratados y el grupo de no tratados. Es decir, pruebe que <span class="math inline">\(\hat\tau_{MCO} = \hat\tau_{DM}\)</span>, donde:</strong></p>
+<p><span class="math display">\[
+\hat\tau_{\scriptsize DM}
+:= \frac{1}{N_1}\sum_{\{i : D_i = 1\}} Y_i
+- \frac{1}{N_0}\sum_{\{i : D_i = 0\}} Y_i,
+\]</span></p>
+<p>y donde <span class="math inline">\(N_1=\sum_i D_i\)</span>; <span class="math inline">\(N_0=\sum_i (1-D_i)\)</span>.</p>
+<p><strong>R/:</strong></p>
+<p>Para demostrar que <span class="math inline">\(\hat\tau_{MCO}=\hat\tau_{DM}\)</span>.</p>
+<p>Podemos tomar dos caminos, uno es utilizando el método de momentos y otro haciendo la minimización de cuadrados.</p>
+<p>De la clase sabemos que el estimador de <span class="math inline">\(MCO\)</span> es el análogo muestral de los estimadores poblacionales de la <span class="math inline">\(CEF\)</span>, entonces hagamos lo siguiente: tomemos el valor esperado de nuestra regresión.</p>
+<p><span class="math display">\[
+E[Y_i \mid D_i=0]= \beta_0
+\]</span></p>
+<p><span class="math display">\[
+E[Y_i \mid D_i=1]= \beta_0+\tau
+\]</span></p>
+<p>Por lo tanto, si aplicamos la diferencia de medias:</p>
+<p><span class="math display">\[
+E[Y_i \mid D_i=1]- E[Y_i \mid D_i=0]
+= (\beta_0+\tau)- \beta_0
+\]</span></p>
+<p><span class="math display">\[
+E[Y_i \mid D_i=1]- E[Y_i \mid D_i=0]
+= \tau
+\]</span></p>
+<p>Si tomamos el momento muestral, tendríamos que:</p>
+<p><span class="math display">\[
+\frac{1}{N_1}\sum_{\{i : D_i = 1\}} Y_i
+- \frac{1}{N_0}\sum_{\{i : D_i = 0\}} Y_i
+= \hat\tau_{MCO}
+\]</span></p>
+<p>La segunda forma de llegar a la respuesta es aplicando la minimización de cuadrados a los residuos de nuestro modelo de regresión:</p>
+<p><span class="math display">\[
+\min_{\hat\beta_0,\hat\tau}
+\sum_{i=1}^N (Y_i-\hat\beta_0-\hat\tau D_i)^2
+\]</span></p>
+<p><strong>FOC respecto de <span class="math inline">\(\hat\beta_0\)</span>:</strong></p>
+<p><span class="math display">\[
+-2\sum_{i=1}^N (Y_i-\hat\beta_0-\hat\tau D_i) = 0
+\]</span></p>
+<p><span class="math display">\[
+\sum_{i=1}^{N}Y_i- N\hat\beta_0 -\hat\tau \sum_{i=1}^{N}D_i =0
+\]</span></p>
+<p><span class="math display">\[
+N\bar{Y} - N\hat\beta_0 - \hat\tau N_1 =0
+\]</span></p>
+<p>Despejando <span class="math inline">\(\beta_0\)</span>:</p>
+<p><span class="math display">\[
+\beta_0= \bar{Y}-\hat\tau \frac{N1}{N}
+\]</span></p>
+<p><strong>FOC respecto de <span class="math inline">\(\hat\tau\)</span>:</strong></p>
+<p><span class="math display">\[
+-2\sum_{i=1}^N (Y_i-\hat\beta_0-\hat\tau D_i)D_i = 0
+\]</span></p>
+<p>Para que la sumatoria exista <span class="math inline">\(D_i=1\)</span>:</p>
+<p><span class="math display">\[
+\sum_{i:D_i=1}(Y_i-\hat\beta_0-\hat\tau)=0
+\]</span></p>
+<p><span class="math display">\[
+\sum_{i:D_i=1}Y_i - N_1\hat\beta_0 - N_1\hat\tau=0
+\]</span></p>
+<p>Despejando <span class="math inline">\(\hat\tau\)</span>:</p>
+<p><span class="math display">\[
+\hat\tau=\frac{1}{N_1}\sum_{i:D_i=1}Y_i - \hat\beta_0
+\]</span></p>
+<p><span class="math display">\[
+\hat\tau=\bar{Y_1} - \hat\beta_0
+\]</span></p>
+<p>Reemplazamos el <span class="math inline">\(\beta_0\)</span> que obtuvimos:</p>
+<p><span class="math display">\[
+\hat\tau=\bar{Y_1} -\left(\bar{Y} - \hat{\tau}\,\frac{N_1}{N}\right)
+\]</span></p>
+<p><span class="math display">\[
+\hat\tau - \hat\tau\frac{N1}{N}=\bar{Y_1}- \bar{Y}
+\]</span></p>
+<p><span class="math display">\[
+\hat\tau\left(1 - \frac{N_1}{N}\right)=\bar{Y_1}- \bar{Y}
+\]</span></p>
+<p>Si <span class="math inline">\(\frac{N_1}{N}\)</span> es la proporción de tratados, <span class="math inline">\(1 - \frac{N_1}{N}\)</span> es la proporción de controles:</p>
+<p><span class="math display">\[
+\hat\tau\left(\frac{N_0}{N}\right)=\bar{Y_1}- \bar{Y}
+\]</span></p>
+<p>El promedio es la suma del promedio de los grupos ponderado:</p>
+<p><span class="math display">\[
+\hat\tau\left(\frac{N_0}{N}\right)
+= \bar{Y_1}
+- \left(\bar{Y_1}\frac{N_1}{N}+\bar{Y_0}\frac{N_0}{N}\right)
+\]</span></p>
+<p><span class="math display">\[
+\hat\tau\left(\frac{N_0}{N}\right)
+= \bar{Y_1}\left(1- \frac{N_1}{N}\right)-\bar{Y_0}\frac{N_0}{N}
+\]</span></p>
+<p><span class="math display">\[
+\hat\tau\left(\frac{N_0}{N}\right)
+= \bar{Y_1}\left(\frac{N_0}{N}\right)-\bar{Y_0}\left(\frac{N_0}{N}\right)
+\]</span></p>
+<p><span class="math display">\[
+\hat\tau_{MCO}=\bar{Y_1}-\bar{Y_0}
+\]</span></p>
+<p><span class="math display">\[
+\hat\tau_{MCO}
+=\frac{1}{N_1}\sum_{\{i : D_i = 1\}} Y_i
+- \frac{1}{N_0}\sum_{\{i : D_i = 0\}} Y_i
+\]</span></p>
+<p>Cómo vemos, <span class="math inline">\(\hat\tau_{MCO} = \hat\tau_{DM}\)</span>.</p>
 </section>
 
 </main>
