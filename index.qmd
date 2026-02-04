@@ -25,7 +25,7 @@ Para comenzar, suponga que el mecanismo de asignación al tratamiento es descono
 
 ## Punto1 
 
-**1 Describa el problema de estimación utilizando el lenguaje de resultados potenciales**
+**Describa el problema de estimación utilizando el lenguaje de resultados potenciales**
 
 **a) Teniendo en cuenta el contexto presentado, defina formalmente los resultados potenciales $Y_i(1)$ y $Y_i(0)$. Luego, describa el problema de inferencia causal en este contexto.**
 
@@ -71,11 +71,11 @@ En este caso representa la diferencia en el puntaje promedio del test de habilid
 
 ## Punto2 
 
-**2.Usted se encuentra interesada en estimar el siguiente efecto causal:**
+**Usted se encuentra interesada en estimar el siguiente efecto causal:**
 
 $$τ = E[Y_i(1)]-E[Y_i(0)]$$
 
-Para esto plantea una diferencia de medias ingenua:
+**Para esto plantea una diferencia de medias ingenua**
 
 $$τ_{naive} = E[Y_i | D_i=1]-E[Y_i|D_i =0]$$
 
@@ -188,28 +188,6 @@ $$
 $$
 
 y donde $N_1=\sum_i D_i$; $N_0=\sum_i (1-D_i)$.
-
-
-
-**R/:**
-
-**3. Para encontrar el efecto causal promedio de participar en el programa de tecnología educativa sobre el resultado en el test, considere el siguiente modelo lineal:**
-
-$$
-Y_i=\beta_0+ \tau D_i+ U_i
-$$
-
-**Demuestre que el estimador $\hat\tau_{MCO}$ coincide con la diferencia de medias entre el grupo de tratados y el grupo de no tratados. Es decir, pruebe que $\hat\tau_{MCO} = \hat\tau_{DM}$, donde:**
-
-$$
-\hat\tau_{\scriptsize DM}
-:= \frac{1}{N_1}\sum_{\{i : D_i = 1\}} Y_i
-- \frac{1}{N_0}\sum_{\{i : D_i = 0\}} Y_i,
-$$
-
-y donde $N_1=\sum_i D_i$; $N_0=\sum_i (1-D_i)$.
-
-
 
 **R/:**
 
@@ -370,4 +348,4 @@ tal que:
 
 $$E[\hat\tau_{DM}]=\tau+ \underbrace{E[U_i|D_i=1]-E[U-i|D_i=0]}_{\text{Selection Bias}}$$
 
-Por lo tanto en terminos de la recta de regresión el supuesto de independencia $(Y_i(1),Y_i(0))\perp D_i $ se traduce en el supuesto de exogenidad $E[U_i| D_i]=0$. Esto nos señala que, para tener un estimador insesgado, no debemos tener factores no observables correlacionados con el tratamiento que afecten el resultado, haciendo a los grupos diferentes."
+Por lo tanto en terminos de la recta de regresión el supuesto de independencia $(Y_i(1),Y_i(0))\perp D_i$ se traduce en el supuesto de exogenidad $E[U_i| D_i]=0$. Esto nos señala que, para tener un estimador insesgado, no debemos tener factores no observables correlacionados con el tratamiento que afecten el resultado, haciendo a los grupos diferentes."
