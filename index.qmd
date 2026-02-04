@@ -8,68 +8,147 @@ format:
     toc: true
     code-fold: true
     self-contained: true
+editor: 
+  markdown: 
+    wrap: 72
 ---
+
 # **Primer Ejercicio**
 
-Desde la perspectiva del capital humano, estudios como el de Cunha & Heckma (2007) encuentran que las intervenciones durante los primeros años de escolaridad son fundamentales para el desarrollo temprano de habilidades y, con ello, para la trayectoria de aprendizaje posterior de los individuos. Una forma de evaluar el éxito de estas intervenciones es mediante el nivel de habilidades cognitivas que desarrollan los estudiantes, dado que estas capacidades constituyen la base de cualquier aprendizaje futuro.
+Desde la perspectiva del capital humano, estudios como el de Cunha &
+Heckma (2007) encuentran que las intervenciones durante los primeros
+años de escolaridad son fundamentales para el desarrollo temprano de
+habilidades y, con ello, para la trayectoria de aprendizaje posterior de
+los individuos. Una forma de evaluar el éxito de estas intervenciones es
+mediante el nivel de habilidades cognitivas que desarrollan los
+estudiantes, dado que estas capacidades constituyen la base de cualquier
+aprendizaje futuro.
 
-En este contexto, los gobiernos suelen mostrar interés por los programas de digitalización, ya que prometen acelerar el desarrollo del razonamiento y facilitar la adaptación al mundo moderno. Con base en lo anterior, la pregunta de investigación que guiará este ejercicio, inspirada en Cristia et al. (2012), es: ¿cuál es el efecto de participar en un programa de tecnología educativa sobre el desarrollo de habilidades cognitivas de razonamiento abstracto?
+En este contexto, los gobiernos suelen mostrar interés por los programas
+de digitalización, ya que prometen acelerar el desarrollo del
+razonamiento y facilitar la adaptación al mundo moderno. Con base en lo
+anterior, la pregunta de investigación que guiará este ejercicio,
+inspirada en Cristia et al. (2012), es: ¿cuál es el efecto de participar
+en un programa de tecnología educativa sobre el desarrollo de
+habilidades cognitivas de razonamiento abstracto?
 
-Para responder esta pregunta, usted analizará una política implementada por la Secretaría de Educación de Macondo en conjunto con el colegio Sonrisas, ubicado en una zona rural del país. La iniciativa buscaba transformar el modelo educativo tradicional mediante la entrega de laptops diseñadas específicamente para el aprendizaje autodidacta en entornos con limitaciones severas de infraestructura. El programa se enfocó exclusivamente en estudiantes de tercer grado de primaria, nivel que en este colegio cuenta con dos salones. El programa seleccionaba un salón para convertirlo en Aula Tecnológica.
+Para responder esta pregunta, usted analizará una política implementada
+por la Secretaría de Educación de Macondo en conjunto con el colegio
+Sonrisas, ubicado en una zona rural del país. La iniciativa buscaba
+transformar el modelo educativo tradicional mediante la entrega de
+laptops diseñadas específicamente para el aprendizaje autodidacta en
+entornos con limitaciones severas de infraestructura. El programa se
+enfocó exclusivamente en estudiantes de tercer grado de primaria, nivel
+que en este colegio cuenta con dos salones. El programa seleccionaba un
+salón para convertirlo en Aula Tecnológica.
 
-Los estudiantes asignados al Aula Tecnológica realizaban actividades guiadas tres veces por semana utilizando las laptops. Estas actividades se desarrollaban únicamente durante el horario de clases, las cuales fueron adaptadas para incluir ejercicios lógicos y juegos de asociación visual orientados a fortalecer el razonamiento abstracto. Cada actividad estaba vinculada con el tema correspondiente a la clase del día. Adicionalmente, los estudiantes no podían llevar las laptops a sus hogares. Los estudiantes del otro salón, por su parte, continuaron con sus clases de manera habitual.
+Los estudiantes asignados al Aula Tecnológica realizaban actividades
+guiadas tres veces por semana utilizando las laptops. Estas actividades
+se desarrollaban únicamente durante el horario de clases, las cuales
+fueron adaptadas para incluir ejercicios lógicos y juegos de asociación
+visual orientados a fortalecer el razonamiento abstracto. Cada actividad
+estaba vinculada con el tema correspondiente a la clase del día.
+Adicionalmente, los estudiantes no podían llevar las laptops a sus
+hogares. Los estudiantes del otro salón, por su parte, continuaron con
+sus clases de manera habitual.
 
-Considere una muestra de N estudiantes observados en un diseño de corte transversal. Defina $Y_i$ como el puntaje del estudiante i en un test de habilidades cognitivas de razonamiento abstracto. Este test se aplica anualmente a nivel nacional a estudiantes de tercer grado, está definido por el Ministerio de Educación y sus puntajes oscilan entre 0 y 100. Por otro lado, $Di$ es una variable dicotómica que toma el valor de 1 si el estudiante $i$ fue asignado al Aula Tecnológica y 0 en caso contrario.
+Considere una muestra de N estudiantes observados en un diseño de corte
+transversal. Defina $Y_i$ como el puntaje del estudiante i en un test de
+habilidades cognitivas de razonamiento abstracto. Este test se aplica
+anualmente a nivel nacional a estudiantes de tercer grado, está definido
+por el Ministerio de Educación y sus puntajes oscilan entre 0 y 100. Por
+otro lado, $Di$ es una variable dicotómica que toma el valor de 1 si el
+estudiante $i$ fue asignado al Aula Tecnológica y 0 en caso contrario.
 
-Para comenzar, suponga que el mecanismo de asignación al tratamiento es desconocido; es decir, no se conocen los criterios que determinaron la elección de un salón sobre el otro ni la forma en que los estudiantes son asignados a cada salón.
+Para comenzar, suponga que el mecanismo de asignación al tratamiento es
+desconocido; es decir, no se conocen los criterios que determinaron la
+elección de un salón sobre el otro ni la forma en que los estudiantes
+son asignados a cada salón.
 
-## Punto1 
+## Punto1
 
-**Describa el problema de estimación utilizando el lenguaje de resultados potenciales**
+**Describa el problema de estimación utilizando el lenguaje de
+resultados potenciales**
 
-**a) Teniendo en cuenta el contexto presentado, defina formalmente los resultados potenciales $Y_i(1)$ y $Y_i(0)$. Luego, describa el problema de inferencia causal en este contexto.**
+**a) Teniendo en cuenta el contexto presentado, defina formalmente los
+resultados potenciales** $Y_i(1)$ y $Y_i(0)$. Luego, describa el
+problema de inferencia causal en este contexto.
 
-**R/:** En este caso el resultado potencial $Y_i(1)$ se define como el puntaje que obtendría el estudiante $i$ dado que fue asigando al aula tecnologica. Por su parte el resultado potencial $Y_i(0)$ es el resultado que obtendría el estudiante $i$ dado que no fue asignado al aula tecnologica.
+**R/:** En este caso el resultado potencial $Y_i(1)$ se define como el
+puntaje que obtendría el estudiante $i$ dado que fue asigando al aula
+tecnologica. Por su parte el resultado potencial $Y_i(0)$ es el
+resultado que obtendría el estudiante $i$ dado que no fue asignado al
+aula tecnologica.
 
-Para recuperar el efecto causal de la participación en las aulas tecnologicas en el puntaje obtenido por el estudiante $i$, nos gustaria ver la dferencia en sus resultados potenciales, es decir de sus puntajes dado que participio en el aula y que no participo en el aula:
+Para recuperar el efecto causal de la participación en las aulas
+tecnologicas en el puntaje obtenido por el estudiante $i$, nos gustaria
+ver la dferencia en sus resultados potenciales, es decir de sus puntajes
+dado que participio en el aula y que no participo en el aula:
 
-  $$τ_i=Y_i(1)-Y_i(0) $$
+$$τ_i=Y_i(1)-Y_i(0) $$
 
-Sin embargo, acá nos encontramos con el problema de la inferencia causal. En nuestra muestra $N$ para el estudiante $i$ solo se puede observar uno de los dos caminos, o el estudiante fue asignado ($D_i=1$) o no fue asignado ($D_i=0$). Es decir, lo que realmente tenemos en nuestra base de datos es:
+Sin embargo, acá nos encontramos con el problema de la inferencia
+causal. En nuestra muestra $N$ para el estudiante $i$ solo se puede
+observar uno de los dos caminos, o el estudiante fue asignado ($D_i=1$)
+o no fue asignado ($D_i=0$). Es decir, lo que realmente tenemos en
+nuestra base de datos es:
 
 $$Y_i=Y_i(1)D_i+(1-D_i)Y_i(0) $$
 
-De tal manera que el resultado observado $Y_i $ para el estudiante con $D_i = 1$ sera su resultado potencial dado que participó $Y_i(1)$ y para el estudiante con $D_i = 0$ observaremos su resultado potencial dado que no participó $Y_i(0)$. Pero nunca seremos capaces de ver para el mismo estudiante $i$ su resultado dado que participo $D_i = 1$ y su contrafactual $D_i = 0$.
+De tal manera que el resultado observado \$Y_i \$ para el estudiante con
+$D_i = 1$ sera su resultado potencial dado que participó $Y_i(1)$ y para
+el estudiante con $D_i = 0$ observaremos su resultado potencial dado que
+no participó $Y_i(0)$. Pero nunca seremos capaces de ver para el mismo
+estudiante $i$ su resultado dado que participo $D_i = 1$ y su
+contrafactual $D_i = 0$.
 
-Es por lo anterior que para trabajar con nuestra muestra utilizaremos no el resultado del inddividuo $i$ sino que trabajaremos con el promedio de los resultados potenciales, es decir buscaremos estumar los efectos promedio, bien sea el efecto promedio del tramaiento $ATE$, el efecto promedio del tratamiento en los tratados $ATT$ y el efecto promedio del tratamiento en los no tratados $ATU$.
+Es por lo anterior que para trabajar con nuestra muestra utilizaremos no
+el resultado del inddividuo $i$ sino que trabajaremos con el promedio de
+los resultados potenciales, es decir buscaremos estumar los efectos
+promedio, bien sea el efecto promedio del tramaiento $ATE$, el efecto
+promedio del tratamiento en los tratados $ATT$ y el efecto promedio del
+tratamiento en los no tratados $ATU$.
 
-**b) Define en lenguaje matemático el $ATE$, el $ATT$ y el $ATU$. Interprete cada uno de estos conceptos de acuerdo al contexto del caso**
+**b) Define en lenguaje matemático el** $ATE$, el $ATT$ y el $ATU$.
+Interprete cada uno de estos conceptos de acuerdo al contexto del caso
 
 **R/:**
 
 El $ATE$ se define como el efectro promedio del tratamiento:
 
-$$τ_{ATE} = E[Y_i(1)-Y_i(0)]$$
-$$τ_{ATE} = E[Y_i(1)]-E[Y_i(0)]$$
+$$τ_{ATE} = E[Y_i(1)-Y_i(0)]$$ $$τ_{ATE} = E[Y_i(1)]-E[Y_i(0)]$$
 
-Que para el caso de nuestra investigación representa la diferencia entre el puntaje promedio en el test de habilidad cognitivas si toda la población de estudiantes de tercer grado hubieran asistido a  las aulas tecnológicas, frente al promedio si ninguno hubiera asisitido a dichas aulas.
+Que para el caso de nuestra investigación representa la diferencia entre
+el puntaje promedio en el test de habilidad cognitivas si toda la
+población de estudiantes de tercer grado hubieran asistido a las aulas
+tecnológicas, frente al promedio si ninguno hubiera asisitido a dichas
+aulas.
 
-El $ATT$ se define como el efectro promedio del tratamiento en los tratados:
+El $ATT$ se define como el efectro promedio del tratamiento en los
+tratados:
 
 $$τ_{ATT} = E[Y_i(1)-Y_i(0)| D_i= 1]$$
 $$τ_{ATT} = E[Y_i(1)| D_i=1]-E[Y_i(0)| D_i=1]$$
 
-En este caso representa la diferencia en el puntaje promedio del test de habilidades cognitivas del salon que fue asignado a las aulas tecnológicas y el resultado que esos mismos estudiantes hubieran obtenido  si no hubieran sido asignados. Es decir, en este caso estamos restringiendo el efecto promedio al grupo que fue tratado.
+En este caso representa la diferencia en el puntaje promedio del test de
+habilidades cognitivas del salon que fue asignado a las aulas
+tecnológicas y el resultado que esos mismos estudiantes hubieran
+obtenido si no hubieran sido asignados. Es decir, en este caso estamos
+restringiendo el efecto promedio al grupo que fue tratado.
 
-
-El $ATU$ se define como el efectro promedio del tratamiento en los no tratados:
+El $ATU$ se define como el efectro promedio del tratamiento en los no
+tratados:
 
 $$τ_{ATU} = E[Y_i(1)-Y_i(0)| D_i= 0]$$
 $$τ_{ATU} = E[Y_i(1)| D_i=0]-E[Y_i(0)| D_i=0]$$
 
-En este caso representa la diferencia en el puntaje promedio del test de habilidades cognitivas del salon que no fue asignado a las aulas tecnológicas y el resultado que esos mismos estudiantes hubieran obtenido  si hubieran sido asignados. Es decir, en este caso estamos restringiendo el efecto promedio al grupo que no fue tratado.
+En este caso representa la diferencia en el puntaje promedio del test de
+habilidades cognitivas del salon que no fue asignado a las aulas
+tecnológicas y el resultado que esos mismos estudiantes hubieran
+obtenido si hubieran sido asignados. Es decir, en este caso estamos
+restringiendo el efecto promedio al grupo que no fue tratado.
 
-## Punto2 
+## Punto2
 
 **Usted se encuentra interesada en estimar el siguiente efecto causal:**
 
@@ -83,8 +162,7 @@ $$τ_{naive} = E[Y_i | D_i=1]-E[Y_i|D_i =0]$$
 
 $$τ_{naive} = ATT + E[Y_i(0) | D_i=1]-E[Y_i (0)|D_i =0]$$
 
-**R/:**
-$$
+**R/:** $$
 \begin{aligned}
 \tau_{naive} &= E[Y_i | D_i=1] - E[Y_i | D_i=0] \\
 \tau_{naive} &= E[Y_i(1) | D_i=1] - E[Y_i(0) | D_i=0] + \color{red}{E[Y_i(0) | D_i=1]} - \color{red}{E[Y_i(0) | D_i=1]}\\
@@ -97,8 +175,7 @@ $$
 
 $$\tau_{naive} = ATU + E[Y_i(1) | D_i=1]-E[Y_i (1)|D_i =0]$$
 
-**R/:**
-$$
+**R/:** $$
 \begin{aligned}
 \tau_{naive} &= E[Y_i | D_i=1] - E[Y_i | D_i=0] \\
 \tau_{naive} &= E[Y_i(1) |D_i=1] - E[Y_i(0)| D_i=0]+\color{red}{E[Y_i(1)| D_i=0]}-\\
@@ -113,8 +190,9 @@ $$
 
 $$ ATE = \pi ATT + (1-\pi) ATU$$
 
-**R/:**
-Esta demostración es diferente a las anteriores, es menos intuitiva. Sin embargo, podemos aplicar la ley de esperanzas iteradas a la definición de $ATE$:
+**R/:** Esta demostración es diferente a las anteriores, es menos
+intuitiva. Sin embargo, podemos aplicar la ley de esperanzas iteradas a
+la definición de $ATE$:
 
 $$
 \begin{aligned}
@@ -129,30 +207,57 @@ $$\tau_{ATE} = \underbrace{E[Y_i(1) - Y_i(0) | D_i=1]}_{ATT} ⋅\underbrace{P(D_
 
 **Interpretando cada expresión:**
 
-**a).** 
+**a).**
 
 $$\tau_{naive}= ATT + \underbrace{E[Y_i(0) | D_i=1]-E[Y_i (0)|D_i =0]}_{\text{Selection Bias}} $$
 
-Esta expresión indica que el $\tau_{naive}$ recupera el efecto causal sobre los tratados ($ATT$) si y solo si el sesgo de selección es igual a cero. Esto ocurre cuando el resultado promedio contrafactual del grupo tratado $E[Y_i(0) | D_i=1]$ es idéntico al resultado promedio observado del grupo de control $E[Y_i (0)|D_i =0]$. Para que esto se cumpla la composición de los salones debería ser homogénea o el proceso de asignación debería haber sido aleatorio, garantizando que no existan diferencias pre-existentes entre ambos grupos.
+Esta expresión indica que el $\tau_{naive}$ recupera el efecto causal
+sobre los tratados ($ATT$) si y solo si el sesgo de selección es igual a
+cero. Esto ocurre cuando el resultado promedio contrafactual del grupo
+tratado $E[Y_i(0) | D_i=1]$ es idéntico al resultado promedio observado
+del grupo de control $E[Y_i (0)|D_i =0]$. Para que esto se cumpla la
+composición de los salones debería ser homogénea o el proceso de
+asignación debería haber sido aleatorio, garantizando que no existan
+diferencias pre-existentes entre ambos grupos.
 
 **b).**
 
 $$\tau_{naive} = ATU + \underbrace{E[Y_i(1) | D_i=1]-E[Y_i (1)|D_i =0]}_{\text{Heterogeneity Bias}}$$
 
-Por tro lado esta expresión nos indica que el $\tau_{naive}$  recupera el efecto promedio causal sobre los no tratado ($ATU$) si y solo si el sesgo de heterogeneidad en resultados del tratamiento es igual a cero. Esto ocurre cuando el resultado promedio de los estudiantes tratados $E[Y_i(1)|D_i=1]$ es igual al resultado promedio que hubieran obtenido los estudiantes del grupo de control si se les hubiera asignado el tratamiento $E[Y_i(1)|D_i=0]$. Esto quiere decir que el efecto de las computadoras sería el mismo, independientemente dle salon que hubiera sido seleccionado. 
+Por tro lado esta expresión nos indica que el $\tau_{naive}$ recupera el
+efecto promedio causal sobre los no tratado ($ATU$) si y solo si el
+sesgo de heterogeneidad en resultados del tratamiento es igual a cero.
+Esto ocurre cuando el resultado promedio de los estudiantes tratados
+$E[Y_i(1)|D_i=1]$ es igual al resultado promedio que hubieran obtenido
+los estudiantes del grupo de control si se les hubiera asignado el
+tratamiento $E[Y_i(1)|D_i=0]$. Esto quiere decir que el efecto de las
+computadoras sería el mismo, independientemente dle salon que hubiera
+sido seleccionado.
 
 **c).**
 
 $$ ATE = \pi \cdot ATT + (1-\pi) \cdot ATU$$
 
-Por úlimo esta expresión nos dice que el efecto promedio del tratamiento es un promedio ponderado del efecto promedio en los tratado $ATT$ y en los no tratados $ATU$. 
+Por úlimo esta expresión nos dice que el efecto promedio del tratamiento
+es un promedio ponderado del efecto promedio en los tratado $ATT$ y en
+los no tratados $ATU$.
 
-**¿Es cierto que si $\tau_{naive}= ATT$, entonces $\tau_{naive}=ATU$?**
+**¿Es cierto que si** $\tau_{naive}= ATT$, entonces $\tau_{naive}=ATU$?
 
-Esta afirmación no es cierta. Como vimos, el $\tau_{naive}= ATT$ sí y solo sí el resultado promedio contrafactual del grupo tratado $E[Y_i(0) | D_i=1]$ es idéntico al resultado promedio observado del grupo de control $E[Y_i (0)|D_i =0]$, lo cual no nos esta brindando ninguna información al respecto de algún posible sesgo de heterogeneidad del tratamiento, es decir no nos garantiza que el efecto del tratamiento sea el mismo para ambos grupos. Por su parte, si el $\tau_{naive}=ATU$ solo sabemos que hay ausencia de sesgo de heterogeneidad, pero no tenemos certeza al respecto de la comparabilidad de los grupos (sesgo de selección). 
+Esta afirmación no es cierta. Como vimos, el $\tau_{naive}= ATT$ sí y
+solo sí el resultado promedio contrafactual del grupo tratado
+$E[Y_i(0) | D_i=1]$ es idéntico al resultado promedio observado del
+grupo de control $E[Y_i (0)|D_i =0]$, lo cual no nos esta brindando
+ninguna información al respecto de algún posible sesgo de heterogeneidad
+del tratamiento, es decir no nos garantiza que el efecto del tratamiento
+sea el mismo para ambos grupos. Por su parte, si el $\tau_{naive}=ATU$
+solo sabemos que hay ausencia de sesgo de heterogeneidad, pero no
+tenemos certeza al respecto de la comparabilidad de los grupos (sesgo de
+selección).
 
-Teniendo como base la descomposicón que se hace en libro Causal Inference: The Mixtape de Scott Cunningham podemos demostrar la relación entre estos parametros: 
-$$
+Teniendo como base la descomposicón que se hace en libro Causal
+Inference: The Mixtape de Scott Cunningham podemos demostrar la relación
+entre estos parametros: $$
 \begin{aligned}
 \tau_{ATE} &=\pi.ATT+(1-\pi).ATU\\
 \tau_{ATE} &=\pi.ATT+(1-\pi).ATU + \color{red}{(1-\pi).ATT} - \color{red}{(1-\pi).ATT}\\
@@ -161,25 +266,33 @@ $$
 \text{Despejando $ATT$:} \\
 \tau_{ATT} &= ATE+ (1-\pi).(ATT-ATU)
 \end{aligned}
-$$
-Remplazando la expresión que acabamos obtener de $\tau_{ATT}$ en nuestso esmitador $\tau_{naive}$, obtenemos la descomposición completa del sesgo: 
-$$
+$$ Remplazando la expresión que acabamos obtener de $\tau_{ATT}$ en
+nuestso esmitador $\tau_{naive}$, obtenemos la descomposición completa
+del sesgo: $$
 \begin{aligned}
 \tau_{naive} &= ATT + \underbrace{E[Y_i(0) | D_i=1]-E[Y_i (0)|D_i =0]}_{\text{Selection Bias}}\\
 \tau_{naive} &= ATE+ \underbrace{(1-\pi).(ATT-ATU)}_{\text{Heterogenity Bias}} + \underbrace{E[Y_i(0) | D_i=1]-E[Y_i (0)|D_i =0]}_{\text{Selection Bias}}
 \end{aligned}
-$$
-Por lo tanto en nuestro caso , es posible que el salón elegido fuera comparable inicialmente al de control (sin sesgo de selección), pero que las laptops tengan un retorno mayor en el salón tratado debido a factores específicos del grupo o del profesor. Por lo tanto para que $ATE=ATT=ATU$ necesitamos tener ausencia del sesgo de hterogeneidad y de selección. 
+$$ Por lo tanto en nuestro caso , es posible que el salón elegido fuera
+comparable inicialmente al de control (sin sesgo de selección), pero que
+las laptops tengan un retorno mayor en el salón tratado debido a
+factores específicos del grupo o del profesor. Por lo tanto para que
+$ATE=ATT=ATU$ necesitamos tener ausencia del sesgo de hterogeneidad y de
+selección.
 
 ## Punto3
 
-**Para encontrar el efecto causal promedio de participar en el programa de tecnología educativa sobre el resultado en el test, considere el siguiente modelo lineal:**
+**Para encontrar el efecto causal promedio de participar en el programa
+de tecnología educativa sobre el resultado en el test, considere el
+siguiente modelo lineal:**
 
 $$
 Y_i=\beta_0+ \tau D_i+ U_i
 $$
 
-**Demuestre que el estimador $\hat\tau_{MCO}$ coincide con la diferencia de medias entre el grupo de tratados y el grupo de no tratados. Es decir, pruebe que $\hat\tau_{MCO} = \hat\tau_{DM}$, donde:**
+**Demuestre que el estimador** $\hat\tau_{MCO}$ coincide con la
+diferencia de medias entre el grupo de tratados y el grupo de no
+tratados. Es decir, pruebe que $\hat\tau_{MCO} = \hat\tau_{DM}$, donde:
 
 $$
 \hat\tau_{\scriptsize DM}
@@ -191,16 +304,16 @@ y donde $N_1=\sum_i D_i$; $N_0=\sum_i (1-D_i)$.
 
 **R/:**
 
-Para demostrar que $\hat\tau_{MCO}=\hat\tau_{DM}$, podemos estimar$\hat\tau_{MCO}$ haciendo la minimización de cuadrados a los residuos de nuestro modelo de regresión:
+Para demostrar que $\hat\tau_{MCO}=\hat\tau_{DM}$, podemos
+estimar$\hat\tau_{MCO}$ haciendo la minimización de cuadrados a los
+residuos de nuestro modelo de regresión:
 
 $$
 \min_{\hat\beta_0,\hat\tau}
 \sum_{i=1}^N (Y_i-\hat\beta_0-\hat\tau D_i)^2
 $$
 
-
-
-**FOC respecto de $\hat\beta_0$:**
+**FOC respecto de** $\hat\beta_0$:
 
 $$
 -2\sum_{i=1}^N (Y_i-\hat\beta_0-\hat\tau D_i) = 0
@@ -220,9 +333,7 @@ $$
 \hat\beta_0= \bar{Y}-\hat\tau \frac{N1}{N}
 $$
 
-
-
-**FOC respecto de $\hat\tau$:**
+**FOC respecto de** $\hat\tau$:
 
 $$
 -2\sum_{i=1}^N (Y_i-\hat\beta_0-\hat\tau D_i)D_i = 0
@@ -262,7 +373,8 @@ $$
 \hat\tau\left(1 - \frac{N_1}{N}\right)=\bar{Y_1}- \bar{Y}
 $$
 
-Si $\frac{N_1}{N}$ es la proporción de tratados, $1 - \frac{N_1}{N}$ es la proporción de controles:
+Si $\frac{N_1}{N}$ es la proporción de tratados, $1 - \frac{N_1}{N}$ es
+la proporción de controles:
 
 $$
 \hat\tau\left(\frac{N_0}{N}\right)=\bar{Y_1}- \bar{Y}
@@ -298,10 +410,11 @@ $$
 
 Cómo vemos, $\hat\tau_{MCO} = \hat\tau_{DM}$.
 
+**b).¿que supuesto debe cumplirse para que** $\hat\tau_{DM}$ sea un
+esitimador insesgadod el efecto causal promedio?
 
-**b).¿que supuesto debe cumplirse para que $\hat\tau_{DM}$ sea un esitimador insesgadod el efecto causal promedio?** 
-
-Para verificar que supuesto se debe cumplir vamos a evaluar la insesgadez tomando la esperanza matematica de nuestro estimador:
+Para verificar que supuesto se debe cumplir vamos a evaluar la
+insesgadez tomando la esperanza matematica de nuestro estimador:
 
 \begin{aligned}
 E[\hat\tau_{DM}]&=E[\bar{Y_1}-\bar{Y_0}]\\
@@ -314,19 +427,23 @@ Si usamos notación de resultados potenciales:
 E[\hat\tau_{DM}]&=E[Y_i|D_i=1]-E[Y_i|D_i=0]\\
 \end{aligned}
 
-Como en la primera demostración del taller, si sumamos y restamos el contrafactual tenemos que: 
+Como en la primera demostración del taller, si sumamos y restamos el
+contrafactual tenemos que:
 
 $$E[\hat\tau_{DM}]= \underbrace{E[Y_i(1)|D_i=1]-\color{red}{E[Y_i(0)|D_i=1]}}_{ATT}+\underbrace{\color{red}{E[Y_i(0)|D_i=1]}-E[Y_i (0)|D_i=0]}_{\text{Selectión Bias}}$$
 
-Por lo tanto, para que nuestro estimador $\hat\tau_{DM}$ se insesgado necesitamos evitar el sesgo de selección lo cual se logra por medio de la aleatorización garantizando que $(Y_i(1),Y_i(0))\perp D_i $
+Por lo tanto, para que nuestro estimador $\hat\tau_{DM}$ se insesgado
+necesitamos evitar el sesgo de selección lo cual se logra por medio de
+la aleatorización garantizando que \$(Y_i(1),Y_i(0))\perp D_i \$
 
-Ahora veamos esto como lo podemos obtener tambien de la recta de regresión. Recordemos que nuestra linea de regresión es: 
+Ahora veamos esto como lo podemos obtener tambien de la recta de
+regresión. Recordemos que nuestra linea de regresión es:
 
 $$
 Y_i=\beta_0+ \tau D_i+ U_i
 $$
 
-Partamos del mismo punto que antes: 
+Partamos del mismo punto que antes:
 
 \begin{aligned}
 E[\hat\tau_{DM}]&=E[\bar{Y_1}-\bar{Y_0}]\\
@@ -340,12 +457,18 @@ Ahora si tomamos estos valores esperados de nuestra recta obtenemos:
 E[Y_i|D_i=1]&= \beta_0+\tau+ E[U_i|D_i=1]\\
 E[Y_i|D_i=0]&=\beta_0+E[U_i|D_i=0]
 \end{aligned}
-Por lo tanto tenemos: 
+
+Por lo tanto tenemos:
 
 $$E[\hat\tau_{DM}]=\beta_0+\tau+ E[U-i|D_i=1]-(\beta_0+E[U_i|D_i=0])$$
 
-tal que: 
+tal que:
 
 $$E[\hat\tau_{DM}]=\tau+ \underbrace{E[U_i|D_i=1]-E[U-i|D_i=0]}_{\text{Selection Bias}}$$
 
-Por lo tanto en terminos de la recta de regresión el supuesto de independencia $(Y_i(1),Y_i(0))\perp D_i$ se traduce en el supuesto de exogenidad $E[U_i| D_i]=0$. Esto nos señala que, para tener un estimador insesgado, no debemos tener factores no observables correlacionados con el tratamiento que afecten el resultado, haciendo a los grupos diferentes."
+Por lo tanto en terminos de la recta de regresión el supuesto de
+independencia $(Y_i(1),Y_i(0))\perp D_i$ se traduce en el supuesto de
+exogenidad $E[U_i| D_i]=0$. Esto nos señala que, para tener un estimador
+insesgado, no debemos tener factores no observables correlacionados con
+el tratamiento que afecten el resultado, haciendo a los grupos
+diferentes."
