@@ -23,7 +23,9 @@ Considere una muestra de N estudiantes observados en un diseño de corte transve
 
 Para comenzar, suponga que el mecanismo de asignación al tratamiento es desconocido; es decir, no se conocen los criterios que determinaron la elección de un salón sobre el otro ni la forma en que los estudiantes son asignados a cada salón.
 
-# **1 Describa el problema de estimación utilizando el lenguaje de resultados potenciales**
+## Punto1 
+
+**1 Describa el problema de estimación utilizando el lenguaje de resultados potenciales**
 
 **a) Teniendo en cuenta el contexto presentado, defina formalmente los resultados potenciales $Y_i(1)$ y $Y_i(0)$. Luego, describa el problema de inferencia causal en este contexto.**
 
@@ -67,7 +69,9 @@ $$τ_{ATU} = E[Y_i(1)| D_i=0]-E[Y_i(0)| D_i=0]$$
 
 En este caso representa la diferencia en el puntaje promedio del test de habilidades cognitivas del salon que no fue asignado a las aulas tecnológicas y el resultado que esos mismos estudiantes hubieran obtenido  si hubieran sido asignados. Es decir, en este caso estamos restringiendo el efecto promedio al grupo que no fue tratado.
 
-# **2.Usted se encuentra interesada en estimar el siguiente efecto causal:**
+## Punto2 
+
+**2.Usted se encuentra interesada en estimar el siguiente efecto causal:**
 
 $$τ = E[Y_i(1)]-E[Y_i(0)]$$
 
@@ -167,7 +171,9 @@ $$
 $$
 Por lo tanto en nuestro caso , es posible que el salón elegido fuera comparable inicialmente al de control (sin sesgo de selección), pero que las laptops tengan un retorno mayor en el salón tratado debido a factores específicos del grupo o del profesor. Por lo tanto para que $ATE=ATT=ATU$ necesitamos tener ausencia del sesgo de hterogeneidad y de selección. 
 
-# **3. Para encontrar el efecto causal promedio de participar en el programa de tecnología educativa sobre el resultado en el test, considere el siguiente modelo lineal:**
+## Punto3
+
+**Para encontrar el efecto causal promedio de participar en el programa de tecnología educativa sobre el resultado en el test, considere el siguiente modelo lineal:**
 
 $$
 Y_i=\beta_0+ \tau D_i+ U_i
@@ -187,43 +193,27 @@ y donde $N_1=\sum_i D_i$; $N_0=\sum_i (1-D_i)$.
 
 **R/:**
 
-Para demostrar que $\hat\tau_{MCO}=\hat\tau_{DM}$.
-
-Podemos tomar dos caminos, uno es utilizando el método de momentos y otro haciendo la minimización de cuadrados.
-
-De la clase sabemos que el estimador de $MCO$ es el análogo muestral de los estimadores poblacionales de la $CEF$, entonces hagamos lo siguiente: tomemos el valor esperado de nuestra regresión.
+**3. Para encontrar el efecto causal promedio de participar en el programa de tecnología educativa sobre el resultado en el test, considere el siguiente modelo lineal:**
 
 $$
-E[Y_i \mid D_i=0]= \beta_0
+Y_i=\beta_0+ \tau D_i+ U_i
 $$
 
-$$
-E[Y_i \mid D_i=1]= \beta_0+\tau
-$$
-
-Por lo tanto, si aplicamos la diferencia de medias:
+**Demuestre que el estimador $\hat\tau_{MCO}$ coincide con la diferencia de medias entre el grupo de tratados y el grupo de no tratados. Es decir, pruebe que $\hat\tau_{MCO} = \hat\tau_{DM}$, donde:**
 
 $$
-E[Y_i \mid D_i=1]- E[Y_i \mid D_i=0]
-= (\beta_0+\tau)- \beta_0
+\hat\tau_{\scriptsize DM}
+:= \frac{1}{N_1}\sum_{\{i : D_i = 1\}} Y_i
+- \frac{1}{N_0}\sum_{\{i : D_i = 0\}} Y_i,
 $$
 
-$$
-E[Y_i \mid D_i=1]- E[Y_i \mid D_i=0]
-= \tau
-$$
-
-Si tomamos el momento muestral, tendríamos que:
-
-$$
-\frac{1}{N_1}\sum_{\{i : D_i = 1\}} Y_i
-- \frac{1}{N_0}\sum_{\{i : D_i = 0\}} Y_i
-= \hat\tau_{MCO}
-$$
+y donde $N_1=\sum_i D_i$; $N_0=\sum_i (1-D_i)$.
 
 
 
-La segunda forma de llegar a la respuesta es aplicando la minimización de cuadrados a los residuos de nuestro modelo de regresión:
+**R/:**
+
+Para demostrar que $\hat\tau_{MCO}=\hat\tau_{DM}$, podemos estimar$\hat\tau_{MCO}$ haciendo la minimización de cuadrados a los residuos de nuestro modelo de regresión:
 
 $$
 \min_{\hat\beta_0,\hat\tau}
@@ -249,7 +239,7 @@ $$
 Despejando $\beta_0$:
 
 $$
-\beta_0= \bar{Y}-\hat\tau \frac{N1}{N}
+\hat\beta_0= \bar{Y}-\hat\tau \frac{N1}{N}
 $$
 
 
@@ -329,3 +319,55 @@ $$
 $$
 
 Cómo vemos, $\hat\tau_{MCO} = \hat\tau_{DM}$.
+
+
+**b).¿que supuesto debe cumplirse para que $\hat\tau_{DM}$ sea un esitimador insesgadod el efecto causal promedio?** 
+
+Para verificar que supuesto se debe cumplir vamos a evaluar la insesgadez tomando la esperanza matematica de nuestro estimador:
+
+\begin{aligned}
+E[\hat\tau_{DM}]&=E[\bar{Y_1}-\bar{Y_0}]\\
+E[\hat\tau_{DM}]&=E[\bar{Y_1}]-E[\bar{Y_0}]\\
+\end{aligned}
+
+Si usamos notación de resultados potenciales:
+
+\begin{aligned}
+E[\hat\tau_{DM}]&=E[Y_i|D_i=1]-E[Y_i|D_i=0]\\
+\end{aligned}
+
+Como en la primera demostración del taller, si sumamos y restamos el contrafactual tenemos que: 
+
+$$E[\hat\tau_{DM}]= \underbrace{E[Y_i(1)|D_i=1]-\color{red}{E[Y_i(0)|D_i=1]}}_{ATT}+\underbrace{\color{red}{E[Y_i(0)|D_i=1]}-E[Y_i (0)|D_i=0]}_{\text{Selectión Bias}}$$
+
+Por lo tanto, para que nuestro estimador $\hat\tau_{DM}$ se insesgado necesitamos evitar el sesgo de selección lo cual se logra por medio de la aleatorización garantizando que $(Y_i(1),Y_i(0))\perp D_i $
+
+Ahora veamos esto como lo podemos obtener tambien de la recta de regresión. Recordemos que nuestra linea de regresión es: 
+
+$$
+Y_i=\beta_0+ \tau D_i+ U_i
+$$
+
+Partamos del mismo punto que antes: 
+
+\begin{aligned}
+E[\hat\tau_{DM}]&=E[\bar{Y_1}-\bar{Y_0}]\\
+E[\hat\tau_{DM}]&=E[\bar{Y_1}]-E[\bar{Y_0}]\\
+E[\hat\tau_{DM}]&=E[Y_i|D_i=1]-E[Y_i|D_i=0]\\
+\end{aligned}
+
+Ahora si tomamos estos valores esperados de nuestra recta obtenemos:
+
+\begin{aligned}
+E[Y_i|D_i=1]&= \beta_0+\tau+ E[U_i|D_i=1]\\
+E[Y_i|D_i=0]&=\beta_0+E[U_i|D_i=0]
+\end{aligned}
+Por lo tanto tenemos: 
+
+$$E[\hat\tau_{DM}]=\beta_0+\tau+ E[U-i|D_i=1]-(\beta_0+E[U_i|D_i=0])$$
+
+tal que: 
+
+$$E[\hat\tau_{DM}]=\tau+ \underbrace{E[U_i|D_i=1]-E[U-i|D_i=0]}_{\text{Selection Bias}}$$
+
+Por lo tanto en terminos de la recta de regresión el supuesto de independencia $(Y_i(1),Y_i(0))\perp D_i $ se traduce en el supuesto de exogenidad $E[U_i| D_i]=0$. Esto nos señala que, para tener un estimador insesgado, no debemos tener factores no observables correlacionados con el tratamiento que afecten el resultado, haciendo a los grupos diferentes."
