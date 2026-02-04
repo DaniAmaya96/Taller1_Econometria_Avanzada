@@ -3237,7 +3237,7 @@ window.Quarto = {
 <section id="punto1" class="level2">
 <h2 class="anchored" data-anchor-id="punto1">Punto1</h2>
 <p><strong>Describa el problema de estimación utilizando el lenguaje de resultados potenciales</strong></p>
-<p><strong>a) Teniendo en cuenta el contexto presentado, defina formalmente los resultados potenciales <span class="math inline">\(Y_i(1)\)</span> y <span class="math inline">\(Y_i(0)\)</span>. Luego, describa el problema de inferencia causal en este contexto.</strong></p>
+<p><strong>a) Teniendo en cuenta el contexto presentado, defina formalmente los resultados potenciales</strong> <span class="math inline">\(Y_i(1)\)</span> y <span class="math inline">\(Y_i(0)\)</span>. Luego, describa el problema de inferencia causal en este contexto.</p>
 <p><strong>R/:</strong> En este caso el resultado potencial <span class="math inline">\(Y_i(1)\)</span> se define como el puntaje que obtendría el estudiante <span class="math inline">\(i\)</span> dado que fue asigando al aula tecnologica. Por su parte el resultado potencial <span class="math inline">\(Y_i(0)\)</span> es el resultado que obtendría el estudiante <span class="math inline">\(i\)</span> dado que no fue asignado al aula tecnologica.</p>
 <p>Para recuperar el efecto causal de la participación en las aulas tecnologicas en el puntaje obtenido por el estudiante <span class="math inline">\(i\)</span>, nos gustaria ver la dferencia en sus resultados potenciales, es decir de sus puntajes dado que participio en el aula y que no participo en el aula:</p>
 <p><span class="math display">\[τ_i=Y_i(1)-Y_i(0) \]</span></p>
@@ -3245,7 +3245,7 @@ window.Quarto = {
 <p><span class="math display">\[Y_i=Y_i(1)D_i+(1-D_i)Y_i(0) \]</span></p>
 <p>De tal manera que el resultado observado $Y_i $ para el estudiante con <span class="math inline">\(D_i = 1\)</span> sera su resultado potencial dado que participó <span class="math inline">\(Y_i(1)\)</span> y para el estudiante con <span class="math inline">\(D_i = 0\)</span> observaremos su resultado potencial dado que no participó <span class="math inline">\(Y_i(0)\)</span>. Pero nunca seremos capaces de ver para el mismo estudiante <span class="math inline">\(i\)</span> su resultado dado que participo <span class="math inline">\(D_i = 1\)</span> y su contrafactual <span class="math inline">\(D_i = 0\)</span>.</p>
 <p>Es por lo anterior que para trabajar con nuestra muestra utilizaremos no el resultado del inddividuo <span class="math inline">\(i\)</span> sino que trabajaremos con el promedio de los resultados potenciales, es decir buscaremos estumar los efectos promedio, bien sea el efecto promedio del tramaiento <span class="math inline">\(ATE\)</span>, el efecto promedio del tratamiento en los tratados <span class="math inline">\(ATT\)</span> y el efecto promedio del tratamiento en los no tratados <span class="math inline">\(ATU\)</span>.</p>
-<p><strong>b) Define en lenguaje matemático el <span class="math inline">\(ATE\)</span>, el <span class="math inline">\(ATT\)</span> y el <span class="math inline">\(ATU\)</span>. Interprete cada uno de estos conceptos de acuerdo al contexto del caso</strong></p>
+<p><strong>b) Define en lenguaje matemático el</strong> <span class="math inline">\(ATE\)</span>, el <span class="math inline">\(ATT\)</span> y el <span class="math inline">\(ATU\)</span>. Interprete cada uno de estos conceptos de acuerdo al contexto del caso</p>
 <p><strong>R/:</strong></p>
 <p>El <span class="math inline">\(ATE\)</span> se define como el efectro promedio del tratamiento:</p>
 <p><span class="math display">\[τ_{ATE} = E[Y_i(1)-Y_i(0)]\]</span> <span class="math display">\[τ_{ATE} = E[Y_i(1)]-E[Y_i(0)]\]</span></p>
@@ -3306,7 +3306,7 @@ E[Y_i(1)|D_i=1]-\color{red}{E[Y_i(1)| D_i=0]}\\
 <p><strong>c).</strong></p>
 <p><span class="math display">\[ ATE = \pi \cdot ATT + (1-\pi) \cdot ATU\]</span></p>
 <p>Por úlimo esta expresión nos dice que el efecto promedio del tratamiento es un promedio ponderado del efecto promedio en los tratado <span class="math inline">\(ATT\)</span> y en los no tratados <span class="math inline">\(ATU\)</span>.</p>
-<p><strong>¿Es cierto que si <span class="math inline">\(\tau_{naive}= ATT\)</span>, entonces <span class="math inline">\(\tau_{naive}=ATU\)</span>?</strong></p>
+<p><strong>¿Es cierto que si</strong> <span class="math inline">\(\tau_{naive}= ATT\)</span>, entonces <span class="math inline">\(\tau_{naive}=ATU\)</span>?</p>
 <p>Esta afirmación no es cierta. Como vimos, el <span class="math inline">\(\tau_{naive}= ATT\)</span> sí y solo sí el resultado promedio contrafactual del grupo tratado <span class="math inline">\(E[Y_i(0) | D_i=1]\)</span> es idéntico al resultado promedio observado del grupo de control <span class="math inline">\(E[Y_i (0)|D_i =0]\)</span>, lo cual no nos esta brindando ninguna información al respecto de algún posible sesgo de heterogeneidad del tratamiento, es decir no nos garantiza que el efecto del tratamiento sea el mismo para ambos grupos. Por su parte, si el <span class="math inline">\(\tau_{naive}=ATU\)</span> solo sabemos que hay ausencia de sesgo de heterogeneidad, pero no tenemos certeza al respecto de la comparabilidad de los grupos (sesgo de selección).</p>
 <p>Teniendo como base la descomposicón que se hace en libro Causal Inference: The Mixtape de Scott Cunningham podemos demostrar la relación entre estos parametros: <span class="math display">\[
 \begin{aligned}
@@ -3330,7 +3330,7 @@ E[Y_i(1)|D_i=1]-\color{red}{E[Y_i(1)| D_i=0]}\\
 <p><span class="math display">\[
 Y_i=\beta_0+ \tau D_i+ U_i
 \]</span></p>
-<p><strong>Demuestre que el estimador <span class="math inline">\(\hat\tau_{MCO}\)</span> coincide con la diferencia de medias entre el grupo de tratados y el grupo de no tratados. Es decir, pruebe que <span class="math inline">\(\hat\tau_{MCO} = \hat\tau_{DM}\)</span>, donde:</strong></p>
+<p><strong>Demuestre que el estimador</strong> <span class="math inline">\(\hat\tau_{MCO}\)</span> coincide con la diferencia de medias entre el grupo de tratados y el grupo de no tratados. Es decir, pruebe que <span class="math inline">\(\hat\tau_{MCO} = \hat\tau_{DM}\)</span>, donde:</p>
 <p><span class="math display">\[
 \hat\tau_{\scriptsize DM}
 := \frac{1}{N_1}\sum_{\{i : D_i = 1\}} Y_i
@@ -3343,7 +3343,7 @@ Y_i=\beta_0+ \tau D_i+ U_i
 \min_{\hat\beta_0,\hat\tau}
 \sum_{i=1}^N (Y_i-\hat\beta_0-\hat\tau D_i)^2
 \]</span></p>
-<p><strong>FOC respecto de <span class="math inline">\(\hat\beta_0\)</span>:</strong></p>
+<p><strong>FOC respecto de</strong> <span class="math inline">\(\hat\beta_0\)</span>:</p>
 <p><span class="math display">\[
 -2\sum_{i=1}^N (Y_i-\hat\beta_0-\hat\tau D_i) = 0
 \]</span></p>
@@ -3357,7 +3357,7 @@ N\bar{Y} - N\hat\beta_0 - \hat\tau N_1 =0
 <p><span class="math display">\[
 \hat\beta_0= \bar{Y}-\hat\tau \frac{N1}{N}
 \]</span></p>
-<p><strong>FOC respecto de <span class="math inline">\(\hat\tau\)</span>:</strong></p>
+<p><strong>FOC respecto de</strong> <span class="math inline">\(\hat\tau\)</span>:</p>
 <p><span class="math display">\[
 -2\sum_{i=1}^N (Y_i-\hat\beta_0-\hat\tau D_i)D_i = 0
 \]</span></p>
@@ -3412,7 +3412,7 @@ N\bar{Y} - N\hat\beta_0 - \hat\tau N_1 =0
 - \frac{1}{N_0}\sum_{\{i : D_i = 0\}} Y_i
 \]</span></p>
 <p>Cómo vemos, <span class="math inline">\(\hat\tau_{MCO} = \hat\tau_{DM}\)</span>.</p>
-<p><strong>b).¿que supuesto debe cumplirse para que <span class="math inline">\(\hat\tau_{DM}\)</span> sea un esitimador insesgadod el efecto causal promedio?</strong></p>
+<p><strong>b).¿que supuesto debe cumplirse para que</strong> <span class="math inline">\(\hat\tau_{DM}\)</span> sea un esitimador insesgadod el efecto causal promedio?</p>
 <p>Para verificar que supuesto se debe cumplir vamos a evaluar la insesgadez tomando la esperanza matematica de nuestro estimador:</p>
 <span class="math display">\[\begin{aligned}
 E[\hat\tau_{DM}]&amp;=E[\bar{Y_1}-\bar{Y_0}]\\
