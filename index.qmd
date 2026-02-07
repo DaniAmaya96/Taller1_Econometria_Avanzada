@@ -72,7 +72,7 @@ resultados potenciales**
 
 **a) Teniendo en cuenta el contexto presentado, defina formalmente los
 resultados potenciales** $Y_i(1)$ y $Y_i(0)$. Luego, describa el
-problema de inferencia causal en este contexto.
+problema de inferencia causal en este contexto.**
 
 **R/:** En este caso el resultado potencial $Y_i(1)$ se define como el
 puntaje que obtendría el estudiante $i$ dado que fue asigando al aula
@@ -162,7 +162,8 @@ $$τ_{naive} = E[Y_i | D_i=1]-E[Y_i|D_i =0]$$
 
 $$τ_{naive} = ATT + E[Y_i(0) | D_i=1]-E[Y_i (0)|D_i =0]$$
 
-**R/:** $$
+**R/:** 
+$$
 \begin{aligned}
 \tau_{naive} &= E[Y_i | D_i=1] - E[Y_i | D_i=0] \\
 \tau_{naive} &= E[Y_i(1) | D_i=1] - E[Y_i(0) | D_i=0] + \color{red}{E[Y_i(0) | D_i=1]} - \color{red}{E[Y_i(0) | D_i=1]}\\
@@ -175,7 +176,8 @@ $$
 
 $$\tau_{naive} = ATU + E[Y_i(1) | D_i=1]-E[Y_i (1)|D_i =0]$$
 
-**R/:** $$
+**R/:** 
+$$
 \begin{aligned}
 \tau_{naive} &= E[Y_i | D_i=1] - E[Y_i | D_i=0] \\
 \tau_{naive} &= E[Y_i(1) |D_i=1] - E[Y_i(0)| D_i=0]+\color{red}{E[Y_i(1)| D_i=0]}-\\
@@ -257,7 +259,9 @@ selección).
 
 Teniendo como base la descomposicón que se hace en libro Causal
 Inference: The Mixtape de Scott Cunningham podemos demostrar la relación
-entre estos parametros: $$
+entre estos parametros: 
+
+$$
 \begin{aligned}
 \tau_{ATE} &=\pi.ATT+(1-\pi).ATU\\
 \tau_{ATE} &=\pi.ATT+(1-\pi).ATU + \color{red}{(1-\pi).ATT} - \color{red}{(1-\pi).ATT}\\
@@ -266,14 +270,19 @@ entre estos parametros: $$
 \text{Despejando $ATT$:} \\
 \tau_{ATT} &= ATE+ (1-\pi).(ATT-ATU)
 \end{aligned}
-$$ Remplazando la expresión que acabamos obtener de $\tau_{ATT}$ en
+$$ 
+
+Remplazando la expresión que acabamos obtener de $\tau_{ATT}$ en
 nuestso esmitador $\tau_{naive}$, obtenemos la descomposición completa
-del sesgo: $$
+del sesgo: 
+
+$$
 \begin{aligned}
 \tau_{naive} &= ATT + \underbrace{E[Y_i(0) | D_i=1]-E[Y_i (0)|D_i =0]}_{\text{Selection Bias}}\\
 \tau_{naive} &= ATE+ \underbrace{(1-\pi).(ATT-ATU)}_{\text{Heterogenity Bias}} + \underbrace{E[Y_i(0) | D_i=1]-E[Y_i (0)|D_i =0]}_{\text{Selection Bias}}
 \end{aligned}
-$$ Por lo tanto en nuestro caso , es posible que el salón elegido fuera
+$$ 
+Por lo tanto en nuestro caso , es posible que el salón elegido fuera
 comparable inicialmente al de control (sin sesgo de selección), pero que
 las laptops tengan un retorno mayor en el salón tratado debido a
 factores específicos del grupo o del profesor. Por lo tanto para que
@@ -415,18 +424,18 @@ esitimador insesgadod el efecto causal promedio?
 
 Para verificar que supuesto se debe cumplir vamos a evaluar la
 insesgadez tomando la esperanza matematica de nuestro estimador:
-
+$$
 \begin{aligned}
 E[\hat\tau_{DM}]&=E[\bar{Y_1}-\bar{Y_0}]\\
 E[\hat\tau_{DM}]&=E[\bar{Y_1}]-E[\bar{Y_0}]\\
 \end{aligned}
-
+$$
 Si usamos notación de resultados potenciales:
-
+$$
 \begin{aligned}
 E[\hat\tau_{DM}]&=E[Y_i|D_i=1]-E[Y_i|D_i=0]\\
 \end{aligned}
-
+$$
 Como en la primera demostración del taller, si sumamos y restamos el
 contrafactual tenemos que:
 
@@ -444,20 +453,20 @@ Y_i=\beta_0+ \tau D_i+ U_i
 $$
 
 Partamos del mismo punto que antes:
-
+$$
 \begin{aligned}
 E[\hat\tau_{DM}]&=E[\bar{Y_1}-\bar{Y_0}]\\
 E[\hat\tau_{DM}]&=E[\bar{Y_1}]-E[\bar{Y_0}]\\
 E[\hat\tau_{DM}]&=E[Y_i|D_i=1]-E[Y_i|D_i=0]\\
 \end{aligned}
-
+$$
 Ahora si tomamos estos valores esperados de nuestra recta obtenemos:
-
+$$
 \begin{aligned}
 E[Y_i|D_i=1]&= \beta_0+\tau+ E[U_i|D_i=1]\\
 E[Y_i|D_i=0]&=\beta_0+E[U_i|D_i=0]
 \end{aligned}
-
+$$
 Por lo tanto tenemos:
 
 $$E[\hat\tau_{DM}]=\beta_0+\tau+ E[U-i|D_i=1]-(\beta_0+E[U_i|D_i=0])$$
@@ -479,7 +488,7 @@ diferentes."
 			$$\hat\tau_{DM} \overset{p}{\longrightarrow} \mathbb{E}[Y_{i}(1) - Y_{i}(0) | D_i = 1]$$
 **Puede suponer que el supuesto de SUTVA se cumple. Posteriormente, defina intuitivamente y explique la importancia de la propiedad de consistencia de un estimador.**
 
-R/:
+**R/:**
 
 Para demostrar que $\hat\tau_{DM} \overset{p}{\longrightarrow} \mathbb{E}[Y_{i}(1) - Y_{i}(0) | D_i = 1]$ empecemos por:
 
@@ -521,6 +530,39 @@ $$
 \operatorname{plim} [\hat\tau_{DM}] = \underbrace{E[Y_i(1)- Y_i(0)|D_i=1]}_{ATT}
 $$
 
-que es lo mismo que $\hat\tau_{DM} \overset{p}{\longrightarrow} \mathbb{E}[Y_{i}(1) - Y_{i}(0) | D_i = 1]$ 
+que es lo mismo que $\hat\tau_{DM} \overset{p}{\longrightarrow} \mathbb{E}[Y_{i}(1) - Y_{i}(0) | D_i = 1]$
+
+# **Segundo Ejercicio**
+
+Tal como señalan [Abadie et al. (2022)](https://academic.oup.com/qje/article-abstract/138/1/1/6750017), los errores estándar clusterizados han adquirido un rol central en el trabajo empírico y esto no es casualidad. Si bien una parte sustancial de los esfuerzos de los investigadores se concentra en la obtención de estimadores consistentes e insesgados, resulta también fundamental poder realizar inferencia estadística válida sobre dichos estimadores. En este contexto, una de las prácticas más extendidas en la literatura empírica es el reporte de errores estándar clusterizados. No obstante, su uso plantea varias preguntas recurrentes en la práctica: ¿en qué situaciones es apropiado utilizar este tipo de errores estándar?, ¿cuándo tienen un impacto importante sobre la inferencia estadística? y ¿a qué nivel debería realizarse la clusterización?
+
+Teniendo en cuenta lo anterior, suponga que usted desea estudiar **el impacto de que un estudiante de raza negra tenga un profesor de la misma raza**. Es bien sabido que existen brechas raciales en los resultados educacionales, lo cual resulta problemático por diversas razones: la movilidad social, los ingresos futuros y el bienestar social están estrechamente vinculados al nivel educativo. En este contexto, usted decide seguir la línea de investigación propuesta por [Gershenson et al. (2022)](https://www.aeaweb.org/articles?id=10.1257/pol.20190573) y busca replicar algunos de sus principales resultados, en particular aquellos relacionados con el desempeño en exámenes y la entrada a la universidad.
+
+Para realizar estos ejercicios, usted dispone de una base de datos de corte transversal denominada `race_teaching.dta` que proviene de un experimento realizado en EE.UU. que aleatorizaba la raza de los profesores en diferentes salones de kínder. Sus datos están a nivel individual, donde cada observación es una persona de raza negra que participó en el experimento.
+
+Esta base contiene información sobre los resultados en el SAT (examen estandarizado para el ingreso a la universidad) y una variable indicadora que señala si el estudiante asistió a la universidad. A estas variables de interés se las denota por $Y_i$. Adicionalmente, la base incluye una variable indicadora $D_i$, que toma el valor de uno si el estudiante $i$ tuvo un profesor de raza negra en kínder y cero en caso contrario. Asimismo, se incorporan características geográficas, tales como el salón, el colegio, el condado y el estado al que pertenece cada individuo.
+
+Antes de abordar las decisiones empíricas que deberá tomar en su investigación, usted decide analizar primero, desde una perspectiva teórica, los errores estándar clusterizados. De este modo, podrá comprender su formulación, sus principales propiedades y sentar las bases para determinar en qué contextos resulta apropiado utilizarlos y cómo deben implementarse.
+
+## Punto1
+
+**Realice un análisis crítico de los supuestos de homocedasticidad y no-correlación del término de error. Para ello:**
+
+* Defina ambos supuestos, tanto desde un punto de vista matemático como intuitivo, en el contexto del caso de estudio.
+
+* Discuta si resulta razonable asumir el cumplimiento de estos supuestos dada la pregunta de investigación. Justifique su respuesta utilizando un ejemplo intuitivo para cada supuesto.
+
+**R/:**
+
+El supuesto de homocedasticidad implica que $E[e^{2}_i|x]=σ^2$ que tambien podría ser visto como $E[e^{2}_i|D_i=1]=σ^2$ y $E[e^{2}_i|D_i=0]=σ^2$, lo que quiere decir que la varianza de los errores es constante para cada estudiante independientemente de sus caracteristicas ($X$), en este caso, quiere decir que la dispersión en los resultados de la prueba SAT para cada estudiante es la misma para el grupo de estudiantes tratados y no tratados. 
+
+Por otro lado, el supuesto de no-correlación implica que $E[e_ie_j]= 0$. Esto quiere decier que conocer el error del estudiante $i$ no me dice nada al respecto del resultado del estudiante $j$. Es decir, si a un estudiante le va muy bien en la prueba, por algun factor diferente al tratamiento,  eso no quiere decir que a otro estudiante le vaya a ir igual de bien o que le vaya a ir mucho peor. Es decir si un estudiante el dia del examen se desperto con dolor de cabeza, eso no nos dice nada respecto de otro estudiante.  
+
+El supuesto de homocedasticidad en nuestro RCT no tiene muchos sentido. Tal como lo señalan Angrist y Pischke (2009) en la vida real, aunque no conocemos la $CEF$ es viable pensar que esta no es lineal necesarimente, por lo que el hecho que no sea lineal ya va a generar por si mismo que tengamos variabilidad en la forma en que la línea de regresión se aproxima. Así mismo hay que tener en cuenta que una de nuestras variables dependientes es binaria (asístencia a la universidad), de acuerdo con los autores mencionados esto anula el supusto de homocedasticidad porque por simple construcción va a haber variación en los errores. 
+
+Por otro Abadie et al.(2023) señalan que el ajuste por cluster de errores estandar se debe hacer por nivel de muestreo y de asignación de tratamiento. En este caso el tratamiento fue asignado por salones por lo que en este caso no solo no deberíamos asumir errores homocedasticos sino aplicar cluster. Esto tambien implica que debemos ser concientes que es muy probable que l supuesto de no-correlación implica que $E[e_ie_j]= 0$ no se cumpla, pues en este caso pueden haber factores no observados en cada salon que si correlaciónen los resultados de l estudiante $i$ con el estudiante $j$ que pertenecen al mismo salon, lo que vimos formalmente en clase como $E[e_{gi}e_{gh}]\neq 0$
+
+
+
 
 

@@ -3197,6 +3197,10 @@ window.Quarto = {
   <li><a href="#punto3" id="toc-punto3" class="nav-link" data-scroll-target="#punto3">Punto3</a></li>
   <li><a href="#punto4" id="toc-punto4" class="nav-link" data-scroll-target="#punto4">Punto4</a></li>
   </ul></li>
+  <li><a href="#segundo-ejercicio" id="toc-segundo-ejercicio" class="nav-link" data-scroll-target="#segundo-ejercicio"><strong>Segundo Ejercicio</strong></a>
+  <ul class="collapse">
+  <li><a href="#punto1-1" id="toc-punto1-1" class="nav-link" data-scroll-target="#punto1-1">Punto1</a></li>
+  </ul></li>
   </ul>
 </nav>
 </div>
@@ -3238,7 +3242,7 @@ window.Quarto = {
 <section id="punto1" class="level2">
 <h2 class="anchored" data-anchor-id="punto1">Punto1</h2>
 <p><strong>Describa el problema de estimación utilizando el lenguaje de resultados potenciales</strong></p>
-<p><strong>a) Teniendo en cuenta el contexto presentado, defina formalmente los resultados potenciales</strong> <span class="math inline">\(Y_i(1)\)</span> y <span class="math inline">\(Y_i(0)\)</span>. Luego, describa el problema de inferencia causal en este contexto.</p>
+<p><strong>a) Teniendo en cuenta el contexto presentado, defina formalmente los resultados potenciales</strong> <span class="math inline">\(Y_i(1)\)</span> y <span class="math inline">\(Y_i(0)\)</span>. Luego, describa el problema de inferencia causal en este contexto.**</p>
 <p><strong>R/:</strong> En este caso el resultado potencial <span class="math inline">\(Y_i(1)\)</span> se define como el puntaje que obtendría el estudiante <span class="math inline">\(i\)</span> dado que fue asigando al aula tecnologica. Por su parte el resultado potencial <span class="math inline">\(Y_i(0)\)</span> es el resultado que obtendría el estudiante <span class="math inline">\(i\)</span> dado que no fue asignado al aula tecnologica.</p>
 <p>Para recuperar el efecto causal de la participación en las aulas tecnologicas en el puntaje obtenido por el estudiante <span class="math inline">\(i\)</span>, nos gustaria ver la dferencia en sus resultados potenciales, es decir de sus puntajes dado que participio en el aula y que no participo en el aula:</p>
 <p><span class="math display">\[τ_i=Y_i(1)-Y_i(0) \]</span></p>
@@ -3309,7 +3313,8 @@ E[Y_i(1)|D_i=1]-\color{red}{E[Y_i(1)| D_i=0]}\\
 <p>Por úlimo esta expresión nos dice que el efecto promedio del tratamiento es un promedio ponderado del efecto promedio en los tratado <span class="math inline">\(ATT\)</span> y en los no tratados <span class="math inline">\(ATU\)</span>.</p>
 <p><strong>¿Es cierto que si</strong> <span class="math inline">\(\tau_{naive}= ATT\)</span>, entonces <span class="math inline">\(\tau_{naive}=ATU\)</span>?</p>
 <p>Esta afirmación no es cierta. Como vimos, el <span class="math inline">\(\tau_{naive}= ATT\)</span> sí y solo sí el resultado promedio contrafactual del grupo tratado <span class="math inline">\(E[Y_i(0) | D_i=1]\)</span> es idéntico al resultado promedio observado del grupo de control <span class="math inline">\(E[Y_i (0)|D_i =0]\)</span>, lo cual no nos esta brindando ninguna información al respecto de algún posible sesgo de heterogeneidad del tratamiento, es decir no nos garantiza que el efecto del tratamiento sea el mismo para ambos grupos. Por su parte, si el <span class="math inline">\(\tau_{naive}=ATU\)</span> solo sabemos que hay ausencia de sesgo de heterogeneidad, pero no tenemos certeza al respecto de la comparabilidad de los grupos (sesgo de selección).</p>
-<p>Teniendo como base la descomposicón que se hace en libro Causal Inference: The Mixtape de Scott Cunningham podemos demostrar la relación entre estos parametros: <span class="math display">\[
+<p>Teniendo como base la descomposicón que se hace en libro Causal Inference: The Mixtape de Scott Cunningham podemos demostrar la relación entre estos parametros:</p>
+<p><span class="math display">\[
 \begin{aligned}
 \tau_{ATE} &amp;=\pi.ATT+(1-\pi).ATU\\
 \tau_{ATE} &amp;=\pi.ATT+(1-\pi).ATU + \color{red}{(1-\pi).ATT} - \color{red}{(1-\pi).ATT}\\
@@ -3318,7 +3323,9 @@ E[Y_i(1)|D_i=1]-\color{red}{E[Y_i(1)| D_i=0]}\\
 \text{Despejando $ATT$:} \\
 \tau_{ATT} &amp;= ATE+ (1-\pi).(ATT-ATU)
 \end{aligned}
-\]</span> Remplazando la expresión que acabamos obtener de <span class="math inline">\(\tau_{ATT}\)</span> en nuestso esmitador <span class="math inline">\(\tau_{naive}\)</span>, obtenemos la descomposición completa del sesgo: <span class="math display">\[
+\]</span></p>
+<p>Remplazando la expresión que acabamos obtener de <span class="math inline">\(\tau_{ATT}\)</span> en nuestso esmitador <span class="math inline">\(\tau_{naive}\)</span>, obtenemos la descomposición completa del sesgo:</p>
+<p><span class="math display">\[
 \begin{aligned}
 \tau_{naive} &amp;= ATT + \underbrace{E[Y_i(0) | D_i=1]-E[Y_i (0)|D_i =0]}_{\text{Selection Bias}}\\
 \tau_{naive} &amp;= ATE+ \underbrace{(1-\pi).(ATT-ATU)}_{\text{Heterogenity Bias}} + \underbrace{E[Y_i(0) | D_i=1]-E[Y_i (0)|D_i =0]}_{\text{Selection Bias}}
@@ -3414,34 +3421,34 @@ N\bar{Y} - N\hat\beta_0 - \hat\tau N_1 =0
 \]</span></p>
 <p>Cómo vemos, <span class="math inline">\(\hat\tau_{MCO} = \hat\tau_{DM}\)</span>.</p>
 <p><strong>b).¿que supuesto debe cumplirse para que</strong> <span class="math inline">\(\hat\tau_{DM}\)</span> sea un esitimador insesgadod el efecto causal promedio?</p>
-<p>Para verificar que supuesto se debe cumplir vamos a evaluar la insesgadez tomando la esperanza matematica de nuestro estimador:</p>
-<span class="math display">\[\begin{aligned}
+<p>Para verificar que supuesto se debe cumplir vamos a evaluar la insesgadez tomando la esperanza matematica de nuestro estimador: <span class="math display">\[
+\begin{aligned}
 E[\hat\tau_{DM}]&amp;=E[\bar{Y_1}-\bar{Y_0}]\\
 E[\hat\tau_{DM}]&amp;=E[\bar{Y_1}]-E[\bar{Y_0}]\\
-\end{aligned}\]</span>
-<p>Si usamos notación de resultados potenciales:</p>
-<span class="math display">\[\begin{aligned}
+\end{aligned}
+\]</span> Si usamos notación de resultados potenciales: <span class="math display">\[
+\begin{aligned}
 E[\hat\tau_{DM}]&amp;=E[Y_i|D_i=1]-E[Y_i|D_i=0]\\
-\end{aligned}\]</span>
-<p>Como en la primera demostración del taller, si sumamos y restamos el contrafactual tenemos que:</p>
+\end{aligned}
+\]</span> Como en la primera demostración del taller, si sumamos y restamos el contrafactual tenemos que:</p>
 <p><span class="math display">\[E[\hat\tau_{DM}]= \underbrace{E[Y_i(1)|D_i=1]-\color{red}{E[Y_i(0)|D_i=1]}}_{ATT}+\underbrace{\color{red}{E[Y_i(0)|D_i=1]}-E[Y_i (0)|D_i=0]}_{\text{Selectión Bias}}\]</span></p>
 <p>Por lo tanto, para que nuestro estimador <span class="math inline">\(\hat\tau_{DM}\)</span> se insesgado necesitamos evitar el sesgo de selección lo cual se logra por medio de la aleatorización garantizando que $(Y_i(1),Y_i(0))D_i $</p>
 <p>Ahora veamos esto como lo podemos obtener tambien de la recta de regresión. Recordemos que nuestra linea de regresión es:</p>
 <p><span class="math display">\[
 Y_i=\beta_0+ \tau D_i+ U_i
 \]</span></p>
-<p>Partamos del mismo punto que antes:</p>
-<span class="math display">\[\begin{aligned}
+<p>Partamos del mismo punto que antes: <span class="math display">\[
+\begin{aligned}
 E[\hat\tau_{DM}]&amp;=E[\bar{Y_1}-\bar{Y_0}]\\
 E[\hat\tau_{DM}]&amp;=E[\bar{Y_1}]-E[\bar{Y_0}]\\
 E[\hat\tau_{DM}]&amp;=E[Y_i|D_i=1]-E[Y_i|D_i=0]\\
-\end{aligned}\]</span>
-<p>Ahora si tomamos estos valores esperados de nuestra recta obtenemos:</p>
-<span class="math display">\[\begin{aligned}
+\end{aligned}
+\]</span> Ahora si tomamos estos valores esperados de nuestra recta obtenemos: <span class="math display">\[
+\begin{aligned}
 E[Y_i|D_i=1]&amp;= \beta_0+\tau+ E[U_i|D_i=1]\\
 E[Y_i|D_i=0]&amp;=\beta_0+E[U_i|D_i=0]
-\end{aligned}\]</span>
-<p>Por lo tanto tenemos:</p>
+\end{aligned}
+\]</span> Por lo tanto tenemos:</p>
 <p><span class="math display">\[E[\hat\tau_{DM}]=\beta_0+\tau+ E[U-i|D_i=1]-(\beta_0+E[U_i|D_i=0])\]</span></p>
 <p>tal que:</p>
 <p><span class="math display">\[E[\hat\tau_{DM}]=\tau+ \underbrace{E[U_i|D_i=1]-E[U-i|D_i=0]}_{\text{Selection Bias}}\]</span></p>
@@ -3450,7 +3457,7 @@ E[Y_i|D_i=0]&amp;=\beta_0+E[U_i|D_i=0]
 <section id="punto4" class="level2">
 <h2 class="anchored" data-anchor-id="punto4">Punto4</h2>
 <p><strong>Suponga ahora que la asignación de estudiantes a cada salón se realiza de manera aleatoria. De igual forma, la decisión sobre qué salón recibe el tratamiento también se tomó aleatoriamente. Además, todos los estudiantes pertenecientes al salón asignado al tratamiento efectivamente participaron en el programa. Demuestre que el estimador</strong> <span class="math display">\[\hat\tau_{DM} \overset{p}{\longrightarrow} \mathbb{E}[Y_{i}(1) - Y_{i}(0) | D_i = 1]\]</span> <strong>Puede suponer que el supuesto de SUTVA se cumple. Posteriormente, defina intuitivamente y explique la importancia de la propiedad de consistencia de un estimador.</strong></p>
-<p>R/:</p>
+<p><strong>R/:</strong></p>
 <p>Para demostrar que <span class="math inline">\(\hat\tau_{DM} \overset{p}{\longrightarrow} \mathbb{E}[Y_{i}(1) - Y_{i}(0) | D_i = 1]\)</span> empecemos por:</p>
 <p><span class="math display">\[
 \operatorname{plim} [\hat\tau_{DM}] = \operatorname{plim} \left( \left(\frac{1}{N_1} \sum_{i:D_i=1} Y_i\right) - \left(\frac{1}{N_0} \sum_{i:D_i=0} Y_i \right) \right)
@@ -3478,6 +3485,27 @@ E[Y_i|D_i=0]&amp;=\beta_0+E[U_i|D_i=0]
 \operatorname{plim} [\hat\tau_{DM}] = \underbrace{E[Y_i(1)- Y_i(0)|D_i=1]}_{ATT}
 \]</span></p>
 <p>que es lo mismo que <span class="math inline">\(\hat\tau_{DM} \overset{p}{\longrightarrow} \mathbb{E}[Y_{i}(1) - Y_{i}(0) | D_i = 1]\)</span></p>
+</section>
+</section>
+<section id="segundo-ejercicio" class="level1">
+<h1><strong>Segundo Ejercicio</strong></h1>
+<p>Tal como señalan <a href="https://academic.oup.com/qje/article-abstract/138/1/1/6750017">Abadie et al. (2022)</a>, los errores estándar clusterizados han adquirido un rol central en el trabajo empírico y esto no es casualidad. Si bien una parte sustancial de los esfuerzos de los investigadores se concentra en la obtención de estimadores consistentes e insesgados, resulta también fundamental poder realizar inferencia estadística válida sobre dichos estimadores. En este contexto, una de las prácticas más extendidas en la literatura empírica es el reporte de errores estándar clusterizados. No obstante, su uso plantea varias preguntas recurrentes en la práctica: ¿en qué situaciones es apropiado utilizar este tipo de errores estándar?, ¿cuándo tienen un impacto importante sobre la inferencia estadística? y ¿a qué nivel debería realizarse la clusterización?</p>
+<p>Teniendo en cuenta lo anterior, suponga que usted desea estudiar <strong>el impacto de que un estudiante de raza negra tenga un profesor de la misma raza</strong>. Es bien sabido que existen brechas raciales en los resultados educacionales, lo cual resulta problemático por diversas razones: la movilidad social, los ingresos futuros y el bienestar social están estrechamente vinculados al nivel educativo. En este contexto, usted decide seguir la línea de investigación propuesta por <a href="https://www.aeaweb.org/articles?id=10.1257/pol.20190573">Gershenson et al. (2022)</a> y busca replicar algunos de sus principales resultados, en particular aquellos relacionados con el desempeño en exámenes y la entrada a la universidad.</p>
+<p>Para realizar estos ejercicios, usted dispone de una base de datos de corte transversal denominada <code>race_teaching.dta</code> que proviene de un experimento realizado en EE.UU. que aleatorizaba la raza de los profesores en diferentes salones de kínder. Sus datos están a nivel individual, donde cada observación es una persona de raza negra que participó en el experimento.</p>
+<p>Esta base contiene información sobre los resultados en el SAT (examen estandarizado para el ingreso a la universidad) y una variable indicadora que señala si el estudiante asistió a la universidad. A estas variables de interés se las denota por <span class="math inline">\(Y_i\)</span>. Adicionalmente, la base incluye una variable indicadora <span class="math inline">\(D_i\)</span>, que toma el valor de uno si el estudiante <span class="math inline">\(i\)</span> tuvo un profesor de raza negra en kínder y cero en caso contrario. Asimismo, se incorporan características geográficas, tales como el salón, el colegio, el condado y el estado al que pertenece cada individuo.</p>
+<p>Antes de abordar las decisiones empíricas que deberá tomar en su investigación, usted decide analizar primero, desde una perspectiva teórica, los errores estándar clusterizados. De este modo, podrá comprender su formulación, sus principales propiedades y sentar las bases para determinar en qué contextos resulta apropiado utilizarlos y cómo deben implementarse.</p>
+<section id="punto1-1" class="level2">
+<h2 class="anchored" data-anchor-id="punto1-1">Punto1</h2>
+<p><strong>Realice un análisis crítico de los supuestos de homocedasticidad y no-correlación del término de error. Para ello:</strong></p>
+<ul>
+<li><p>Defina ambos supuestos, tanto desde un punto de vista matemático como intuitivo, en el contexto del caso de estudio.</p></li>
+<li><p>Discuta si resulta razonable asumir el cumplimiento de estos supuestos dada la pregunta de investigación. Justifique su respuesta utilizando un ejemplo intuitivo para cada supuesto.</p></li>
+</ul>
+<p><strong>R/:</strong></p>
+<p>El supuesto de homocedasticidad implica que <span class="math inline">\(E[e^{2}_i|x]=σ^2\)</span> que tambien podría ser visto como <span class="math inline">\(E[e^{2}_i|D_i=1]=σ^2\)</span> y <span class="math inline">\(E[e^{2}_i|D_i=0]=σ^2\)</span>, lo que quiere decir que la varianza de los errores es constante para cada estudiante independientemente de sus caracteristicas (<span class="math inline">\(X\)</span>), en este caso, quiere decir que la dispersión en los resultados de la prueba SAT para cada estudiante es la misma para el grupo de estudiantes tratados y no tratados.</p>
+<p>Por otro lado, el supuesto de no-correlación implica que <span class="math inline">\(E[e_ie_j]= 0\)</span>. Esto quiere decier que conocer el error del estudiante <span class="math inline">\(i\)</span> no me dice nada al respecto del resultado del estudiante <span class="math inline">\(j\)</span>. Es decir, si a un estudiante le va muy bien en la prueba, por algun factor diferente al tratamiento, eso no quiere decir que a otro estudiante le vaya a ir igual de bien o que le vaya a ir mucho peor. Es decir si un estudiante el dia del examen se desperto con dolor de cabeza, eso no nos dice nada respecto de otro estudiante.</p>
+<p>El supuesto de homocedasticidad en nuestro RCT no tiene muchos sentido. Tal como lo señalan Angrist y Pischke (2009) en la vida real, aunque no conocemos la <span class="math inline">\(CEF\)</span> es viable pensar que esta no es lineal necesarimente, por lo que el hecho que no sea lineal ya va a generar por si mismo que tengamos variabilidad en la forma en que la línea de regresión se aproxima. Así mismo hay que tener en cuenta que una de nuestras variables dependientes es binaria (asístencia a la universidad), de acuerdo con los autores mencionados esto anula el supusto de homocedasticidad porque por simple construcción va a haber variación en los errores.</p>
+<p>Por otro Abadie et al.(2023) señalan que el ajuste por cluster de errores estandar se debe hacer por nivel de muestreo y de asignación de tratamiento. En este caso el tratamiento fue asignado por salones por lo que en este caso no solo no deberíamos asumir errores homocedasticos sino aplicar cluster. Esto tambien implica que debemos ser concientes que es muy probable que l supuesto de no-correlación implica que <span class="math inline">\(E[e_ie_j]= 0\)</span> no se cumpla, pues en este caso pueden haber factores no observados en cada salon que si correlaciónen los resultados de l estudiante <span class="math inline">\(i\)</span> con el estudiante <span class="math inline">\(j\)</span> que pertenecen al mismo salon, lo que vimos formalmente en clase como <span class="math inline">\(E[e_{gi}e_{gh}]\neq 0\)</span></p>
 </section>
 </section>
 
