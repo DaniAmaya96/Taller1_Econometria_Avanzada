@@ -8,6 +8,10 @@ format:
     toc: true
     code-fold: true
     self-contained: true
+  pdf:
+    toc: true
+    number-sections: true
+    colorlinks: true
 editor: 
   markdown: 
     wrap: 72
