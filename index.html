@@ -3201,6 +3201,7 @@ window.Quarto = {
   <ul class="collapse">
   <li><a href="#punto1-1" id="toc-punto1-1" class="nav-link" data-scroll-target="#punto1-1">Punto1</a></li>
   <li><a href="#punto2-1" id="toc-punto2-1" class="nav-link" data-scroll-target="#punto2-1">Punto2</a></li>
+  <li><a href="#punto3-1" id="toc-punto3-1" class="nav-link" data-scroll-target="#punto3-1">Punto3</a></li>
   </ul></li>
   </ul>
 <div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="index.pdf"><i class="bi bi-file-pdf"></i>PDF</a></li></ul></div></nav>
@@ -3542,43 +3543,43 @@ E[Y_i|D_i=0]&amp;=\beta_0+E[U_i|D_i=0]
 <p><span class="math display">\[\hat\beta= \frac{\beta∑_{i=1}^N X_i^2+∑_{i=1}^N  e_iX_i}{∑_{i=1}^N X_i^2} \]</span></p>
 <p><span class="math display">\[\hat\beta= \beta+ \frac{∑_{i=1}^N e_iX_i}{∑_{i=1}^N X_i^2} \]</span></p>
 <p>Aplicamos el operador de la varianza:</p>
-<p><span class="math display">\[Var(\hat\beta|x_i)= \underbrace{Var(\beta)}_{\text{Var de conste = 0 }}+ Var\left( \frac{∑_{i=1}^N X_ie_i}{∑_{i=1}^N X_i^2}\right)\]</span></p>
+<p><span class="math display">\[\operatorname{Var}(\hat\beta|x_i)= \underbrace{\operatorname{Var}(\beta)}_{\text{Var de conste = 0 }}+ \operatorname{Var}\left( \frac{∑_{i=1}^N X_ie_i}{∑_{i=1}^N X_i^2}\right)\]</span></p>
 <p>Aplicamos la propiedad de la varianza <span class="math inline">\(Var(aX+b)=a^2Var(X)\)</span>:</p>
-<p><span class="math display">\[Var(\hat\beta|x_i)= Var\left( \frac{∑_{i=1}^N X_ie_i}{∑_{i=1}^N X_i^2} \right)\]</span></p>
-<p><span class="math display">\[Var(\hat\beta|x_i)= \frac{1}{\left(∑_{i=1}^N X_i^2\right)^2}∑_{i=1}^N X_i^2 \underbrace{Var(e_i|x_i)}_{\sigma^2} \]</span></p>
-<p><span class="math display">\[Var(\hat\beta|x_i)= \frac{\sigma^2}{∑_{i=1}^N X_i^2}\]</span></p>
+<p><span class="math display">\[\operatorname{Var}(\hat\beta|x_i)= \operatorname{Var}\left( \frac{∑_{i=1}^N X_ie_i}{∑_{i=1}^N X_i^2} \right)\]</span></p>
+<p><span class="math display">\[\operatorname{Var}(\hat\beta|x_i)= \frac{1}{\left(∑_{i=1}^N X_i^2\right)^2}∑_{i=1}^N X_i^2 \underbrace{\operatorname{Var}(e_i|x_i)}_{\sigma^2} \]</span></p>
+<p><span class="math display">\[\operatorname{Var}(\hat\beta|x_i)= \frac{\sigma^2}{∑_{i=1}^N X_i^2}\]</span></p>
 <p>Una vez obtenido nuestro estimando, como no conocemos <span class="math inline">\(\sigma^2\)</span> usamos su estimador <span class="math inline">\(\hat\sigma^2\)</span>. Por lo tanto nuestro estimador de la varianza es:</p>
 <p><span class="math display">\[
-\widehat{\text{Var}(\hat{\beta})} = \frac{\widehat{\sigma}^2}{\sum_{i=1}^{N} X_i^2}
+\widehat{\operatorname{Var}(\hat{\beta})} = \frac{\widehat{\sigma}^2}{\sum_{i=1}^{N} X_i^2}
 \]</span> Donde:</p>
 <p><span class="math display">\[\hat\sigma^2= \frac{∑_{i=1}^N e_i^2}{N-\underbrace{K}_{\text{en este caso = 1}}}\]</span></p>
 <ul>
 <li><strong>Caso 2:</strong> Se cumple el supuesto de no-correlación, pero existe heterocedasticidad.</li>
 </ul>
-<p>Este caso nos plantea que que <span class="math inline">\(Var(e_i|x_i)=\sigma^2_i\)</span> y que <span class="math inline">\(E[e_ie_j]= 0, ∀i\neq j\)</span>.</p>
-<p><span class="math display">\[Var(\hat\beta|x_i)= \frac{1}{\left(∑_{i=1}^N X_i^2\right)^2}∑_{i=1}^N X_i^2 \underbrace{Var(e_i|x_i)}_{\sigma^2} \]</span></p>
-<p><span class="math display">\[Var(\hat\beta|x_i)= \frac{1}{\left(∑_{i=1}^N X_i^2\right)^2}∑_{i=1}^N X_i^2 \sigma^2_i \]</span></p>
-<p><span class="math display">\[Var(\hat\beta|x_i)= \frac{∑_{i=1}^N X_i^2 \sigma^2_i}{\left(∑_{i=1}^N X_i^2\right)^2} \]</span></p>
+<p>Este caso nos plantea que que <span class="math inline">\(\operatorname{Var}(e_i|x_i)=\sigma^2_i\)</span> y que <span class="math inline">\(E[e_ie_j]= 0, ∀i\neq j\)</span>.</p>
+<p><span class="math display">\[\operatorname{Var}(\hat\beta|x_i)= \frac{1}{\left(∑_{i=1}^N X_i^2\right)^2}∑_{i=1}^N X_i^2 \underbrace{\operatorname{Var}(e_i|x_i)}_{\sigma^2} \]</span></p>
+<p><span class="math display">\[\operatorname{Var}(\hat\beta|x_i)= \frac{1}{\left(∑_{i=1}^N X_i^2\right)^2}∑_{i=1}^N X_i^2 \sigma^2_i \]</span></p>
+<p><span class="math display">\[\operatorname{Var}(\hat\beta|x_i)= \frac{∑_{i=1}^N X_i^2 \sigma^2_i}{\left(∑_{i=1}^N X_i^2\right)^2} \]</span></p>
 <p>Por lo tanto el estimador de la varianza siguiendo la formulación de errores robustos de White es:</p>
 <p><span class="math display">\[
-\widehat{\text{Var}(\hat{\beta})} = \frac{\sum_{i=1}^N X_i^2 \hat e^2_i}{\sum_{i=1}^{N} X_i^2}
+\widehat{\operatorname{Var}(\hat{\beta})} = \frac{\sum_{i=1}^N X_i^2 \hat e^2_i}{\left(∑_{i=1}^N X_i^2\right)^2}
 \]</span></p>
 <p>Donde <span class="math inline">\(\hat e_i = (Y_i-\hat\beta X_i)\)</span>. Es importante tener en cuenta que no podemos conocer la varianza de cada persona <span class="math inline">\(i\)</span> por lo tanto hacemos una aproximación a traves del residual estimado.</p>
 <ul>
 <li><strong>Caso 3:</strong> Existe heterocedasticidad y correlación entre las características no-observadas de los individuos que asisten al mismo colegio.</li>
 </ul>
-<p>Este caso nos plantea que que <span class="math inline">\(Var(e_{gi}|x_i)=\sigma^2_{gi}\)</span> y que <span class="math inline">\(E[e_{gi}e_{gj}]\neq 0\)</span> y <span class="math inline">\(E[e_{gi}e_{hj}]= 0\)</span>.</p>
+<p>Este caso nos plantea que que <span class="math inline">\(\operatorname{Var}(e_{gi}|X)=\sigma^2_{gi}\)</span>, que existe correlación dentro de los grupostal que <span class="math inline">\(E[e_{gi}e_{gj}]\neq 0\)</span> para estudiantes del mismo colegio, pero hay independencia entre coelgios <span class="math inline">\(E[e_{gi}e_{hj}]= 0\)</span>.</p>
 <p>entonces:</p>
 <p><span class="math display">\[\hat\beta -\beta = \frac{∑_{i=1}^N X_ie_i}{∑_{i=1}^N X_i^2} \]</span></p>
-<p>Como tenemos varios salones no sumamos hasta N sino hasta G:</p>
-<p><span class="math display">\[\hat\beta -\beta = \frac{∑_{i=1}^G \left( ∑_{i\in g} X_{gi} e_{gi}\right)}{∑_{i=1}^N X_i^2} \]</span></p>
-<p>Aplicamos la varianza recordando que <span class="math inline">\(E[e_{gi}e_{hj}]= 0\)</span></p>
-<p><span class="math display">\[Var(\hat\beta|x_i) = \frac{∑_{i=1}^G Var\left( ∑_{i\in g} X_{gi} e_{gi}\right)}{\left(∑_{i=1}^N X_i^2\right)^2} \]</span></p>
+<p>Como tenemos correlación al interior de los colegios, agrupamos la suma del numerador por grupos (colegios) <span class="math inline">\(g\)</span>, en lugar de individuos <span class="math inline">\(i\)</span>:</p>
+<p><span class="math display">\[\hat\beta -\beta = \frac{∑_{g=1}^G \left( ∑_{i\in g} X_{gi} e_{gi}\right)}{∑_{i=1}^N X_i^2} \]</span></p>
+<p>Aplicamos la varianza recordando que <span class="math inline">\(E[e_{gi}e_{hj}]= 0\)</span> y que la varianza de la suma es la vianza de cada grupo:</p>
+<p><span class="math display">\[\operatorname{Var}(\hat\beta|x_i) = \frac{∑_{g=1}^G \operatorname{Var}\left( ∑_{i\in g} X_{gi} e_{gi}\right)}{\left(∑_{i=1}^N X_i^2\right)^2} \]</span></p>
 <p>Que es lo mismo que:</p>
 <p><span class="math display">\[
-Var(\hat{\beta}\mid x_i)
+\operatorname{Var}(\hat{\beta}\mid x_i)
 =
-\frac{\sum_{i=1}^{G}
+\frac{\sum_{g=1}^{G}
 E\left[
 \left( \sum_{i \in g} X_{gi} e_{gi} \right)^2
 \right]}
@@ -3586,12 +3587,48 @@ E\left[
 \]</span></p>
 <p>En este caso nuestro estimador sería:</p>
 <p><span class="math display">\[
-Var(\hat{\beta}\mid x_i)
+\widehat{\operatorname{Var}(\hat{\beta}\mid x_i)}
 =
-\frac{\sum_{i=1}^{G}  
+\frac{\sum_{g=1}^{G}  
 \left( \sum_{i \in g} X_{gi} \hat e_{gi} \right)^2 }
 {\left(\sum_{i=1}^{N} X_i^2\right)^2}
 \]</span></p>
+<p>Este estimador es el adecuado porque captura la estructura de correlación intra-clúster. Al elevar al cuadrado la suma a nivel de grupo, el estimador incorpora no solo la varianza individual (heterocedasticidad), sino también todas las covarianzas entre estudiantes del mismo colegio. Es importante notar que, aunque el tratamiento se asignó a nivel de salon, el supuesto del problema indica correlación de errores a nivel de colegio. Por lo tanto, para evitar subestimar la varianza, la variable de agrupación G corresponde a los colegios.</p>
+</section>
+<section id="punto3-1" class="level2">
+<h2 class="anchored" data-anchor-id="punto3-1">Punto3</h2>
+<p><strong>Uno de sus colegas le indica que no es necesario tener en cuenta el cluster a nivel de colegio y le propone usar la siguiente expresión como estimador de la varianza en el caso 3:</strong></p>
+<p><span class="math display">\[\frac{\sum_i \sum_j x_i x_j \hat{\varepsilon}_i \hat{\varepsilon}_j}{(\sum_i x_i)^2}\]</span></p>
+<ul>
+<li><p><strong>Utilizando sus conocimientos de teoría de regresión lineal, explique brevemente por qué este estimador es inválido.</strong></p></li>
+<li><p><strong>Compare el estimador que usted propuso para el caso 3 con el que le propuso su colega. ¿Cómo soluciona su estimador el problema que identificó?</strong></p></li>
+</ul>
+<p><strong>R/:</strong></p>
+<p>El estimador es inválido por dos motivos.</p>
+<p>1). En primer lugar, el numerador colapsa matemáticamente a cero. Esto se puede notar al recordar que una propiedad fundamental de MCO es que los residuos son ortogonales a los regresores. Tengamos en cuenta que esa ortogonalidad viene del mismo proceso de minimización de cuadrados:</p>
+<p><span class="math display">\[min∑_{i=1}^N (Y_i-\beta X_i)^2\]</span></p>
+<p>FOC: <span class="math display">\[\frac{\partial SSR}{\partial \beta} = 2∑_{i=1}^N (Y_i-\beta X_i)(-X_i)\]</span></p>
+<p>Igualando a cero para encontrar el mínimo:</p>
+<p><span class="math display">\[∑_{i=1}^N (X_i)\underbrace{(Y_i-\hat\beta X_i)}_{\hat\varepsilon_i}=0\]</span></p>
+<p>Lo que quiere decir que:</p>
+<p><span class="math display">\[∑_{i=1}^N X_i\hat\varepsilon_i=0\]</span></p>
+<p>Si tomamos el numerador propuesto</p>
+<p><span class="math display">\[\sum_i \sum_j x_i x_j \hat{\varepsilon}_i \hat{\varepsilon}_j\]</span></p>
+<p>y agrupamos las sumatorias:</p>
+<p><span class="math display">\[\underbrace{\sum_i x_i\hat{\varepsilon}_i}_{0} \underbrace{\sum_j x_j\hat{\varepsilon}_j}_{0} \]</span></p>
+<p>Por ortogonalidad, el numerador propuesto colapsaría a cero, resultando en una varianza estimada de cero.</p>
+<p>2). En términos conceptuales, asume que existe correlación entre todos los individuos de la muestra, ignorando la independencia entre colegios <span class="math inline">\(E[e_{gi}e_{hj}]= 0\)</span>.</p>
+<p>Por su lado, nuestro estimador propuesto para el caso 3:</p>
+<p><span class="math display">\[
+\widehat{\operatorname{Var}(\hat{\beta})}
+=
+\frac{\sum_{g=1}^{G}  
+\left( \sum_{i \in g} X_{gi} \hat e_{gi} \right)^2 }
+{\left(\sum_{i=1}^{N} X_i^2\right)^2}
+\]</span></p>
+<p>soluciona el problema porque ordena y agrupa las operaciones de manera correcta.</p>
+<p>Para poder entender esto, centrémonos de nuevo el numerador $<em>{g=1}^{G} ( </em>{i g} X_{gi} e_{gi} )^2 $.</p>
+<p>En primer lugar, calcula la suma de los productos cruzados para cada colegio <span class="math inline">\(g\)</span>. En este caso, al ser la suma de cada colegio (local), se evita que la condición de ortogonalidad tenga efecto, pues no es la suma total de los productos; un colegio puede tener contribuciones positivas y otro negativas a los errores. Luego, al elevar eso al cuadrado, convertimos esos balances positivos y negativos en estrictamente positivos. Finalmente, aplicamos la sumatoria de todos los colegios, logrando así capturar la verdadera variabilidad intra-clúster y respetando la independencia entre colegios.</p>
 </section>
 </section>
 
