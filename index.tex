@@ -1,0 +1,982 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+\PassOptionsToPackage{dvipsnames,svgnames,x11names}{xcolor}
+%
+\documentclass[
+  letterpaper,
+  DIV=11,
+  numbers=noendperiod]{scrartcl}
+
+\usepackage{amsmath,amssymb}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else  
+    % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\setcounter{secnumdepth}{5}
+% Make \paragraph and \subparagraph free-standing
+\makeatletter
+\ifx\paragraph\undefined\else
+  \let\oldparagraph\paragraph
+  \renewcommand{\paragraph}{
+    \@ifstar
+      \xxxParagraphStar
+      \xxxParagraphNoStar
+  }
+  \newcommand{\xxxParagraphStar}[1]{\oldparagraph*{#1}\mbox{}}
+  \newcommand{\xxxParagraphNoStar}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+  \let\oldsubparagraph\subparagraph
+  \renewcommand{\subparagraph}{
+    \@ifstar
+      \xxxSubParagraphStar
+      \xxxSubParagraphNoStar
+  }
+  \newcommand{\xxxSubParagraphStar}[1]{\oldsubparagraph*{#1}\mbox{}}
+  \newcommand{\xxxSubParagraphNoStar}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+\makeatother
+
+
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}\usepackage{longtable,booktabs,array}
+\usepackage{calc} % for calculating minipage widths
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+
+\KOMAoption{captions}{tableheading}
+\makeatletter
+\@ifpackageloaded{caption}{}{\usepackage{caption}}
+\AtBeginDocument{%
+\ifdefined\contentsname
+  \renewcommand*\contentsname{Table of contents}
+\else
+  \newcommand\contentsname{Table of contents}
+\fi
+\ifdefined\listfigurename
+  \renewcommand*\listfigurename{List of Figures}
+\else
+  \newcommand\listfigurename{List of Figures}
+\fi
+\ifdefined\listtablename
+  \renewcommand*\listtablename{List of Tables}
+\else
+  \newcommand\listtablename{List of Tables}
+\fi
+\ifdefined\figurename
+  \renewcommand*\figurename{Figure}
+\else
+  \newcommand\figurename{Figure}
+\fi
+\ifdefined\tablename
+  \renewcommand*\tablename{Table}
+\else
+  \newcommand\tablename{Table}
+\fi
+}
+\@ifpackageloaded{float}{}{\usepackage{float}}
+\floatstyle{ruled}
+\@ifundefined{c@chapter}{\newfloat{codelisting}{h}{lop}}{\newfloat{codelisting}{h}{lop}[chapter]}
+\floatname{codelisting}{Listing}
+\newcommand*\listoflistings{\listof{codelisting}{List of Listings}}
+\makeatother
+\makeatletter
+\makeatother
+\makeatletter
+\@ifpackageloaded{caption}{}{\usepackage{caption}}
+\@ifpackageloaded{subcaption}{}{\usepackage{subcaption}}
+\makeatother
+
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+\usepackage{bookmark}
+
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same} % disable monospaced font for URLs
+\hypersetup{
+  pdftitle={Taller 1. Econometría Avanzada},
+  pdfauthor={Daniel Ricardo Amaya Alba},
+  colorlinks=true,
+  linkcolor={blue},
+  filecolor={Maroon},
+  citecolor={Blue},
+  urlcolor={Blue},
+  pdfcreator={LaTeX via pandoc}}
+
+
+\title{Taller 1. Econometría Avanzada}
+\author{Daniel Ricardo Amaya Alba}
+\date{}
+
+\begin{document}
+\maketitle
+
+\renewcommand*\contentsname{Table of contents}
+{
+\hypersetup{linkcolor=}
+\setcounter{tocdepth}{3}
+\tableofcontents
+}
+
+\section{\texorpdfstring{\textbf{Primer
+Ejercicio}}{Primer Ejercicio}}\label{primer-ejercicio}
+
+Desde la perspectiva del capital humano, estudios como el de Cunha \&
+Heckma (2007) encuentran que las intervenciones durante los primeros
+años de escolaridad son fundamentales para el desarrollo temprano de
+habilidades y, con ello, para la trayectoria de aprendizaje posterior de
+los individuos. Una forma de evaluar el éxito de estas intervenciones es
+mediante el nivel de habilidades cognitivas que desarrollan los
+estudiantes, dado que estas capacidades constituyen la base de cualquier
+aprendizaje futuro.
+
+En este contexto, los gobiernos suelen mostrar interés por los programas
+de digitalización, ya que prometen acelerar el desarrollo del
+razonamiento y facilitar la adaptación al mundo moderno. Con base en lo
+anterior, la pregunta de investigación que guiará este ejercicio,
+inspirada en Cristia et al.~(2012), es: ¿cuál es el efecto de participar
+en un programa de tecnología educativa sobre el desarrollo de
+habilidades cognitivas de razonamiento abstracto?
+
+Para responder esta pregunta, usted analizará una política implementada
+por la Secretaría de Educación de Macondo en conjunto con el colegio
+Sonrisas, ubicado en una zona rural del país. La iniciativa buscaba
+transformar el modelo educativo tradicional mediante la entrega de
+laptops diseñadas específicamente para el aprendizaje autodidacta en
+entornos con limitaciones severas de infraestructura. El programa se
+enfocó exclusivamente en estudiantes de tercer grado de primaria, nivel
+que en este colegio cuenta con dos salones. El programa seleccionaba un
+salón para convertirlo en Aula Tecnológica.
+
+Los estudiantes asignados al Aula Tecnológica realizaban actividades
+guiadas tres veces por semana utilizando las laptops. Estas actividades
+se desarrollaban únicamente durante el horario de clases, las cuales
+fueron adaptadas para incluir ejercicios lógicos y juegos de asociación
+visual orientados a fortalecer el razonamiento abstracto. Cada actividad
+estaba vinculada con el tema correspondiente a la clase del día.
+Adicionalmente, los estudiantes no podían llevar las laptops a sus
+hogares. Los estudiantes del otro salón, por su parte, continuaron con
+sus clases de manera habitual.
+
+Considere una muestra de N estudiantes observados en un diseño de corte
+transversal. Defina \(Y_i\) como el puntaje del estudiante i en un test
+de habilidades cognitivas de razonamiento abstracto. Este test se aplica
+anualmente a nivel nacional a estudiantes de tercer grado, está definido
+por el Ministerio de Educación y sus puntajes oscilan entre 0 y 100. Por
+otro lado, \(Di\) es una variable dicotómica que toma el valor de 1 si
+el estudiante \(i\) fue asignado al Aula Tecnológica y 0 en caso
+contrario.
+
+Para comenzar, suponga que el mecanismo de asignación al tratamiento es
+desconocido; es decir, no se conocen los criterios que determinaron la
+elección de un salón sobre el otro ni la forma en que los estudiantes
+son asignados a cada salón.
+
+\subsection{Punto1}\label{punto1}
+
+\textbf{Describa el problema de estimación utilizando el lenguaje de
+resultados potenciales}
+
+\textbf{a) Teniendo en cuenta el contexto presentado, defina formalmente
+los resultados potenciales} \(Y_i(1)\) y \(Y_i(0)\). Luego, describa el
+problema de inferencia causal en este contexto.**
+
+\textbf{R/:} En este caso el resultado potencial \(Y_i(1)\) se define
+como el puntaje que obtendría el estudiante \(i\) dado que fue asigando
+al aula tecnologica. Por su parte el resultado potencial \(Y_i(0)\) es
+el resultado que obtendría el estudiante \(i\) dado que no fue asignado
+al aula tecnologica.
+
+Para recuperar el efecto causal de la participación en las aulas
+tecnologicas en el puntaje obtenido por el estudiante \(i\), nos
+gustaria ver la dferencia en sus resultados potenciales, es decir de sus
+puntajes dado que participio en el aula y que no participo en el aula:
+
+\[τ_i=Y_i(1)-Y_i(0) \]
+
+Sin embargo, acá nos encontramos con el problema de la inferencia
+causal. En nuestra muestra \(N\) para el estudiante \(i\) solo se puede
+observar uno de los dos caminos, o el estudiante fue asignado
+(\(D_i=1\)) o no fue asignado (\(D_i=0\)). Es decir, lo que realmente
+tenemos en nuestra base de datos es:
+
+\[Y_i=Y_i(1)D_i+(1-D_i)Y_i(0) \]
+
+De tal manera que el resultado observado \$Y\_i \$ para el estudiante
+con \(D_i = 1\) sera su resultado potencial dado que participó
+\(Y_i(1)\) y para el estudiante con \(D_i = 0\) observaremos su
+resultado potencial dado que no participó \(Y_i(0)\). Pero nunca seremos
+capaces de ver para el mismo estudiante \(i\) su resultado dado que
+participo \(D_i = 1\) y su contrafactual \(D_i = 0\).
+
+Es por lo anterior que para trabajar con nuestra muestra utilizaremos no
+el resultado del inddividuo \(i\) sino que trabajaremos con el promedio
+de los resultados potenciales, es decir buscaremos estumar los efectos
+promedio, bien sea el efecto promedio del tramaiento \(ATE\), el efecto
+promedio del tratamiento en los tratados \(ATT\) y el efecto promedio
+del tratamiento en los no tratados \(ATU\).
+
+\textbf{b) Define en lenguaje matemático el} \(ATE\), el \(ATT\) y el
+\(ATU\). Interprete cada uno de estos conceptos de acuerdo al contexto
+del caso
+
+\textbf{R/:}
+
+El \(ATE\) se define como el efectro promedio del tratamiento:
+
+\[τ_{ATE} = E[Y_i(1)-Y_i(0)]\] \[τ_{ATE} = E[Y_i(1)]-E[Y_i(0)]\]
+
+Que para el caso de nuestra investigación representa la diferencia entre
+el puntaje promedio en el test de habilidad cognitivas si toda la
+población de estudiantes de tercer grado hubieran asistido a las aulas
+tecnológicas, frente al promedio si ninguno hubiera asisitido a dichas
+aulas.
+
+El \(ATT\) se define como el efectro promedio del tratamiento en los
+tratados:
+
+\[τ_{ATT} = E[Y_i(1)-Y_i(0)| D_i= 1]\]
+\[τ_{ATT} = E[Y_i(1)| D_i=1]-E[Y_i(0)| D_i=1]\]
+
+En este caso representa la diferencia en el puntaje promedio del test de
+habilidades cognitivas del salon que fue asignado a las aulas
+tecnológicas y el resultado que esos mismos estudiantes hubieran
+obtenido si no hubieran sido asignados. Es decir, en este caso estamos
+restringiendo el efecto promedio al grupo que fue tratado.
+
+El \(ATU\) se define como el efectro promedio del tratamiento en los no
+tratados:
+
+\[τ_{ATU} = E[Y_i(1)-Y_i(0)| D_i= 0]\]
+\[τ_{ATU} = E[Y_i(1)| D_i=0]-E[Y_i(0)| D_i=0]\]
+
+En este caso representa la diferencia en el puntaje promedio del test de
+habilidades cognitivas del salon que no fue asignado a las aulas
+tecnológicas y el resultado que esos mismos estudiantes hubieran
+obtenido si hubieran sido asignados. Es decir, en este caso estamos
+restringiendo el efecto promedio al grupo que no fue tratado.
+
+\subsection{Punto2}\label{punto2}
+
+\textbf{Usted se encuentra interesada en estimar el siguiente efecto
+causal:}
+
+\[τ = E[Y_i(1)]-E[Y_i(0)]\]
+
+\textbf{Para esto plantea una diferencia de medias ingenua}
+
+\[τ_{naive} = E[Y_i | D_i=1]-E[Y_i|D_i =0]\]
+
+\textbf{a). Muestre formalmente que:}
+
+\[τ_{naive} = ATT + E[Y_i(0) | D_i=1]-E[Y_i (0)|D_i =0]\]
+
+\textbf{R/:} \[
+\begin{aligned}
+\tau_{naive} &= E[Y_i | D_i=1] - E[Y_i | D_i=0] \\
+\tau_{naive} &= E[Y_i(1) | D_i=1] - E[Y_i(0) | D_i=0] + \color{red}{E[Y_i(0) | D_i=1]} - \color{red}{E[Y_i(0) | D_i=1]}\\
+\tau_{naive} &= \underbrace{E[Y_i(1) | D_i=1]- \color{red}{E[Y_i(0) | D_i=1]}}_{ATT} +\color{red}{E[Y_i(0) | D_i=1]} - E[Y_i(0) | D_i=0]\\
+\tau_{naive} &= ATT  +\color{red}{E[Y_i(0) | D_i=1]} - E[Y_i(0) | D_i=0]
+\end{aligned}
+\]
+
+\textbf{b). Muestre formalmente que:}
+
+\[\tau_{naive} = ATU + E[Y_i(1) | D_i=1]-E[Y_i (1)|D_i =0]\]
+
+\textbf{R/:} \[
+\begin{aligned}
+\tau_{naive} &= E[Y_i | D_i=1] - E[Y_i | D_i=0] \\
+\tau_{naive} &= E[Y_i(1) |D_i=1] - E[Y_i(0)| D_i=0]+\color{red}{E[Y_i(1)| D_i=0]}-\\
+\color{red}{E[Y_i(1)| D_i=0]}\\
+\tau_{naive} &= \underbrace{\color{red}{E[Y_i(1)| D_i=0]} - E[Y_i(0)| D_i=0]}_{ATU} + \\
+E[Y_i(1)|D_i=1]-\color{red}{E[Y_i(1)| D_i=0]}\\
+\tau_{naive}&= ATU+ E[Y_i(1)|D_i=1]-\color{red}{E[Y_i(1)| D_i=0]}
+\end{aligned}
+\]
+
+\textbf{c). Muestre formalmente que:}
+
+\[ ATE = \pi ATT + (1-\pi) ATU\]
+
+\textbf{R/:} Esta demostración es diferente a las anteriores, es menos
+intuitiva. Sin embargo, podemos aplicar la ley de esperanzas iteradas a
+la definición de \(ATE\):
+
+\[
+\begin{aligned}
+\tau_{ATE}&= E[Y_i(1)] - E[Y_i(0)]\\
+\tau_{ATE}&= E[E[Y_i(1) -Y_i(0)|D_i]]\\
+\tau_{ATE}&= E[Y_i(1)- Y_i(0) | D_i=1] P(D_i=1) + E[Y_i(1)- Y_i(0) | D_i=0] P(D_i=0)
+\end{aligned}
+\]
+
+\textbf{Donde:}
+\[\tau_{ATE} = \underbrace{E[Y_i(1) - Y_i(0) | D_i=1]}_{ATT} ⋅\underbrace{P(D_i=1)}_{\pi} + \underbrace{E[Y_i(1)- Y_i(0)| D_i=0]}_{ATU} ⋅ \underbrace{P(D_i=0)}_{(1-\pi)}\]
+
+\textbf{Interpretando cada expresión:}
+
+\textbf{a).}
+
+\[\tau_{naive}= ATT + \underbrace{E[Y_i(0) | D_i=1]-E[Y_i (0)|D_i =0]}_{\text{Selection Bias}} \]
+
+Esta expresión indica que el \(\tau_{naive}\) recupera el efecto causal
+sobre los tratados (\(ATT\)) si y solo si el sesgo de selección es igual
+a cero. Esto ocurre cuando el resultado promedio contrafactual del grupo
+tratado \(E[Y_i(0) | D_i=1]\) es idéntico al resultado promedio
+observado del grupo de control \(E[Y_i (0)|D_i =0]\). Para que esto se
+cumpla la composición de los salones debería ser homogénea o el proceso
+de asignación debería haber sido aleatorio, garantizando que no existan
+diferencias pre-existentes entre ambos grupos.
+
+\textbf{b).}
+
+\[\tau_{naive} = ATU + \underbrace{E[Y_i(1) | D_i=1]-E[Y_i (1)|D_i =0]}_{\text{Heterogeneity Bias}}\]
+
+Por tro lado esta expresión nos indica que el \(\tau_{naive}\) recupera
+el efecto promedio causal sobre los no tratado (\(ATU\)) si y solo si el
+sesgo de heterogeneidad en resultados del tratamiento es igual a cero.
+Esto ocurre cuando el resultado promedio de los estudiantes tratados
+\(E[Y_i(1)|D_i=1]\) es igual al resultado promedio que hubieran obtenido
+los estudiantes del grupo de control si se les hubiera asignado el
+tratamiento \(E[Y_i(1)|D_i=0]\). Esto quiere decir que el efecto de las
+computadoras sería el mismo, independientemente dle salon que hubiera
+sido seleccionado.
+
+\textbf{c).}
+
+\[ ATE = \pi \cdot ATT + (1-\pi) \cdot ATU\]
+
+Por úlimo esta expresión nos dice que el efecto promedio del tratamiento
+es un promedio ponderado del efecto promedio en los tratado \(ATT\) y en
+los no tratados \(ATU\).
+
+\textbf{¿Es cierto que si} \(\tau_{naive}= ATT\), entonces
+\(\tau_{naive}=ATU\)?
+
+Esta afirmación no es cierta. Como vimos, el \(\tau_{naive}= ATT\) sí y
+solo sí el resultado promedio contrafactual del grupo tratado
+\(E[Y_i(0) | D_i=1]\) es idéntico al resultado promedio observado del
+grupo de control \(E[Y_i (0)|D_i =0]\), lo cual no nos esta brindando
+ninguna información al respecto de algún posible sesgo de heterogeneidad
+del tratamiento, es decir no nos garantiza que el efecto del tratamiento
+sea el mismo para ambos grupos. Por su parte, si el \(\tau_{naive}=ATU\)
+solo sabemos que hay ausencia de sesgo de heterogeneidad, pero no
+tenemos certeza al respecto de la comparabilidad de los grupos (sesgo de
+selección).
+
+Teniendo como base la descomposicón que se hace en libro Causal
+Inference: The Mixtape de Scott Cunningham podemos demostrar la relación
+entre estos parametros:
+
+\[
+\begin{aligned}
+\tau_{ATE} &=\pi.ATT+(1-\pi).ATU\\
+\tau_{ATE} &=\pi.ATT+(1-\pi).ATU + \color{red}{(1-\pi).ATT} - \color{red}{(1-\pi).ATT}\\
+\tau_{ATE} &= \color{red}{ATT.\underbrace{(\pi+1-\pi)}_{1}}- \color{red}{(1-\pi).ATT} +(1-\pi).ATU\\
+\tau_{ATE} &= ATT- \color{red}{(1-\pi).ATT}+(1-\pi).ATU\\
+\text{Despejando $ATT$:} \\
+\tau_{ATT} &= ATE+ (1-\pi).(ATT-ATU)
+\end{aligned}
+\]
+
+Remplazando la expresión que acabamos obtener de \(\tau_{ATT}\) en
+nuestso esmitador \(\tau_{naive}\), obtenemos la descomposición completa
+del sesgo:
+
+\[
+\begin{aligned}
+\tau_{naive} &= ATT + \underbrace{E[Y_i(0) | D_i=1]-E[Y_i (0)|D_i =0]}_{\text{Selection Bias}}\\
+\tau_{naive} &= ATE+ \underbrace{(1-\pi).(ATT-ATU)}_{\text{Heterogenity Bias}} + \underbrace{E[Y_i(0) | D_i=1]-E[Y_i (0)|D_i =0]}_{\text{Selection Bias}}
+\end{aligned}
+\] Por lo tanto en nuestro caso , es posible que el salón elegido fuera
+comparable inicialmente al de control (sin sesgo de selección), pero que
+las laptops tengan un retorno mayor en el salón tratado debido a
+factores específicos del grupo o del profesor. Por lo tanto para que
+\(ATE=ATT=ATU\) necesitamos tener ausencia del sesgo de hterogeneidad y
+de selección.
+
+\subsection{Punto3}\label{punto3}
+
+\textbf{Para encontrar el efecto causal promedio de participar en el
+programa de tecnología educativa sobre el resultado en el test,
+considere el siguiente modelo lineal:}
+
+\[
+Y_i=\beta_0+ \tau D_i+ U_i
+\]
+
+\textbf{Demuestre que el estimador} \(\hat\tau_{MCO}\) coincide con la
+diferencia de medias entre el grupo de tratados y el grupo de no
+tratados. Es decir, pruebe que \(\hat\tau_{MCO} = \hat\tau_{DM}\),
+donde:
+
+\[
+\hat\tau_{\scriptsize DM}
+:= \frac{1}{N_1}\sum_{\{i : D_i = 1\}} Y_i
+- \frac{1}{N_0}\sum_{\{i : D_i = 0\}} Y_i,
+\]
+
+y donde \(N_1=\sum_i D_i\); \(N_0=\sum_i (1-D_i)\).
+
+\textbf{R/:}
+
+Para demostrar que \(\hat\tau_{MCO}=\hat\tau_{DM}\), podemos
+estimar\(\hat\tau_{MCO}\) haciendo la minimización de cuadrados a los
+residuos de nuestro modelo de regresión:
+
+\[
+\min_{\hat\beta_0,\hat\tau}
+\sum_{i=1}^N (Y_i-\hat\beta_0-\hat\tau D_i)^2
+\]
+
+\textbf{FOC respecto de} \(\hat\beta_0\):
+
+\[
+-2\sum_{i=1}^N (Y_i-\hat\beta_0-\hat\tau D_i) = 0
+\]
+
+\[
+\sum_{i=1}^{N}Y_i- N\hat\beta_0 -\hat\tau \sum_{i=1}^{N}D_i =0
+\]
+
+\[
+N\bar{Y} - N\hat\beta_0 - \hat\tau N_1 =0
+\]
+
+Despejando \(\beta_0\):
+
+\[
+\hat\beta_0= \bar{Y}-\hat\tau \frac{N1}{N}
+\]
+
+\textbf{FOC respecto de} \(\hat\tau\):
+
+\[
+-2\sum_{i=1}^N (Y_i-\hat\beta_0-\hat\tau D_i)D_i = 0
+\]
+
+Para que la sumatoria exista \(D_i=1\):
+
+\[
+\sum_{i:D_i=1}(Y_i-\hat\beta_0-\hat\tau)=0
+\]
+
+\[
+\sum_{i:D_i=1}Y_i - N_1\hat\beta_0 - N_1\hat\tau=0
+\]
+
+Despejando \(\hat\tau\):
+
+\[
+\hat\tau=\frac{1}{N_1}\sum_{i:D_i=1}Y_i - \hat\beta_0
+\]
+
+\[
+\hat\tau=\bar{Y_1} - \hat\beta_0
+\]
+
+Reemplazamos el \(\beta_0\) que obtuvimos:
+
+\[
+\hat\tau=\bar{Y_1} -\left(\bar{Y} - \hat{\tau}\,\frac{N_1}{N}\right)
+\]
+
+\[
+\hat\tau - \hat\tau\frac{N1}{N}=\bar{Y_1}- \bar{Y}
+\]
+
+\[
+\hat\tau\left(1 - \frac{N_1}{N}\right)=\bar{Y_1}- \bar{Y}
+\]
+
+Si \(\frac{N_1}{N}\) es la proporción de tratados, \(1 - \frac{N_1}{N}\)
+es la proporción de controles:
+
+\[
+\hat\tau\left(\frac{N_0}{N}\right)=\bar{Y_1}- \bar{Y}
+\]
+
+El promedio es la suma del promedio de los grupos ponderado:
+
+\[
+\hat\tau\left(\frac{N_0}{N}\right)
+= \bar{Y_1}
+- \left(\bar{Y_1}\frac{N_1}{N}+\bar{Y_0}\frac{N_0}{N}\right)
+\]
+
+\[
+\hat\tau\left(\frac{N_0}{N}\right)
+= \bar{Y_1}\left(1- \frac{N_1}{N}\right)-\bar{Y_0}\frac{N_0}{N}
+\]
+
+\[
+\hat\tau\left(\frac{N_0}{N}\right)
+= \bar{Y_1}\left(\frac{N_0}{N}\right)-\bar{Y_0}\left(\frac{N_0}{N}\right)
+\]
+
+\[
+\hat\tau_{MCO}=\bar{Y_1}-\bar{Y_0}
+\]
+
+\[
+\hat\tau_{MCO}
+=\frac{1}{N_1}\sum_{\{i : D_i = 1\}} Y_i
+- \frac{1}{N_0}\sum_{\{i : D_i = 0\}} Y_i
+\]
+
+Cómo vemos, \(\hat\tau_{MCO} = \hat\tau_{DM}\).
+
+\textbf{b).¿que supuesto debe cumplirse para que} \(\hat\tau_{DM}\) sea
+un esitimador insesgadod el efecto causal promedio?
+
+Para verificar que supuesto se debe cumplir vamos a evaluar la
+insesgadez tomando la esperanza matematica de nuestro estimador: \[
+\begin{aligned}
+E[\hat\tau_{DM}]&=E[\bar{Y_1}-\bar{Y_0}]\\
+E[\hat\tau_{DM}]&=E[\bar{Y_1}]-E[\bar{Y_0}]\\
+\end{aligned}
+\] Si usamos notación de resultados potenciales: \[
+\begin{aligned}
+E[\hat\tau_{DM}]&=E[Y_i|D_i=1]-E[Y_i|D_i=0]\\
+\end{aligned}
+\] Como en la primera demostración del taller, si sumamos y restamos el
+contrafactual tenemos que:
+
+\[E[\hat\tau_{DM}]= \underbrace{E[Y_i(1)|D_i=1]-\color{red}{E[Y_i(0)|D_i=1]}}_{ATT}+\underbrace{\color{red}{E[Y_i(0)|D_i=1]}-E[Y_i (0)|D_i=0]}_{\text{Selectión Bias}}\]
+
+Por lo tanto, para que nuestro estimador \(\hat\tau_{DM}\) se insesgado
+necesitamos evitar el sesgo de selección lo cual se logra por medio de
+la aleatorización garantizando que \$(Y\_i(1),Y\_i(0))\perp D\_i \$
+
+Ahora veamos esto como lo podemos obtener tambien de la recta de
+regresión. Recordemos que nuestra linea de regresión es:
+
+\[
+Y_i=\beta_0+ \tau D_i+ U_i
+\]
+
+Partamos del mismo punto que antes: \[
+\begin{aligned}
+E[\hat\tau_{DM}]&=E[\bar{Y_1}-\bar{Y_0}]\\
+E[\hat\tau_{DM}]&=E[\bar{Y_1}]-E[\bar{Y_0}]\\
+E[\hat\tau_{DM}]&=E[Y_i|D_i=1]-E[Y_i|D_i=0]\\
+\end{aligned}
+\] Ahora si tomamos estos valores esperados de nuestra recta obtenemos:
+\[
+\begin{aligned}
+E[Y_i|D_i=1]&= \beta_0+\tau+ E[U_i|D_i=1]\\
+E[Y_i|D_i=0]&=\beta_0+E[U_i|D_i=0]
+\end{aligned}
+\] Por lo tanto tenemos:
+
+\[E[\hat\tau_{DM}]=\beta_0+\tau+ E[U-i|D_i=1]-(\beta_0+E[U_i|D_i=0])\]
+
+tal que:
+
+\[E[\hat\tau_{DM}]=\tau+ \underbrace{E[U_i|D_i=1]-E[U-i|D_i=0]}_{\text{Selection Bias}}\]
+
+Por lo tanto en terminos de la recta de regresión el supuesto de
+independencia \((Y_i(1),Y_i(0))\perp D_i\) se traduce en el supuesto de
+exogenidad \(E[U_i| D_i]=0\). Esto nos señala que, para tener un
+estimador insesgado, no debemos tener factores no observables
+correlacionados con el tratamiento que afecten el resultado, haciendo a
+los grupos diferentes.''
+
+\subsection{Punto4}\label{punto4}
+
+\textbf{Suponga ahora que la asignación de estudiantes a cada salón se
+realiza de manera aleatoria. De igual forma, la decisión sobre qué salón
+recibe el tratamiento también se tomó aleatoriamente. Además, todos los
+estudiantes pertenecientes al salón asignado al tratamiento
+efectivamente participaron en el programa. Demuestre que el estimador}
+\[\hat\tau_{DM} \overset{p}{\longrightarrow} \mathbb{E}[Y_{i}(1) - Y_{i}(0) | D_i = 1]\]
+\textbf{Puede suponer que el supuesto de SUTVA se cumple.
+Posteriormente, defina intuitivamente y explique la importancia de la
+propiedad de consistencia de un estimador.}
+
+\textbf{R/:}
+
+Para demostrar que
+\(\hat\tau_{DM} \overset{p}{\longrightarrow} \mathbb{E}[Y_{i}(1) - Y_{i}(0) | D_i = 1]\)
+empecemos por:
+
+\[ 
+\operatorname{plim} [\hat\tau_{DM}] = \operatorname{plim} \left( \left(\frac{1}{N_1} \sum_{i:D_i=1} Y_i\right) - \left(\frac{1}{N_0} \sum_{i:D_i=0} Y_i \right) \right)
+\] Como vimos en clase, por mapeo continuo (Slutsky):
+
+\[ 
+\operatorname{plim} [\hat\tau_{DM}] =  \operatorname{plim} \left(\frac{1}{N_1} \sum_{i:D_i=1} Y_i\right) - \operatorname{plim}\left(\frac{1}{N_0} \sum_{i:D_i=0} Y_i \right) 
+\]
+
+Así mismo por WLLN:
+
+\[
+\operatorname{plim} [\hat\tau_{DM}] =E[Y_i|D_i=1]-E[Y_i|D_i=0]
+\]
+
+Si escribimos en resultado potencial:
+
+\[
+\operatorname{plim} [\hat\tau_{DM}] =E[Y_i(1)|D_i=1]-E[Y_i(0)|D_i=0]
+\]
+
+Aplicamos la suma y resta del contrafactual:
+
+\[
+\operatorname{plim} [\hat\tau_{DM}] = \underbrace{E[Y_i(1)|D_i=1]-\color{red}{E[Y_i(0)|D_i=1]}}_{ATT}+\underbrace{\color{red}{E[Y_i(0)|D_i=1]}-E[Y_i (0)|D_i=0]}_{\text{Selectión Bias}}
+\]
+
+Cómo sabemos por el enunciado que la asignación a los salones fue
+aleatoría entonces podemos estar tranquilo respecto del sesgo de
+selección, es decir sabemos que \(((Y_i(1),Y_i(0)) \perp D_i)\):
+
+\[
+\operatorname{plim} [\hat\tau_{DM}] = \underbrace{E[Y_i(1)|D_i=1]-\color{red}{E[Y_i(0)|D_i=1]}}_{ATT}
+\]
+
+Simplficando: \[
+\operatorname{plim} [\hat\tau_{DM}] = \underbrace{E[Y_i(1)- Y_i(0)|D_i=1]}_{ATT}
+\]
+
+que es lo mismo que
+\(\hat\tau_{DM} \overset{p}{\longrightarrow} \mathbb{E}[Y_{i}(1) - Y_{i}(0) | D_i = 1]\)
+
+\section{\texorpdfstring{\textbf{Segundo
+Ejercicio}}{Segundo Ejercicio}}\label{segundo-ejercicio}
+
+Tal como señalan
+\href{https://academic.oup.com/qje/article-abstract/138/1/1/6750017}{Abadie
+et al.~(2022)}, los errores estándar clusterizados han adquirido un rol
+central en el trabajo empírico y esto no es casualidad. Si bien una
+parte sustancial de los esfuerzos de los investigadores se concentra en
+la obtención de estimadores consistentes e insesgados, resulta también
+fundamental poder realizar inferencia estadística válida sobre dichos
+estimadores. En este contexto, una de las prácticas más extendidas en la
+literatura empírica es el reporte de errores estándar clusterizados. No
+obstante, su uso plantea varias preguntas recurrentes en la práctica:
+¿en qué situaciones es apropiado utilizar este tipo de errores
+estándar?, ¿cuándo tienen un impacto importante sobre la inferencia
+estadística? y ¿a qué nivel debería realizarse la clusterización?
+
+Teniendo en cuenta lo anterior, suponga que usted desea estudiar
+\textbf{el impacto de que un estudiante de raza negra tenga un profesor
+de la misma raza}. Es bien sabido que existen brechas raciales en los
+resultados educacionales, lo cual resulta problemático por diversas
+razones: la movilidad social, los ingresos futuros y el bienestar social
+están estrechamente vinculados al nivel educativo. En este contexto,
+usted decide seguir la línea de investigación propuesta por
+\href{https://www.aeaweb.org/articles?id=10.1257/pol.20190573}{Gershenson
+et al.~(2022)} y busca replicar algunos de sus principales resultados,
+en particular aquellos relacionados con el desempeño en exámenes y la
+entrada a la universidad.
+
+Para realizar estos ejercicios, usted dispone de una base de datos de
+corte transversal denominada \texttt{race\_teaching.dta} que proviene de
+un experimento realizado en EE.UU. que aleatorizaba la raza de los
+profesores en diferentes salones de kínder. Sus datos están a nivel
+individual, donde cada observación es una persona de raza negra que
+participó en el experimento.
+
+Esta base contiene información sobre los resultados en el SAT (examen
+estandarizado para el ingreso a la universidad) y una variable
+indicadora que señala si el estudiante asistió a la universidad. A estas
+variables de interés se las denota por \(Y_i\). Adicionalmente, la base
+incluye una variable indicadora \(D_i\), que toma el valor de uno si el
+estudiante \(i\) tuvo un profesor de raza negra en kínder y cero en caso
+contrario. Asimismo, se incorporan características geográficas, tales
+como el salón, el colegio, el condado y el estado al que pertenece cada
+individuo.
+
+Antes de abordar las decisiones empíricas que deberá tomar en su
+investigación, usted decide analizar primero, desde una perspectiva
+teórica, los errores estándar clusterizados. De este modo, podrá
+comprender su formulación, sus principales propiedades y sentar las
+bases para determinar en qué contextos resulta apropiado utilizarlos y
+cómo deben implementarse.
+
+\subsection{Punto1}\label{punto1-1}
+
+\textbf{Realice un análisis crítico de los supuestos de homocedasticidad
+y no-correlación del término de error. Para ello:}
+
+\begin{itemize}
+\item
+  Defina ambos supuestos, tanto desde un punto de vista matemático como
+  intuitivo, en el contexto del caso de estudio.
+\item
+  Discuta si resulta razonable asumir el cumplimiento de estos supuestos
+  dada la pregunta de investigación. Justifique su respuesta utilizando
+  un ejemplo intuitivo para cada supuesto.
+\end{itemize}
+
+\textbf{R/:}
+
+El supuesto de homocedasticidad implica que \(E[e^{2}_i|x]=σ^2\) que
+tambien podría ser visto como \(E[e^{2}_i|D_i=1]=σ^2\) y
+\(E[e^{2}_i|D_i=0]=σ^2\), lo que quiere decir que la varianza de los
+errores es constante para cada estudiante independientemente de sus
+caracteristicas (\(X\)). En este caso, quiere decir que la dispersión en
+los resultados de la prueba SAT para cada estudiante es la misma para el
+grupo de estudiantes tratados y no tratados.
+
+Por otro lado, el supuesto de no-correlación implica que
+\(E[e_ie_j]= 0\). Esto quiere decier que conocer el error del estudiante
+\(i\) no me dice nada al respecto del resultado del estudiante \(j\). Es
+decir, si a un estudiante le va muy bien en la prueba, por algun factor
+diferente al tratamiento, eso no quiere decir que a otro estudiante le
+vaya a ir igual de bien. Es decir, si un estudiante el dia del examen se
+desperto con dolor de cabeza, eso no nos dice nada respecto de otros
+estudiantes.
+
+El supuesto de homocedasticidad resulta poco plausible en este
+escenario. Tal como lo señalan Angrist y Pischke (2009) en la vida real,
+aunque no conocemos la \(CEF\), es viable pensar que esta no es lineal
+necesarimente, por lo que el hecho que no sea lineal ya va a generar por
+si mismo que tengamos variabilidad en la forma en que la línea de
+regresión se aproxima a la \(CEF\). Así mismo, hay que tener en cuenta
+que una de nuestras variables dependientes es binaria (asístencia a la
+universidad), de acuerdo con los autores mencionados, esto anula el
+supusto de homocedasticidad porque por simple construcción va a haber
+variación en los errores.
+
+Por otro lado, Abadie et al.(2023) señalan que el ajuste por cluster de
+errores estandar se debe hacer por nivel de muestreo y de asignación de
+tratamiento. En este caso el tratamiento fue asignado por salones, por
+lo que no solo no deberíamos asumir errores homocedasticos sino aplicar
+cluster. Esto tambien implica que debemos ser concientes de que es muy
+probable que el supuesto de no-correlación \(E[e_ie_j]= 0\) no se
+cumpla, pues en este caso pueden haber factores no observados en cada
+salon que si correlaciónen los resultados del estudiante \(i\) con el
+estudiante \(j\) que pertenecen al mismo salon, lo que vimos formalmente
+en clase como \(E[e_{gi}e_{gh}]\neq 0\). Por ejemplo, si el profesor de
+un salón específico se enferma o, por el contrario, posee una motivación
+excepcional independientemente de su raza, estos factores afectarán
+simultáneamente el término de error de todos los estudiantes de ese
+curso, generando una correlación intra-clúster que debe ser corregida.
+
+\subsection{Punto2}\label{punto2-1}
+
+\textbf{Por el momento, suponga que usted desea estimar el modelo sin
+intercepto:}
+
+\[Y_i = \beta X_i + \varepsilon_i\]
+
+\begin{quote}
+\textbf{Nota:} Considere que es un modelo donde las variables \(Y\) y
+\(X\) se han re-centrado con respecto a sus medias. En general, note que
+eliminar el intercepto tiene consecuencias importantes si no se realiza
+dicho proceso.
+\end{quote}
+
+\textbf{Donde \(X_i\) es una variable determinística. Determine la
+varianza del estimador de \(\beta\) bajo los siguientes escenarios:}
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Caso 1:} Se cumplen los supuestos de homocedasticidad y
+  no-correlación del término de error.
+\item
+  \textbf{Caso 2:} Se cumple el supuesto de no-correlación, pero existe
+  heterocedasticidad.
+\item
+  \textbf{Caso 3:} Existe heterocedasticidad y correlación entre las
+  características no-observadas de los individuos que asisten al mismo
+  colegio.
+\end{itemize}
+
+\textbf{Para cada caso, identifique el estimando poblacional
+correspondiente y proponga un estimador adecuado de la varianza.
+Justifique brevemente su respuesta.}
+
+\textbf{R/:}
+
+En primer lugar partamos de la definción de nuestro esmitado
+\(\hat\beta\):
+
+Nuestro modelo es: \(Y_i = \beta X_i + \varepsilon_i\)
+
+El problema de minimización es:
+
+\[min∑_{i=1}^N (Y_i-\beta X_i)^2\]
+
+Si obtenemos la FOC:
+\[\frac{\partial SSR}{\partial \beta} = 2∑_{i=1}^N (Y_i-\beta X_i)(-X_i)\]
+
+\[∑_{i=1}^N (Y_i X_i-\hat\beta X_i^2)=0\]
+
+Despejando \(\hat\beta\):
+\[∑_{i=1}^N (Y_i X_i) - \hat\beta ∑_{i=1}^N X_i^2 = 0\]
+
+\[\hat\beta= \frac{∑_{i=1}^N (Y_i X_i)}{∑_{i=1}^N X_i^2} \]
+
+Ahora veamos la varianza en cada uno de los casos:
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Caso 1:} Se cumplen los supuestos de homocedasticidad y
+  no-correlación del término de error.
+\end{itemize}
+
+el caso nos plantea que \(Var(e_i|x_i)=\sigma^2\) y que
+\(E[e_ie_j]= 0, ∀i\neq j\).
+
+Para encontrar la varianza peimro organicemos remplazando \(Y_i\):
+
+\[\hat\beta= \frac{∑_{i=1}^N ((\beta X_i+e_i) X_i)}{∑_{i=1}^N X_i^2} \]
+
+\[\hat\beta= \frac{∑_{i=1}^N (\beta X_i^2+e_iX_i) }{∑_{i=1}^N X_i^2} \]
+
+\[\hat\beta= \frac{\beta∑_{i=1}^N X_i^2+∑_{i=1}^N  e_iX_i}{∑_{i=1}^N X_i^2} \]
+
+\[\hat\beta= \beta+ \frac{∑_{i=1}^N e_iX_i}{∑_{i=1}^N X_i^2} \]
+
+Aplicamos el operador de la varianza:
+
+\[Var(\hat\beta|x_i)= \underbrace{Var(\beta)}_{\text{Var de conste = 0 }}+ Var\left( \frac{∑_{i=1}^N X_ie_i}{∑_{i=1}^N X_i^2}\right)\]
+
+Aplicamos la propiedad de la varianza \(Var(aX+b)=a^2Var(X)\):
+
+\[Var(\hat\beta|x_i)= Var\left( \frac{∑_{i=1}^N X_ie_i}{∑_{i=1}^N X_i^2} \right)\]
+
+\[Var(\hat\beta|x_i)= \frac{1}{\left(∑_{i=1}^N X_i^2\right)^2}∑_{i=1}^N X_i^2 \underbrace{Var(e_i|x_i)}_{\sigma^2} \]
+
+\[Var(\hat\beta|x_i)= \frac{\sigma^2}{∑_{i=1}^N X_i^2}\]
+
+Una vez obtenido nuestro estimando, como no conocemos \(\sigma^2\)
+usamos su estimador \(\hat\sigma^2\). Por lo tanto nuestro estimador de
+la varianza es:
+
+\[
+\widehat{\text{Var}(\hat{\beta})} = \frac{\widehat{\sigma}^2}{\sum_{i=1}^{N} X_i^2}
+\] Donde:
+
+\[\hat\sigma^2= \frac{∑_{i=1}^N e_i^2}{N-\underbrace{K}_{\text{en este caso = 1}}}\]
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Caso 2:} Se cumple el supuesto de no-correlación, pero existe
+  heterocedasticidad.
+\end{itemize}
+
+Este caso nos plantea que que \(Var(e_i|x_i)=\sigma^2_i\) y que
+\(E[e_ie_j]= 0, ∀i\neq j\).
+
+\[Var(\hat\beta|x_i)= \frac{1}{\left(∑_{i=1}^N X_i^2\right)^2}∑_{i=1}^N X_i^2 \underbrace{Var(e_i|x_i)}_{\sigma^2} \]
+
+\[Var(\hat\beta|x_i)= \frac{1}{\left(∑_{i=1}^N X_i^2\right)^2}∑_{i=1}^N X_i^2 \sigma^2_i \]
+
+\[Var(\hat\beta|x_i)= \frac{∑_{i=1}^N X_i^2 \sigma^2_i}{\left(∑_{i=1}^N X_i^2\right)^2} \]
+
+Por lo tanto el estimador de la varianza siguiendo la formulación de
+errores robustos de White es:
+
+\[
+\widehat{\text{Var}(\hat{\beta})} = \frac{\sum_{i=1}^N X_i^2 \hat e^2_i}{\sum_{i=1}^{N} X_i^2}
+\]
+
+Donde \(\hat e_i = (Y_i-\hat\beta X_i)\). Es importante tener en cuenta
+que no podemos conocer la varianza de cada persona \(i\) por lo tanto
+hacemos una aproximación a traves del residual estimado.
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Caso 3:} Existe heterocedasticidad y correlación entre las
+  características no-observadas de los individuos que asisten al mismo
+  colegio.
+\end{itemize}
+
+Este caso nos plantea que que \(Var(e_{gi}|x_i)=\sigma^2_{gi}\) y que
+\(E[e_{gi}e_{gj}]\neq 0\) y \(E[e_{gi}e_{hj}]= 0\).
+
+entonces:
+
+\[\hat\beta -\beta = \frac{∑_{i=1}^N X_ie_i}{∑_{i=1}^N X_i^2} \]
+
+Como tenemos varios salones no sumamos hasta N sino hasta G:
+
+\[\hat\beta -\beta = \frac{∑_{i=1}^G \left( ∑_{i\in g} X_{gi} e_{gi}\right)}{∑_{i=1}^N X_i^2} \]
+
+Aplicamos la varianza recordando que \(E[e_{gi}e_{hj}]= 0\)
+
+\[Var(\hat\beta|x_i) = \frac{∑_{i=1}^G Var\left( ∑_{i\in g} X_{gi} e_{gi}\right)}{\left(∑_{i=1}^N X_i^2\right)^2} \]
+
+Que es lo mismo que:
+
+\[
+Var(\hat{\beta}\mid x_i) 
+=
+\frac{\sum_{i=1}^{G} 
+E\left[ 
+\left( \sum_{i \in g} X_{gi} e_{gi} \right)^2 
+\right]}
+{\left(\sum_{i=1}^{N} X_i^2\right)^2}
+\]
+
+En este caso nuestro estimador sería:
+
+\[
+Var(\hat{\beta}\mid x_i) 
+=
+\frac{\sum_{i=1}^{G}  
+\left( \sum_{i \in g} X_{gi} \hat e_{gi} \right)^2 }
+{\left(\sum_{i=1}^{N} X_i^2\right)^2}
+\]
+
+
+
+
+\end{document}

@@ -3200,6 +3200,7 @@ window.Quarto = {
   <li><a href="#segundo-ejercicio" id="toc-segundo-ejercicio" class="nav-link" data-scroll-target="#segundo-ejercicio"><strong>Segundo Ejercicio</strong></a>
   <ul class="collapse">
   <li><a href="#punto1-1" id="toc-punto1-1" class="nav-link" data-scroll-target="#punto1-1">Punto1</a></li>
+  <li><a href="#punto2-1" id="toc-punto2-1" class="nav-link" data-scroll-target="#punto2-1">Punto2</a></li>
   </ul></li>
   </ul>
 <div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="index.pdf"><i class="bi bi-file-pdf"></i>PDF</a></li></ul></div></nav>
@@ -3502,10 +3503,95 @@ E[Y_i|D_i=0]&amp;=\beta_0+E[U_i|D_i=0]
 <li><p>Discuta si resulta razonable asumir el cumplimiento de estos supuestos dada la pregunta de investigación. Justifique su respuesta utilizando un ejemplo intuitivo para cada supuesto.</p></li>
 </ul>
 <p><strong>R/:</strong></p>
-<p>El supuesto de homocedasticidad implica que <span class="math inline">\(E[e^{2}_i|x]=σ^2\)</span> que tambien podría ser visto como <span class="math inline">\(E[e^{2}_i|D_i=1]=σ^2\)</span> y <span class="math inline">\(E[e^{2}_i|D_i=0]=σ^2\)</span>, lo que quiere decir que la varianza de los errores es constante para cada estudiante independientemente de sus caracteristicas (<span class="math inline">\(X\)</span>), en este caso, quiere decir que la dispersión en los resultados de la prueba SAT para cada estudiante es la misma para el grupo de estudiantes tratados y no tratados.</p>
-<p>Por otro lado, el supuesto de no-correlación implica que <span class="math inline">\(E[e_ie_j]= 0\)</span>. Esto quiere decier que conocer el error del estudiante <span class="math inline">\(i\)</span> no me dice nada al respecto del resultado del estudiante <span class="math inline">\(j\)</span>. Es decir, si a un estudiante le va muy bien en la prueba, por algun factor diferente al tratamiento, eso no quiere decir que a otro estudiante le vaya a ir igual de bien o que le vaya a ir mucho peor. Es decir si un estudiante el dia del examen se desperto con dolor de cabeza, eso no nos dice nada respecto de otro estudiante.</p>
-<p>El supuesto de homocedasticidad en nuestro RCT no tiene muchos sentido. Tal como lo señalan Angrist y Pischke (2009) en la vida real, aunque no conocemos la <span class="math inline">\(CEF\)</span> es viable pensar que esta no es lineal necesarimente, por lo que el hecho que no sea lineal ya va a generar por si mismo que tengamos variabilidad en la forma en que la línea de regresión se aproxima. Así mismo hay que tener en cuenta que una de nuestras variables dependientes es binaria (asístencia a la universidad), de acuerdo con los autores mencionados esto anula el supusto de homocedasticidad porque por simple construcción va a haber variación en los errores.</p>
-<p>Por otro Abadie et al.(2023) señalan que el ajuste por cluster de errores estandar se debe hacer por nivel de muestreo y de asignación de tratamiento. En este caso el tratamiento fue asignado por salones por lo que en este caso no solo no deberíamos asumir errores homocedasticos sino aplicar cluster. Esto tambien implica que debemos ser concientes que es muy probable que l supuesto de no-correlación implica que <span class="math inline">\(E[e_ie_j]= 0\)</span> no se cumpla, pues en este caso pueden haber factores no observados en cada salon que si correlaciónen los resultados de l estudiante <span class="math inline">\(i\)</span> con el estudiante <span class="math inline">\(j\)</span> que pertenecen al mismo salon, lo que vimos formalmente en clase como <span class="math inline">\(E[e_{gi}e_{gh}]\neq 0\)</span></p>
+<p>El supuesto de homocedasticidad implica que <span class="math inline">\(E[e^{2}_i|x]=σ^2\)</span> que tambien podría ser visto como <span class="math inline">\(E[e^{2}_i|D_i=1]=σ^2\)</span> y <span class="math inline">\(E[e^{2}_i|D_i=0]=σ^2\)</span>, lo que quiere decir que la varianza de los errores es constante para cada estudiante independientemente de sus caracteristicas (<span class="math inline">\(X\)</span>). En este caso, quiere decir que la dispersión en los resultados de la prueba SAT para cada estudiante es la misma para el grupo de estudiantes tratados y no tratados.</p>
+<p>Por otro lado, el supuesto de no-correlación implica que <span class="math inline">\(E[e_ie_j]= 0\)</span>. Esto quiere decier que conocer el error del estudiante <span class="math inline">\(i\)</span> no me dice nada al respecto del resultado del estudiante <span class="math inline">\(j\)</span>. Es decir, si a un estudiante le va muy bien en la prueba, por algun factor diferente al tratamiento, eso no quiere decir que a otro estudiante le vaya a ir igual de bien. Es decir, si un estudiante el dia del examen se desperto con dolor de cabeza, eso no nos dice nada respecto de otros estudiantes.</p>
+<p>El supuesto de homocedasticidad resulta poco plausible en este escenario. Tal como lo señalan Angrist y Pischke (2009) en la vida real, aunque no conocemos la <span class="math inline">\(CEF\)</span>, es viable pensar que esta no es lineal necesarimente, por lo que el hecho que no sea lineal ya va a generar por si mismo que tengamos variabilidad en la forma en que la línea de regresión se aproxima a la <span class="math inline">\(CEF\)</span>. Así mismo, hay que tener en cuenta que una de nuestras variables dependientes es binaria (asístencia a la universidad), de acuerdo con los autores mencionados, esto anula el supusto de homocedasticidad porque por simple construcción va a haber variación en los errores.</p>
+<p>Por otro lado, Abadie et al.(2023) señalan que el ajuste por cluster de errores estandar se debe hacer por nivel de muestreo y de asignación de tratamiento. En este caso el tratamiento fue asignado por salones, por lo que no solo no deberíamos asumir errores homocedasticos sino aplicar cluster. Esto tambien implica que debemos ser concientes de que es muy probable que el supuesto de no-correlación <span class="math inline">\(E[e_ie_j]= 0\)</span> no se cumpla, pues en este caso pueden haber factores no observados en cada salon que si correlaciónen los resultados del estudiante <span class="math inline">\(i\)</span> con el estudiante <span class="math inline">\(j\)</span> que pertenecen al mismo salon, lo que vimos formalmente en clase como <span class="math inline">\(E[e_{gi}e_{gh}]\neq 0\)</span>. Por ejemplo, si el profesor de un salón específico se enferma o, por el contrario, posee una motivación excepcional independientemente de su raza, estos factores afectarán simultáneamente el término de error de todos los estudiantes de ese curso, generando una correlación intra-clúster que debe ser corregida.</p>
+</section>
+<section id="punto2-1" class="level2">
+<h2 class="anchored" data-anchor-id="punto2-1">Punto2</h2>
+<p><strong>Por el momento, suponga que usted desea estimar el modelo sin intercepto:</strong></p>
+<p><span class="math display">\[Y_i = \beta X_i + \varepsilon_i\]</span></p>
+<blockquote class="blockquote">
+<p><strong>Nota:</strong> Considere que es un modelo donde las variables <span class="math inline">\(Y\)</span> y <span class="math inline">\(X\)</span> se han re-centrado con respecto a sus medias. En general, note que eliminar el intercepto tiene consecuencias importantes si no se realiza dicho proceso.</p>
+</blockquote>
+<p><strong>Donde <span class="math inline">\(X_i\)</span> es una variable determinística. Determine la varianza del estimador de <span class="math inline">\(\beta\)</span> bajo los siguientes escenarios:</strong></p>
+<ul>
+<li><strong>Caso 1:</strong> Se cumplen los supuestos de homocedasticidad y no-correlación del término de error.</li>
+<li><strong>Caso 2:</strong> Se cumple el supuesto de no-correlación, pero existe heterocedasticidad.</li>
+<li><strong>Caso 3:</strong> Existe heterocedasticidad y correlación entre las características no-observadas de los individuos que asisten al mismo colegio.</li>
+</ul>
+<p><strong>Para cada caso, identifique el estimando poblacional correspondiente y proponga un estimador adecuado de la varianza. Justifique brevemente su respuesta.</strong></p>
+<p><strong>R/:</strong></p>
+<p>En primer lugar partamos de la definción de nuestro esmitado <span class="math inline">\(\hat\beta\)</span>:</p>
+<p>Nuestro modelo es: <span class="math inline">\(Y_i = \beta X_i + \varepsilon_i\)</span></p>
+<p>El problema de minimización es:</p>
+<p><span class="math display">\[min∑_{i=1}^N (Y_i-\beta X_i)^2\]</span></p>
+<p>Si obtenemos la FOC: <span class="math display">\[\frac{\partial SSR}{\partial \beta} = 2∑_{i=1}^N (Y_i-\beta X_i)(-X_i)\]</span></p>
+<p><span class="math display">\[∑_{i=1}^N (Y_i X_i-\hat\beta X_i^2)=0\]</span></p>
+<p>Despejando <span class="math inline">\(\hat\beta\)</span>: <span class="math display">\[∑_{i=1}^N (Y_i X_i) - \hat\beta ∑_{i=1}^N X_i^2 = 0\]</span></p>
+<p><span class="math display">\[\hat\beta= \frac{∑_{i=1}^N (Y_i X_i)}{∑_{i=1}^N X_i^2} \]</span></p>
+<p>Ahora veamos la varianza en cada uno de los casos:</p>
+<ul>
+<li><strong>Caso 1:</strong> Se cumplen los supuestos de homocedasticidad y no-correlación del término de error.</li>
+</ul>
+<p>el caso nos plantea que <span class="math inline">\(Var(e_i|x_i)=\sigma^2\)</span> y que <span class="math inline">\(E[e_ie_j]= 0, ∀i\neq j\)</span>.</p>
+<p>Para encontrar la varianza peimro organicemos remplazando <span class="math inline">\(Y_i\)</span>:</p>
+<p><span class="math display">\[\hat\beta= \frac{∑_{i=1}^N ((\beta X_i+e_i) X_i)}{∑_{i=1}^N X_i^2} \]</span></p>
+<p><span class="math display">\[\hat\beta= \frac{∑_{i=1}^N (\beta X_i^2+e_iX_i) }{∑_{i=1}^N X_i^2} \]</span></p>
+<p><span class="math display">\[\hat\beta= \frac{\beta∑_{i=1}^N X_i^2+∑_{i=1}^N  e_iX_i}{∑_{i=1}^N X_i^2} \]</span></p>
+<p><span class="math display">\[\hat\beta= \beta+ \frac{∑_{i=1}^N e_iX_i}{∑_{i=1}^N X_i^2} \]</span></p>
+<p>Aplicamos el operador de la varianza:</p>
+<p><span class="math display">\[Var(\hat\beta|x_i)= \underbrace{Var(\beta)}_{\text{Var de conste = 0 }}+ Var\left( \frac{∑_{i=1}^N X_ie_i}{∑_{i=1}^N X_i^2}\right)\]</span></p>
+<p>Aplicamos la propiedad de la varianza <span class="math inline">\(Var(aX+b)=a^2Var(X)\)</span>:</p>
+<p><span class="math display">\[Var(\hat\beta|x_i)= Var\left( \frac{∑_{i=1}^N X_ie_i}{∑_{i=1}^N X_i^2} \right)\]</span></p>
+<p><span class="math display">\[Var(\hat\beta|x_i)= \frac{1}{\left(∑_{i=1}^N X_i^2\right)^2}∑_{i=1}^N X_i^2 \underbrace{Var(e_i|x_i)}_{\sigma^2} \]</span></p>
+<p><span class="math display">\[Var(\hat\beta|x_i)= \frac{\sigma^2}{∑_{i=1}^N X_i^2}\]</span></p>
+<p>Una vez obtenido nuestro estimando, como no conocemos <span class="math inline">\(\sigma^2\)</span> usamos su estimador <span class="math inline">\(\hat\sigma^2\)</span>. Por lo tanto nuestro estimador de la varianza es:</p>
+<p><span class="math display">\[
+\widehat{\text{Var}(\hat{\beta})} = \frac{\widehat{\sigma}^2}{\sum_{i=1}^{N} X_i^2}
+\]</span> Donde:</p>
+<p><span class="math display">\[\hat\sigma^2= \frac{∑_{i=1}^N e_i^2}{N-\underbrace{K}_{\text{en este caso = 1}}}\]</span></p>
+<ul>
+<li><strong>Caso 2:</strong> Se cumple el supuesto de no-correlación, pero existe heterocedasticidad.</li>
+</ul>
+<p>Este caso nos plantea que que <span class="math inline">\(Var(e_i|x_i)=\sigma^2_i\)</span> y que <span class="math inline">\(E[e_ie_j]= 0, ∀i\neq j\)</span>.</p>
+<p><span class="math display">\[Var(\hat\beta|x_i)= \frac{1}{\left(∑_{i=1}^N X_i^2\right)^2}∑_{i=1}^N X_i^2 \underbrace{Var(e_i|x_i)}_{\sigma^2} \]</span></p>
+<p><span class="math display">\[Var(\hat\beta|x_i)= \frac{1}{\left(∑_{i=1}^N X_i^2\right)^2}∑_{i=1}^N X_i^2 \sigma^2_i \]</span></p>
+<p><span class="math display">\[Var(\hat\beta|x_i)= \frac{∑_{i=1}^N X_i^2 \sigma^2_i}{\left(∑_{i=1}^N X_i^2\right)^2} \]</span></p>
+<p>Por lo tanto el estimador de la varianza siguiendo la formulación de errores robustos de White es:</p>
+<p><span class="math display">\[
+\widehat{\text{Var}(\hat{\beta})} = \frac{\sum_{i=1}^N X_i^2 \hat e^2_i}{\sum_{i=1}^{N} X_i^2}
+\]</span></p>
+<p>Donde <span class="math inline">\(\hat e_i = (Y_i-\hat\beta X_i)\)</span>. Es importante tener en cuenta que no podemos conocer la varianza de cada persona <span class="math inline">\(i\)</span> por lo tanto hacemos una aproximación a traves del residual estimado.</p>
+<ul>
+<li><strong>Caso 3:</strong> Existe heterocedasticidad y correlación entre las características no-observadas de los individuos que asisten al mismo colegio.</li>
+</ul>
+<p>Este caso nos plantea que que <span class="math inline">\(Var(e_{gi}|x_i)=\sigma^2_{gi}\)</span> y que <span class="math inline">\(E[e_{gi}e_{gj}]\neq 0\)</span> y <span class="math inline">\(E[e_{gi}e_{hj}]= 0\)</span>.</p>
+<p>entonces:</p>
+<p><span class="math display">\[\hat\beta -\beta = \frac{∑_{i=1}^N X_ie_i}{∑_{i=1}^N X_i^2} \]</span></p>
+<p>Como tenemos varios salones no sumamos hasta N sino hasta G:</p>
+<p><span class="math display">\[\hat\beta -\beta = \frac{∑_{i=1}^G \left( ∑_{i\in g} X_{gi} e_{gi}\right)}{∑_{i=1}^N X_i^2} \]</span></p>
+<p>Aplicamos la varianza recordando que <span class="math inline">\(E[e_{gi}e_{hj}]= 0\)</span></p>
+<p><span class="math display">\[Var(\hat\beta|x_i) = \frac{∑_{i=1}^G Var\left( ∑_{i\in g} X_{gi} e_{gi}\right)}{\left(∑_{i=1}^N X_i^2\right)^2} \]</span></p>
+<p>Que es lo mismo que:</p>
+<p><span class="math display">\[
+Var(\hat{\beta}\mid x_i)
+=
+\frac{\sum_{i=1}^{G}
+E\left[
+\left( \sum_{i \in g} X_{gi} e_{gi} \right)^2
+\right]}
+{\left(\sum_{i=1}^{N} X_i^2\right)^2}
+\]</span></p>
+<p>En este caso nuestro estimador sería:</p>
+<p><span class="math display">\[
+Var(\hat{\beta}\mid x_i)
+=
+\frac{\sum_{i=1}^{G}  
+\left( \sum_{i \in g} X_{gi} \hat e_{gi} \right)^2 }
+{\left(\sum_{i=1}^{N} X_i^2\right)^2}
+\]</span></p>
 </section>
 </section>
 
