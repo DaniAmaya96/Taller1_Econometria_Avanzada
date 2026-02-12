@@ -761,3 +761,49 @@ Para poder entender esto, centrémonos de nuevo el numerador $\sum_{g=1}^{G} \le
 
 En primer lugar, calcula la suma de los productos cruzados para cada colegio $g$. En este caso, al ser la suma de cada colegio (local), se evita que la condición de ortogonalidad tenga efecto, pues no es la suma total de los productos; un colegio puede tener contribuciones positivas y otro negativas a los errores. Luego, al elevar eso al cuadrado, convertimos esos balances positivos y negativos en estrictamente positivos. Finalmente, aplicamos la sumatoria de todos los colegios, logrando así capturar la verdadera variabilidad intra-clúster y respetando la independencia entre colegios.
 
+## Punto 4
+
+**¿Compare los estimadores robustos a heterocedasticidad (caso 2) y robustos a clusters (caso 3) que usted propuso. Para ello:**
+
+* **Explique por qué el estimador robusto a clusters también es robusto a heterocedasticidad.**
+
+* **¿Es razonable esperar que la varianza estimada mediante el estimador robusto a clusters sea mayor que la obtenida con el estimador robusto a heterocedasticidad? Justifique su respuesta.**
+
+**R/:**
+
+Para responder a estas preguntas veamos los dos estimadores. El de errores robustos a heterocedasticidad:
+
+$$
+\widehat{\operatorname{Var}(\hat{\beta})}_{White} = \frac{\sum_{i=1}^N X_i^2 \hat e^2_i}{\left(\sum_{i=1}^N X_i^2\right)^2}
+$$
+
+Frente al de errores robustos por cluster:
+
+$$
+\widehat{\operatorname{Var}(\hat{\beta})}_{Cluster}
+=
+\frac{\sum_{g=1}^{G}  
+\left( \sum_{i \in g} X_{gi} \hat e_{gi} \right)^2 }
+{\left(\sum_{i=1}^{N} X_i^2\right)^2}
+$$
+
+Como se puede notar, ambos estimadores estiman la varianza de cada observación $i$ por medio de $\hat e_{gi}$ y $\hat e_i$. Es decir, ambos tienen en cuenta la heterocedasticidad, que significa una varianza diferente en los errores para cada valor de $X$.
+
+Veámoslo más de cerca. Para ello, expandamos el numerador de nuestro estimador por cluster:
+
+$$
+\sum_{g=1}^{G}  
+\left( \sum_{i \in g} X_{gi} \hat e_{gi} \right)^2
+$$
+
+Esto quedaría:
+
+$$
+\sum_{g=1}^{G} \left[ \left( \sum_{i \in g} X_{gi}^2 \hat e_{gi}^2 \right) + \left(\sum_{i \in g}\sum_{j\in g, j \neq i} X_{gi} X_{gj} \hat e_{gi} \hat e_{gj} \right) \right]
+$$
+
+Como se puede notar, el término de la izquierda es la expresión del estimador dos, que reconoce la heterocedasticidad.
+
+Por otro lado, al verlo, se nota que es la parte del estimador de White **más** otra cosa, que representa la correlación intracluster. Por lo tanto, al permitir la correlación intracluster (generalmente positiva), solo viendo la ecuación podemos notar que la varianza va a ser mayor con el estimador de cluster.
+
+

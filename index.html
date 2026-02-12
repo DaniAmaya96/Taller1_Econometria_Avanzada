@@ -3202,6 +3202,7 @@ window.Quarto = {
   <li><a href="#punto1-1" id="toc-punto1-1" class="nav-link" data-scroll-target="#punto1-1">Punto1</a></li>
   <li><a href="#punto2-1" id="toc-punto2-1" class="nav-link" data-scroll-target="#punto2-1">Punto2</a></li>
   <li><a href="#punto3-1" id="toc-punto3-1" class="nav-link" data-scroll-target="#punto3-1">Punto3</a></li>
+  <li><a href="#punto-4" id="toc-punto-4" class="nav-link" data-scroll-target="#punto-4">Punto 4</a></li>
   </ul></li>
   </ul>
 <div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="index.pdf"><i class="bi bi-file-pdf"></i>PDF</a></li></ul></div></nav>
@@ -3629,6 +3630,39 @@ E\left[
 <p>soluciona el problema porque ordena y agrupa las operaciones de manera correcta.</p>
 <p>Para poder entender esto, centrémonos de nuevo el numerador $<em>{g=1}^{G} ( </em>{i g} X_{gi} e_{gi} )^2 $.</p>
 <p>En primer lugar, calcula la suma de los productos cruzados para cada colegio <span class="math inline">\(g\)</span>. En este caso, al ser la suma de cada colegio (local), se evita que la condición de ortogonalidad tenga efecto, pues no es la suma total de los productos; un colegio puede tener contribuciones positivas y otro negativas a los errores. Luego, al elevar eso al cuadrado, convertimos esos balances positivos y negativos en estrictamente positivos. Finalmente, aplicamos la sumatoria de todos los colegios, logrando así capturar la verdadera variabilidad intra-clúster y respetando la independencia entre colegios.</p>
+</section>
+<section id="punto-4" class="level2">
+<h2 class="anchored" data-anchor-id="punto-4">Punto 4</h2>
+<p><strong>¿Compare los estimadores robustos a heterocedasticidad (caso 2) y robustos a clusters (caso 3) que usted propuso. Para ello:</strong></p>
+<ul>
+<li><p><strong>Explique por qué el estimador robusto a clusters también es robusto a heterocedasticidad.</strong></p></li>
+<li><p><strong>¿Es razonable esperar que la varianza estimada mediante el estimador robusto a clusters sea mayor que la obtenida con el estimador robusto a heterocedasticidad? Justifique su respuesta.</strong></p></li>
+</ul>
+<p><strong>R/:</strong></p>
+<p>Para responder a estas preguntas veamos los dos estimadores. El de errores robustos a heterocedasticidad:</p>
+<p><span class="math display">\[
+\widehat{\operatorname{Var}(\hat{\beta})}_{White} = \frac{\sum_{i=1}^N X_i^2 \hat e^2_i}{\left(\sum_{i=1}^N X_i^2\right)^2}
+\]</span></p>
+<p>Frente al de errores robustos por cluster:</p>
+<p><span class="math display">\[
+\widehat{\operatorname{Var}(\hat{\beta})}_{Cluster}
+=
+\frac{\sum_{g=1}^{G}  
+\left( \sum_{i \in g} X_{gi} \hat e_{gi} \right)^2 }
+{\left(\sum_{i=1}^{N} X_i^2\right)^2}
+\]</span></p>
+<p>Como se puede notar, ambos estimadores estiman la varianza de cada observación <span class="math inline">\(i\)</span> por medio de <span class="math inline">\(\hat e_{gi}\)</span> y <span class="math inline">\(\hat e_i\)</span>. Es decir, ambos tienen en cuenta la heterocedasticidad, que significa una varianza diferente en los errores para cada valor de <span class="math inline">\(X\)</span>.</p>
+<p>Veámoslo más de cerca. Para ello, expandamos el numerador de nuestro estimador por cluster:</p>
+<p><span class="math display">\[
+\sum_{g=1}^{G}  
+\left( \sum_{i \in g} X_{gi} \hat e_{gi} \right)^2
+\]</span></p>
+<p>Esto quedaría:</p>
+<p><span class="math display">\[
+\sum_{g=1}^{G} \left[ \left( \sum_{i \in g} X_{gi}^2 \hat e_{gi}^2 \right) + \left(\sum_{i \in g}\sum_{j\in g, j \neq i} X_{gi} X_{gj} \hat e_{gi} \hat e_{gj} \right) \right]
+\]</span></p>
+<p>Como se puede notar, el término de la izquierda es la expresión del estimador dos, que reconoce la heterocedasticidad.</p>
+<p>Por otro lado, al verlo, se nota que es la parte del estimador de White <strong>más</strong> otra cosa, que representa la correlación intracluster. Por lo tanto, al permitir la correlación intracluster (generalmente positiva), solo viendo la ecuación podemos notar que la varianza va a ser mayor con el estimador de cluster.</p>
 </section>
 </section>
 

@@ -1,9 +1,0 @@
-\contentsline {section}{\numberline {1}\textbf {Primer Ejercicio}}{1}{section.1}%
-\contentsline {subsection}{\numberline {1.1}Punto1}{2}{subsection.1.1}%
-\contentsline {subsection}{\numberline {1.2}Punto2}{4}{subsection.1.2}%
-\contentsline {subsection}{\numberline {1.3}Punto3}{6}{subsection.1.3}%
-\contentsline {subsection}{\numberline {1.4}Punto4}{10}{subsection.1.4}%
-\contentsline {section}{\numberline {2}\textbf {Segundo Ejercicio}}{11}{section.2}%
-\contentsline {subsection}{\numberline {2.1}Punto1}{12}{subsection.2.1}%
-\contentsline {subsection}{\numberline {2.2}Punto2}{13}{subsection.2.2}%
-\providecommand \tocbasic@end@toc@file {}\tocbasic@end@toc@file 
