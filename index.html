@@ -3462,6 +3462,7 @@ window.Quarto = {
   <li><a href="#punto3-1" id="toc-punto3-1" class="nav-link" data-scroll-target="#punto3-1">Punto3</a></li>
   <li><a href="#punto-4" id="toc-punto-4" class="nav-link" data-scroll-target="#punto-4">Punto 4</a></li>
   <li><a href="#punto-5" id="toc-punto-5" class="nav-link" data-scroll-target="#punto-5">Punto 5</a></li>
+  <li><a href="#punto-6" id="toc-punto-6" class="nav-link" data-scroll-target="#punto-6">Punto 6</a></li>
   </ul></li>
   </ul>
 <div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="index.pdf"><i class="bi bi-file-pdf"></i>PDF</a></li></ul></div></nav>
@@ -4174,6 +4175,175 @@ Ingreso Universidad
 
 </div>
 </div>
+</section>
+<section id="punto-6" class="level2">
+<h2 class="anchored" data-anchor-id="punto-6">Punto 6</h2>
+<p><strong>¿Qué posible impacto puede tener un nivel de agregación más grande al clusterizar sobre la varianza estimada? Use como guía los siguientes puntos:</strong></p>
+<ul>
+<li><strong>Use el estimador de la varianza que usted propuso en el inciso 3, caso 3 y compare la varianza teórica que se obtiene al clusterizar por colegio vs por condado</strong>.</li>
+<li><strong>Repita las estimaciones del inciso 5, concentrándose únicamente en la variable <span class="math inline">\(Y_i\)</span> correspondiente al puntaje de matemáticas en la prueba SAT. Reporte los coeficientes estimados junto con errores estándar robustos a heterocedasticidad y errores estándar clusterizados a nivel de: i) salón, ii) colegio, iii) condado y iv) estado</strong></li>
+<li><strong>interprete los resultados obtenidos. ¿Las estimaciones son consistentes con lo que usted encuentra teóricamente?</strong></li>
+</ul>
+<p>Siguiendo a Angrist y Pischke y los apuntes de Hansen, y considerando que la unidad de colegio se encuentra anidada dentro de condado y este a su vez en estado, la teoría predice el comportamiento de la varianza. Siempre que exista una correlación intra-cluster positiva a un nivel superior (es decir, que los colegios dentro del mismo condado o estado compartan choques comunes), la varianza estimada clusterizada a estos niveles debería ser mayor que la varianza robusta o clusterizada a niveles inferiores</p>
+<p>Respecto a la validez de esta inferencia, Angrist menciona que la corrección por cluster funciona adecuadamente cuando el número de grupos es suficientemente grande <span class="math inline">\(G\approx 42\)</span>. Hansen advierte que con un G pequeño, los errores estándar clusterizados pueden volverse imprecisos y sufrir de un sesgo hacia abajo.</p>
+<p>En la práctica econométrica, se sugiere clusterizar al nivel más agregado donde exista correlación de los errores o donde se haya asignado el tratamiento. Si al subir el nivel de clusterización los errores estándar aumentan, estamos corrigiendo un sesgo negativo y evitando falsos positivos. Por otro lado, si los errores estándar permanecen estables al subir de nivel, es indica que no hay una correlación espacia a ese nivel. Sin embargo, considero que debe ser una buena práctica reportar estos niveles superiores como prueba de robustez por transparencia con los resultados.</p>
+<p><strong>(Pendiente demostración matematica la hago después no se como hacerla)</strong></p>
+<p>Ahora veamos la estimación del modelo tomando como variable <span class="math inline">\(Y_i\)</span> el puntaje en matematicas en la prueba SAT usando errores robustos para heterocedasticidad y errores clusterizados a nivel de los modelos con errores robustos para heterocedasticidad y con cluster de errores estandar a nivel i) colegio, ii) condado y iii) estado:</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Cargando paquetes necesarios</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(haven)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(fixest)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(modelsummary)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(kableExtra)</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="co">#Importando los datos para la estimación del modelo</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>race_teaching_1_ <span class="ot">&lt;-</span> <span class="fu">read_dta</span>(<span class="st">&quot;race_teaching (1).dta&quot;</span>)</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="co">#Haciendo las regresion con errores heterocedasticos </span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>Reg_Hete<span class="ot">&lt;-</span><span class="fu">feols</span>(sat_math <span class="sc">~</span> D, race_teaching_1_, <span class="at">vcov =</span> <span class="st">&quot;hetero&quot;</span>)</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="co">#Haciendo las regresiones con cluster por colegio</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>Reg_Clus_School<span class="ot">&lt;-</span><span class="fu">feols</span>(sat_math <span class="sc">~</span> D, race_teaching_1_, <span class="at">vcov =</span> <span class="sc">~</span> school )</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a><span class="co">#Haciendo las regresiones con cluster por condado </span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>Reg_Clus_County<span class="ot">&lt;-</span><span class="fu">feols</span>(sat_math <span class="sc">~</span> D, race_teaching_1_, <span class="at">vcov =</span> <span class="sc">~</span> county )</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a><span class="co">#Haciendo las regresiones con cluster por estado</span></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>Reg_Clus_State<span class="ot">&lt;-</span><span class="fu">feols</span>(sat_math <span class="sc">~</span> D, race_teaching_1_, <span class="at">vcov =</span> <span class="sc">~</span> state )</span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a><span class="co">#Haciendo tabla autocontendia </span></span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a><span class="co">#Definimos el mapa de coeficientes y la información visible</span></span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>mapa_coeficientes <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;D&quot;</span> <span class="ot">=</span> <span class="st">&quot;Profesor Misma Raza&quot;</span>, </span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>                       <span class="st">&quot;(Intercept)&quot;</span> <span class="ot">=</span> <span class="st">&quot;Media sin Tratamiento&quot;</span>)</span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>mapa_gof <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="fu">list</span>(<span class="st">&quot;raw&quot;</span> <span class="ot">=</span> <span class="st">&quot;nobs&quot;</span>, </span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a>                      <span class="st">&quot;clean&quot;</span> <span class="ot">=</span> <span class="st">&quot;Observaciones&quot;</span>, <span class="st">&quot;fmt&quot;</span> <span class="ot">=</span> <span class="dv">0</span>),</span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a>                 <span class="fu">list</span>(<span class="st">&quot;raw&quot;</span> <span class="ot">=</span> <span class="st">&quot;r.squared&quot;</span>, </span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a>                      <span class="st">&quot;clean&quot;</span> <span class="ot">=</span> <span class="st">&quot;R²&quot;</span>, <span class="st">&quot;fmt&quot;</span> <span class="ot">=</span> <span class="dv">3</span>))</span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a><span class="co">#Generamos la tabla</span></span>
+<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a><span class="fu">modelsummary</span>(</span>
+<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list</span>(</span>
+<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;Robustos&quot;</span> <span class="ot">=</span> Reg_Hete,</span>
+<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;Cluster Coelgio&quot;</span> <span class="ot">=</span> Reg_Clus_School,</span>
+<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;Cluster Condado&quot;</span> <span class="ot">=</span> Reg_Clus_County ,</span>
+<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;Cluster Estado&quot;</span> <span class="ot">=</span> Reg_Clus_State</span>
+<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a>  ),</span>
+<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a>  <span class="at">coef_map =</span> mapa_coeficientes,</span>
+<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a>  <span class="at">gof_map =</span> mapa_gof,</span>
+<span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a>  <span class="at">fmt =</span> <span class="dv">3</span>,</span>
+<span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a>  <span class="at">stars =</span> <span class="fu">c</span>(<span class="st">&#39;*&#39;</span> <span class="ot">=</span> .<span class="dv">1</span>, <span class="st">&#39;**&#39;</span> <span class="ot">=</span> .<span class="dv">05</span>, <span class="st">&#39;***&#39;</span> <span class="ot">=</span> .<span class="dv">01</span>),</span>
+<span id="cb2-46"><a href="#cb2-46" aria-hidden="true" tabindex="-1"></a>  <span class="at">title =</span> <span class="st">&quot;Tabla 1. Efecto de la asignación racial docente en diferentes niveles cluster&quot;</span>,</span>
+<span id="cb2-47"><a href="#cb2-47" aria-hidden="true" tabindex="-1"></a>  <span class="at">notes =</span> <span class="fu">list</span>(<span class="st">&quot;Nota: Errores estándar entre paréntesis.&quot;</span>),</span>
+<span id="cb2-48"><a href="#cb2-48" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-49"><a href="#cb2-49" aria-hidden="true" tabindex="-1"></a>  <span class="at">output =</span> <span class="st">&quot;kableExtra&quot;</span> </span>
+<span id="cb2-50"><a href="#cb2-50" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span></span>
+<span id="cb2-51"><a href="#cb2-51" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_header_above</span>(<span class="fu">c</span>(<span class="st">&quot; &quot;</span> <span class="ot">=</span> <span class="dv">1</span>, <span class="st">&quot;Puntaje SAT&quot;</span> <span class="ot">=</span> <span class="dv">4</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb2-52"><a href="#cb2-52" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-53"><a href="#cb2-53" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling</span>(</span>
+<span id="cb2-54"><a href="#cb2-54" aria-hidden="true" tabindex="-1"></a>    <span class="at">latex_options =</span> <span class="fu">c</span>(<span class="st">&quot;hold_position&quot;</span>, </span>
+<span id="cb2-55"><a href="#cb2-55" aria-hidden="true" tabindex="-1"></a>                      <span class="st">&quot;scale_down&quot;</span>, <span class="st">&quot;striped&quot;</span>),</span>
+<span id="cb2-56"><a href="#cb2-56" aria-hidden="true" tabindex="-1"></a>    <span class="at">bootstrap_options =</span> <span class="fu">c</span>(<span class="st">&quot;striped&quot;</span>, <span class="st">&quot;hover&quot;</span>, <span class="st">&quot;condensed&quot;</span>),</span>
+<span id="cb2-57"><a href="#cb2-57" aria-hidden="true" tabindex="-1"></a>    <span class="at">full_width =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb2-58"><a href="#cb2-58" aria-hidden="true" tabindex="-1"></a>    <span class="at">position =</span> <span class="st">&quot;center&quot;</span></span>
+<span id="cb2-59"><a href="#cb2-59" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<table class="table table-striped table-hover table-condensed caption-top table-sm small" data-quarto-postprocess="true">
+<caption>Tabla 1. Efecto de la asignación racial docente en diferentes niveles cluster</caption>
+<colgroup>
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+</colgroup>
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th" style="text-align: left; empty-cells: hide; border-bottom: hidden;"></th>
+<th colspan="4" data-quarto-table-cell-role="th" style="text-align: center; border-bottom: hidden; padding-bottom: 0; padding-left: 3px; padding-right: 3px;"><div style="border-bottom: 1px solid #ddd; padding-bottom: 5px; ">
+Puntaje SAT
+</div></th>
+</tr>
+<tr class="odd">
+<th style="text-align: left;" data-quarto-table-cell-role="th"></th>
+<th style="text-align: center;" data-quarto-table-cell-role="th">Robustos</th>
+<th style="text-align: center;" data-quarto-table-cell-role="th">Cluster Coelgio</th>
+<th style="text-align: center;" data-quarto-table-cell-role="th">Cluster Condado</th>
+<th style="text-align: center;" data-quarto-table-cell-role="th">Cluster Estado</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Profesor Misma Raza</td>
+<td style="text-align: center;">4.607***</td>
+<td style="text-align: center;">4.607***</td>
+<td style="text-align: center;">4.607***</td>
+<td style="text-align: center;">4.607***</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: center;">(0.064)</td>
+<td style="text-align: center;">(0.065)</td>
+<td style="text-align: center;">(0.067)</td>
+<td style="text-align: center;">(0.060)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Media sin Tratamiento</td>
+<td style="text-align: center;">499.616***</td>
+<td style="text-align: center;">499.616***</td>
+<td style="text-align: center;">499.616***</td>
+<td style="text-align: center;">499.616***</td>
+</tr>
+<tr class="even">
+<td style="text-align: left; box-shadow: 0px 1.5px;"></td>
+<td style="text-align: center; box-shadow: 0px 1.5px;">(0.045)</td>
+<td style="text-align: center; box-shadow: 0px 1.5px;">(0.319)</td>
+<td style="text-align: center; box-shadow: 0px 1.5px;">(0.683)</td>
+<td style="text-align: center; box-shadow: 0px 1.5px;">(1.204)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Observaciones</td>
+<td style="text-align: center;">99204</td>
+<td style="text-align: center;">99204</td>
+<td style="text-align: center;">99204</td>
+<td style="text-align: center;">99204</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">R²</td>
+<td style="text-align: center;">0.050</td>
+<td style="text-align: center;">0.050</td>
+<td style="text-align: center;">0.050</td>
+<td style="text-align: center;">0.050</td>
+</tr>
+</tbody><tfoot>
+<tr class="even">
+<td style="text-align: left; padding: 0;"><sup></sup> * p &lt; 0.1, ** p &lt; 0.05, *** p &lt; 0.01</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: left; padding: 0;"><sup></sup> Nota: Errores estándar entre paréntesis.</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+</tr>
+</tfoot>
+
+</table>
+
+
+</div>
+</div>
+<p>El resultado de nuestra estimación da cuenta de lo que dijimos anteriormente. El estimador puntual es idéntico en todos los casos <span class="math inline">\(4.607\)</span> eso confirma que el agrupamiento afecta la precisión, no la consistencia de los parámetros. Tambien podemos ver que el error estándar aumenta de <span class="math inline">\(0.065\)</span> cuando aplicamos cluste de colegio a <span class="math inline">\(0.067\)</span> cuando aplicamos cluster de condado. No obstante al agrupar por estado los eerores estandar caen <span class="math inline">\(0.060\)</span>.</p>
+<p>Entoces podemos decir que el incremento de colegio a condado da cuenta de la existencia de correlación positiva entre colegios del mismo condado, lo que nos indica que el cluster a nivel Condado sería la estimación más adecuada sobreto si tenemos en cuenta que en nuestra muestra <span class="math inline">\(G&gt;500\)</span> para el nivel de condado. Por su parte la disminución cuando se aplica cluster a nivel de estado seguramente tiene que ver con un sesgo en el calculo de los errores asociado a un <span class="math inline">\(G=50\)</span> que si bien es superior al aproximado mencionado por Angrist, como explica Hansen en sus notas, aún hay mucho por aprender sobre el correcto nivel para aplicar la correcta clusterización de los errores estandar.</p>
 </section>
 </section>
 

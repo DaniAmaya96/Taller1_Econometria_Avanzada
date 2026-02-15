@@ -1013,8 +1013,87 @@ modelsummary(
   )
 ```
 
+## Punto 6
+**¿Qué posible impacto puede tener un nivel de agregación más grande al clusterizar sobre la varianza estimada? Use como guía los siguientes puntos:**
 
+- **Use el estimador de la varianza que usted propuso en el inciso 3, caso 3 y compare la varianza teórica que se obtiene al clusterizar por colegio vs por condado**.
+- **Repita las estimaciones del inciso 5, concentrándose únicamente en la variable $Y_i$ correspondiente al puntaje de matemáticas en la prueba SAT. Reporte los coeficientes estimados junto con errores estándar robustos a heterocedasticidad y errores estándar clusterizados a nivel de: i) salón, ii) colegio, iii) condado y iv) estado**
+- **interprete los resultados obtenidos. ¿Las estimaciones son consistentes con lo que usted encuentra teóricamente?**
 
+Siguiendo a Angrist y Pischke y los apuntes de Hansen, y considerando que la unidad de colegio se encuentra anidada dentro de condado y este a su vez en estado, la teoría predice el comportamiento de la varianza. Siempre que exista una correlación intra-cluster positiva a un nivel superior (es decir, que los colegios dentro del mismo condado o estado compartan choques comunes), la varianza estimada clusterizada a estos niveles debería ser mayor que la varianza robusta o clusterizada a niveles inferiores
 
+Respecto a la validez de esta inferencia, Angrist menciona que la corrección por cluster funciona adecuadamente cuando el número de grupos es suficientemente grande $G\approx 42$. Hansen advierte que con un G pequeño, los errores estándar clusterizados pueden volverse imprecisos y sufrir de un sesgo hacia abajo.
 
+En la práctica econométrica, se sugiere   clusterizar al nivel más agregado donde exista correlación de los errores o donde se haya asignado el tratamiento. Si al subir el nivel de clusterización  los errores estándar aumentan, estamos corrigiendo un sesgo negativo y evitando falsos positivos. Por otro lado, si los errores estándar permanecen estables al subir de nivel, es indica que no hay una correlación espacia a ese nivel. Sin embargo, considero que debe ser una buena práctica reportar estos niveles superiores como prueba de robustez por transparencia con los resultados.
+
+**(Pendiente demostración matematica la hago después no se como hacerla)**
+
+Ahora veamos la estimación del modelo tomando como variable $Y_i$ el puntaje en matematicas en la prueba SAT usando errores robustos para heterocedasticidad y errores clusterizados a nivel de  los modelos con errores robustos para heterocedasticidad y con cluster de errores estandar a nivel i) colegio, ii) condado y iii) estado: 
+
+```{r}
+#Cargando paquetes necesarios
+library(haven)
+library(fixest)
+library(modelsummary)
+library(dplyr)
+library(kableExtra)
+
+#Importando los datos para la estimación del modelo
+
+race_teaching_1_ <- read_dta("race_teaching (1).dta")
+
+#Haciendo las regresion con errores heterocedasticos 
+Reg_Hete<-feols(sat_math ~ D, race_teaching_1_, vcov = "hetero")
+
+#Haciendo las regresiones con cluster por colegio
+Reg_Clus_School<-feols(sat_math ~ D, race_teaching_1_, vcov = ~ school )
+
+#Haciendo las regresiones con cluster por condado 
+Reg_Clus_County<-feols(sat_math ~ D, race_teaching_1_, vcov = ~ county )
+
+#Haciendo las regresiones con cluster por estado
+Reg_Clus_State<-feols(sat_math ~ D, race_teaching_1_, vcov = ~ state )
+
+#Haciendo tabla autocontendia 
+
+#Definimos el mapa de coeficientes y la información visible
+mapa_coeficientes <- c("D" = "Profesor Misma Raza", 
+                       "(Intercept)" = "Media sin Tratamiento")
+mapa_gof <- list(list("raw" = "nobs", 
+                      "clean" = "Observaciones", "fmt" = 0),
+                 list("raw" = "r.squared", 
+                      "clean" = "R²", "fmt" = 3))
+
+#Generamos la tabla
+modelsummary(
+  list(
+    "Robustos" = Reg_Hete,
+    "Cluster Coelgio" = Reg_Clus_School,
+    "Cluster Condado" = Reg_Clus_County ,
+    "Cluster Estado" = Reg_Clus_State
+  ),
+  coef_map = mapa_coeficientes,
+  gof_map = mapa_gof,
+  fmt = 3,
+  stars = c('*' = .1, '**' = .05, '***' = .01),
+  title = "Tabla 1. Efecto de la asignación racial docente en diferentes niveles cluster",
+  notes = list("Nota: Errores estándar entre paréntesis."),
+  
+  output = "kableExtra" 
+) %>%
+  add_header_above(c(" " = 1, "Puntaje SAT" = 4)) %>%
+  
+  kable_styling(
+    latex_options = c("hold_position", 
+                      "scale_down", "striped"),
+    bootstrap_options = c("striped", "hover", "condensed"),
+    full_width = FALSE,
+    position = "center"
+  )
+
+```
+
+El resultado de nuestra estimación da cuenta de lo que dijimos anteriormente. El estimador puntual es idéntico en todos los casos $4.607$ eso confirma que el  agrupamiento afecta la precisión, no la consistencia de los parámetros. Tambien podemos ver que  el error estándar aumenta  de $0.065$ cuando aplicamos cluste de colegio a $0.067$ cuando aplicamos cluster de condado. No obstante al agrupar por estado los eerores estandar caen $0.060$. 
+
+Entoces podemos decir que el incremento de colegio a condado da cuenta de la existencia de correlación positiva entre colegios del mismo condado, lo que nos indica que  el cluster a nivel Condado sería la estimación más adecuada sobreto si tenemos en cuenta que en nuestra muestra $G>500$ para el nivel de condado. Por su parte la disminución cuando se aplica cluster a nivel de estado seguramente tiene que ver con un sesgo en el calculo de los errores asociado a un $G=50$ que si bien es superior al aproximado mencionado por Angrist, como explica Hansen en sus notas, aún hay mucho por aprender sobre el correcto nivel para aplicar la correcta clusterización de los errores estandar. 
 
