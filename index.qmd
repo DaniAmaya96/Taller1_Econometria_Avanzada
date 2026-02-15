@@ -979,7 +979,7 @@ Reg_Clus_Col<-feols(college ~ D, race_teaching_1_, vcov = ~ school)
 
 #Definimos el mapa de coeficientes y la información visible
 mapa_coeficientes <- c("D" = "Profesor Misma Raza", 
-                       "(Intercept)" = "Intercepto")
+                       "(Intercept)" = "Media sin Tratamiento")
 mapa_gof <- list(list("raw" = "nobs", 
                       "clean" = "Observaciones", "fmt" = 0),
                  list("raw" = "r.squared", 
