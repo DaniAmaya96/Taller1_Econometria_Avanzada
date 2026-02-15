@@ -8,10 +8,15 @@ format:
     toc: true
     code-fold: true
     self-contained: true
+    execute:
+    warning: false
+    message: false
   pdf:
     toc: true
     number-sections: true
     colorlinks: true
+    warning: false
+    message: false
 editor: 
   markdown: 
     wrap: 72
@@ -99,7 +104,7 @@ nuestra base de datos es:
 
 $$Y_i=Y_i(1)D_i+(1-D_i)Y_i(0) $$
 
-De tal manera que el resultado observado \$Y_i \$ para el estudiante con
+De tal manera que el resultado observado $Y_i$ para el estudiante con
 $D_i = 1$ sera su resultado potencial dado que participó $Y_i(1)$ y para
 el estudiante con $D_i = 0$ observaremos su resultado potencial dado que
 no participó $Y_i(0)$. Pero nunca seremos capaces de ver para el mismo
@@ -248,7 +253,7 @@ Por úlimo esta expresión nos dice que el efecto promedio del tratamiento
 es un promedio ponderado del efecto promedio en los tratado $ATT$ y en
 los no tratados $ATU$.
 
-**¿Es cierto que si** $\tau_{naive}= ATT$, entonces $\tau_{naive}=ATU$?
+**¿Es cierto que si $\tau_{naive}= ATT$, entonces $\tau_{naive}=ATU$?**
 
 Esta afirmación no es cierta. Como vimos, el $\tau_{naive}= ATT$ sí y
 solo sí el resultado promedio contrafactual del grupo tratado
@@ -303,9 +308,7 @@ $$
 Y_i=\beta_0+ \tau D_i+ U_i
 $$
 
-**Demuestre que el estimador** $\hat\tau_{MCO}$ coincide con la
-diferencia de medias entre el grupo de tratados y el grupo de no
-tratados. Es decir, pruebe que $\hat\tau_{MCO} = \hat\tau_{DM}$, donde:
+**Demuestre que el estimador $\hat\tau_{MCO}$ coincide con la diferencia de medias entre el grupo de tratados y el grupo de no tratados. Es decir, pruebe que $\hat\tau_{MCO} = \hat\tau_{DM}$, donde:**
 
 $$
 \hat\tau_{\scriptsize DM}
@@ -447,7 +450,7 @@ $$E[\hat\tau_{DM}]= \underbrace{E[Y_i(1)|D_i=1]-\color{red}{E[Y_i(0)|D_i=1]}}_{A
 
 Por lo tanto, para que nuestro estimador $\hat\tau_{DM}$ se insesgado
 necesitamos evitar el sesgo de selección lo cual se logra por medio de
-la aleatorización garantizando que \$(Y_i(1),Y_i(0))\perp D_i \$
+la aleatorización garantizando que $(Y_i(1),Y_i(0))\perp D_i$
 
 Ahora veamos esto como lo podemos obtener tambien de la recta de
 regresión. Recordemos que nuestra linea de regresión es:
@@ -618,7 +621,7 @@ $$\hat\beta= \frac{∑_{i=1}^N (\beta X_i^2+e_iX_i) }{∑_{i=1}^N X_i^2} $$
 
 $$\hat\beta= \frac{\beta∑_{i=1}^N X_i^2+∑_{i=1}^N  e_iX_i}{∑_{i=1}^N X_i^2} $$
 
-$$\hat\beta= \beta+ \frac{∑_{i=1}^N e_iX_i}{∑_{i=1}^N X_i^2} $$
+$$\hat\beta= \beta+ \frac{∑_{i=1}^N e_iX_i}{∑_{i=1}^N X_i^2}$$
 
 Aplicamos el operador de la varianza:
 
@@ -651,7 +654,7 @@ $$\operatorname{Var}(\hat\beta|x_i)= \frac{1}{\left(∑_{i=1}^N X_i^2\right)^2}�
 $$\operatorname{Var}(\hat\beta|x_i)= \frac{1}{\left(∑_{i=1}^N X_i^2\right)^2}∑_{i=1}^N X_i^2 \sigma^2_i $$
 
 
-$$\operatorname{Var}(\hat\beta|x_i)= \frac{∑_{i=1}^N X_i^2 \sigma^2_i}{\left(∑_{i=1}^N X_i^2\right)^2} $$
+$$\operatorname{Var}(\hat\beta|x_i)= \frac{∑_{i=1}^N X_i^2 \sigma^2_i}{\left(∑_{i=1}^N X_i^2\right)^2}$$
 
 Por lo tanto el estimador de la varianza siguiendo la formulación de errores robustos de  White es:
 
@@ -668,16 +671,16 @@ Este caso nos plantea que que $\operatorname{Var}(e_{gi}|X)=\sigma^2_{gi}$, que 
 entonces:
 
 
-$$\hat\beta -\beta = \frac{∑_{i=1}^N X_ie_i}{∑_{i=1}^N X_i^2} $$
+$$\hat\beta -\beta = \frac{∑_{i=1}^N X_ie_i}{∑_{i=1}^N X_i^2}$$
 
 Como tenemos correlación al interior de los colegios, agrupamos la suma del numerador por grupos (colegios) $g$, en lugar de individuos $i$:
 
-$$\hat\beta -\beta = \frac{∑_{g=1}^G \left( ∑_{i\in g} X_{gi} e_{gi}\right)}{∑_{i=1}^N X_i^2} $$
+$$\hat\beta -\beta = \frac{∑_{g=1}^G \left( ∑_{i\in g} X_{gi} e_{gi}\right)}{∑_{i=1}^N X_i^2}$$
 
 Aplicamos la varianza recordando que $E[e_{gi}e_{hj}]= 0$ y que la varianza de la suma es la vianza de cada grupo: 
 
 
-$$\operatorname{Var}(\hat\beta|x_i) = \frac{∑_{g=1}^G \operatorname{Var}\left( ∑_{i\in g} X_{gi} e_{gi}\right)}{\left(∑_{i=1}^N X_i^2\right)^2} $$
+$$\operatorname{Var}(\hat\beta|x_i) = \frac{∑_{g=1}^G \operatorname{Var}\left( ∑_{i\in g} X_{gi} e_{gi}\right)}{\left(∑_{i=1}^N X_i^2\right)^2}$$
 
 Que es lo mismo que:
 
@@ -739,7 +742,7 @@ $$\sum_i \sum_j x_i x_j \hat{\varepsilon}_i \hat{\varepsilon}_j$$
 
 y agrupamos las sumatorias: 
 
-$$\underbrace{\sum_i x_i\hat{\varepsilon}_i}_{0} \underbrace{\sum_j x_j\hat{\varepsilon}_j}_{0} $$
+$$\underbrace{\sum_i x_i\hat{\varepsilon}_i}_{0} \underbrace{\sum_j x_j\hat{\varepsilon}_j}_{0}$$
 
 Por ortogonalidad, el numerador propuesto colapsaría a cero, resultando en una varianza estimada de cero. 
 
@@ -757,7 +760,7 @@ $$
 
 soluciona el problema porque ordena y agrupa las operaciones de manera correcta. 
 
-Para poder entender esto, centrémonos de nuevo el numerador $\sum_{g=1}^{G} \left( \sum_{i \in g} X_{gi} \hat e_{gi} \right)^2 $.
+Para poder entender esto, centrémonos de nuevo el numerador $\sum_{g=1}^{G} \left( \sum_{i \in g} X_{gi} \hat e_{gi} \right)^2$.
 
 En primer lugar, calcula la suma de los productos cruzados para cada colegio $g$. En este caso, al ser la suma de cada colegio (local), se evita que la condición de ortogonalidad tenga efecto, pues no es la suma total de los productos; un colegio puede tener contribuciones positivas y otro negativas a los errores. Luego, al elevar eso al cuadrado, convertimos esos balances positivos y negativos en estrictamente positivos. Finalmente, aplicamos la sumatoria de todos los colegios, logrando así capturar la verdadera variabilidad intra-clúster y respetando la independencia entre colegios.
 
@@ -805,5 +808,214 @@ $$
 Como se puede notar, el término de la izquierda es la expresión del estimador dos, que reconoce la heterocedasticidad.
 
 Por otro lado, al verlo, se nota que es la parte del estimador de White **más** otra cosa, que representa la correlación intracluster. Por lo tanto, al permitir la correlación intracluster (generalmente positiva), solo viendo la ecuación podemos notar que la varianza va a ser mayor con el estimador de cluster.
+
+Habiendo adquirido una mayor claridad sobre la teoría detrás de los errores estándar clusterizados, usted procede a intentar replicar algunos de los resultados del trabajo de [Gershenson et al. (2022)](https://www.aeaweb.org/articles?id=10.1257/pol.20190573), integrando los conocimientos sobre errores estándar clusterizados desarrollados en los incisos anteriores.  
+
+En particular, recuerde que el experimento se llevó a cabo sobre estudiantes de kínder de raza negra y que la exposición a profesores de distinta raza fue aleatorizada *dentro de cada colegio*, asignando estudiantes y docentes a diferentes salones. Una ilustración intuitiva de este contexto puede verse en la serie *Abbott Elementary*, que retrata un colegio con una población estudiantil predominantemente negra cuyos docentes pertenecen a distintas razas. El experimento se implementó en múltiples condados y estados de E.E.U.U.  
+
+Bajo este diseño, los estudiantes de kínder de raza negra fueron expuestos de manera aleatoria a profesores de la misma raza o de razas distintas *condicional en el colegio*. En consecuencia, haciendo uso de sus conocimientos sobre diseños experimentales, usted estima la siguiente ecuación:
+
+$$
+Y_i = \beta_0 + \beta_1 D_i + \varepsilon_i.
+$$
+
+## Punto 5
+**Usando el caso estudio, identifique qué factores pueden generar una mayor varianza estimada por parte de los errores estándar clusterizados a nivel de colegio. Para ello:**
+
+- **Usando el estimador que usted propuso en el caso 3 inciso 3, enuncie qué mecanismos matemáticos incrementan la varianza estimada.**  
+- **Por cada uno de los mecanismos hallados, dé un ejemplo concreto usando el contexto del caso estudio que lo respalde.**  
+- **Estime el modelo anterior utilizando como variable dependiente: i) el puntaje en matemáticas del SAT y ii) la probabilidad de ingresar a la universidad. Reporte los resultados en una tabla, incluyendo errores estándar robustos a heterocedasticidad y errores estándar clusterizados a nivel de colegio.**
+
+**R/:** 
+
+El estimador de cluster que obtuvimos fue
+
+$$
+\widehat{\operatorname{Var}(\hat{\beta})}_{Cluster}=\frac{\sum_{g=1}^{G}\left(\sum_{i \in g}X_{gi}\hat e_{gi}\right)^2}{\left(\sum_{i=1}^{N}X_i^2\right)^2}
+$$
+
+Matemáticamente existen dos mecanismos fundamentales que incrementan la varianza estimada: un aumento en el numerador o una disminución en el denominador. Veamos de qué consta el numerador:
+
+$$
+\sum_{g=1}^{G} \left[ \left( \sum_{i \in g} X_{gi}^2 \hat e_{gi}^2 \right) + \left(\sum_{i \in g}\sum_{j\in g, j \neq i} X_{gi} X_{gj} \hat e_{gi} \hat e_{gj} \right) \right]
+$$
+
+
+Como vimos anteriormente, el primer término representa la varianza de las observaciones individuales. Dicha varianza está compuesta de $X_{gi}$ y de $\hat e_{gi}$, que representan respectivamente el valor de la variable independiente para el individuo $i$ en el grupo o *cluster* $g$ y su residuo respectivo. Por lo anterior, la varianza se puede inflar matemáticamente si tenemos datos muy atípicos en $X_{gi}$ o residuos muy grandes $\hat e_{gi}$.
+
+En cuanto al segundo término, este representa la correlación intra-cluster. Si existe una alta correlación entre los individuos del mismo grupo, los productos cruzados en nuestra sumatoria serán grandes y positivos, incrementando significativamente la varianza.
+
+Ahora veamos el denominador:
+
+$$\left(\sum_{i=1}^{N} X_i^2\right)^2$$
+
+Representa el cuadrado de la variabilidad total de $X$. Funciona como un estabilizador, a mayor información, es decir, más datos o más dispersión en $X$, más grande es este denominador y más pequeña  es la varianza y viceversa.
+
+Aterricemos estos mecanismos al caso. En nuestro modelo con intercepto, la variable relevante es la versión centrada $(D_i-\bar{D})$
+
+Para derivar el estimador exacto en este contexto, partimos del problema de minimización:
+
+$$
+\min_{\hat\beta_0,\hat\beta_1}
+\sum_{i=1}^N (Y_i-\hat\beta_0-\hat\beta_1 D_i)^2
+$$
+
+
+
+**FOC respecto de $\hat\beta_0$:**
+
+$$
+-2\sum_{i=1}^N (Y_i-\hat\beta_0-\hat\beta_1 D_i) = 0
+$$
+
+$$
+\sum_{i=1}^{N}Y_i- N\hat\beta_0 -\hat\beta_1 \sum_{i=1}^{N}D_i =0
+$$
+
+$$
+N\hat\beta_0=\sum_{i=1}^{N}Y_i-\hat\beta_1 \sum_{i=1}^{N}D_i
+$$
+
+Despejando $\beta_0$:
+
+$$
+\hat\beta_0= \bar{Y}-\hat\beta_1  \bar{D}
+$$
+
+**FOC respecto de $\hat\beta_1$:**
+
+$$
+-2\sum_{i=1}^N (Y_i-\hat\beta_0-\hat\beta_1 D_i)D_i = 0
+$$
+
+$$
+\sum_{i=1}^N (Y_i-(\bar{Y}-\hat\beta_1  \bar{D})-\hat\beta_1 D_i)D_i = 0
+$$
+
+$$
+\sum_{i=1}^N (Y_i-\bar{Y}+\hat\beta_1  \bar{D}-\hat\beta_1 D_i)D_i = 0
+$$
+
+$$
+\sum_{i=1}^N [(Y_i-\bar{Y})-(D_i-\bar{D})hat\beta_1]D_i = 0
+$$
+
+$$
+\sum_{i=1}^N D_i(Y_i-\bar{Y})-hat\beta_1\sum_{i=1}^ND_i(D_i-\bar{D}) = 0
+$$
+
+Que es lo mismo que: 
+
+$$
+\sum_{i=1}^N (D_i-\bar{D})(Y_i-\bar{Y})-\hat\beta_1\sum_{i=1}^N (D_i-\bar{D})(D_i-\bar{D}) = 0
+$$
+
+Por lo tanto depejando $\hat\beta_1$:
+
+$$
+\hat\beta_1=\frac{\sum_{i=1}^N (D_i-\bar{D})(Y_i-\bar{Y})}{\sum_{i=1}^N (D_i-\bar{D})^2}
+$$
+
+$$
+\hat\beta_1=\frac{\sum_{i=1}^N (D_i-\bar{D})Y_i}{\sum_{i=1}^N (D_i-\bar{D})^2}
+$$
+
+$$
+\hat\beta_1=\beta_1+\frac{\sum_{i=1}^N (D_i-\bar{D})\varepsilon_i}{\sum_{i=1}^N (D_i-\bar{D})^2}
+$$
+
+Si aplicamos la varianza condicional y permitimos la correlación dentro de los clusters:
+
+$$
+\operatorname{Var}(\hat\beta_1)= \frac{1}{\left(\sum_{i=1}^N (D_i-\bar{D})^2\right)^2} \operatorname{Var}\left(\sum_{i=1}^N (D_i-\bar{D})\varepsilon_i\right)
+$$
+
+Entonces: 
+
+$$
+\widehat{\operatorname{Var}(\hat{\beta})}_{Cluster}
+=\frac{\sum_{g=1}^{G}  \left( \sum_{i \in g} (D_{gi}-\bar{D}) \hat e_{gi} \right)^2 }{\sum_{i=1}^N (D_i-\bar{D})^2}
+$$
+
+Por lo tanto en el caso de nuestra regresión el numerador expandido, que captura los mecanismos de inflación de varianza, es:
+
+$$
+\sum_{g=1}^{G} \left[ \left( \sum_{i \in g} (D_{gi}-\bar{D})^2 \hat e_{gi}^2 \right) + \left(\sum_{i \in g}\sum_{j\in g, j \neq i} (D_{gi}-\bar{D}) (D_{gj}-\bar{D}) \hat e_{gi} \hat e_{gj} \right) \right]
+$$
+
+Veamos, el primer mecanismo asociado a la varianza individual. Como ya mencionamos  Se observa un incremento si hay factores residualesgrandes no explicados por el tratamiento. Por ejemplo, un shock exógeno, como una ola de desempleo o divorcios en las familias de un grupo específico de estudiantes, aumentaría sus residuos individuales inflando la varianza total.
+
+Por otro lado, en cuanto a la correlación intra-cluster, sabemos que a mayor correlación entre compañeros de colegio, mayor varianza. Supongamos que el colegio $g=1$ sufrió un fallo eléctrico y se quedó sin aire acondicionado durante los exámenes. Este factor ambiental afecta negativamente a todos los estudiantes de ese colegio simultáneamente. Sus errores estarán correlacionados positivamente, incrementando drásticamente el segundo término del numerador.
+
+Por úlitmo, veamos como funcionaría el mecanismo del denominador, que en este caso sería: 
+
+$$\left(\sum_{i=1}^{N} (D_i - \bar{D})^2\right)^2$$
+
+Supongamos que en nuestra muestra solo tenemos 10 estudiantes tratados (con profesor de su misma raza) frente a miles de controles. En este caso, la variación $(D_i - \bar{D})^2$ es mínima, lo que hace que el denominador sea muy pequeño. Al dividir por un número pequeño, la varianza resultante será muy grande, indicando que nos falta información para estimar el efecto con precisión. 
+
+Veamos la estimación de los modelos con errores robustos para heterocedasticidad y con cluster de errores estandar a nivel colegio: 
+
+```{r}
+#Cargando paquetes necesarios
+library(haven)
+library(fixest)
+library(modelsummary)
+library(dplyr)
+library(kableExtra)
+
+#Importando los datos para la estimación del modelo
+
+race_teaching_1_ <- read_dta("race_teaching (1).dta")
+
+#Haciendo las regresiones con errores heterocedasticos 
+Reg_Hete_SAT<-feols(sat_math ~ D, race_teaching_1_, vcov = "hetero")
+Reg_Hete_Col<-feols(college ~ D, race_teaching_1_, vcov = "hetero")
+
+#Haciendo las regresiones con cluster por colegio 
+Reg_Clus_SAT<-feols(sat_math ~ D, race_teaching_1_, vcov = ~ school )
+Reg_Clus_Col<-feols(college ~ D, race_teaching_1_, vcov = ~ school)
+
+#Haciendo tabla autocontendia 
+
+#Definimos el mapa de coeficientes y la información visible
+mapa_coeficientes <- c("D" = "Profesor Misma Raza", 
+                       "(Intercept)" = "Intercepto")
+mapa_gof <- list(list("raw" = "nobs", 
+                      "clean" = "Observaciones", "fmt" = 0),
+                 list("raw" = "r.squared", 
+                      "clean" = "R²", "fmt" = 3))
+
+#Generamos la tabla
+modelsummary(
+  list(
+    "(Robusto)" = Reg_Hete_SAT,
+    "(Cluster)" = Reg_Clus_SAT,
+    "(Robusto)" = Reg_Hete_Col,
+    "(Cluster)" = Reg_Clus_Col
+  ),
+  coef_map = mapa_coeficientes,
+  gof_map = mapa_gof,
+  fmt = 3,
+  stars = c('*' = .1, '**' = .05, '***' = .01),
+  title = "Tabla 1. Efecto de la asignación racial docente",
+  notes = list("Nota: Errores estándar entre paréntesis."),
+  
+  output = "kableExtra" 
+) %>%
+  add_header_above(c(" " = 1, "Puntaje SAT" = 2, 
+                     "Ingreso Universidad" = 2)) %>%
+  
+  kable_styling(
+    latex_options = c("hold_position", 
+                      "scale_down", "striped"),
+    bootstrap_options = c("striped", "hover", "condensed"),
+    full_width = FALSE,
+    position = "center"
+  )
+```
+
+
+
+
 
 
