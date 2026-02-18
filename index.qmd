@@ -1288,4 +1288,15 @@ tabla_final %>%
 
 
 ```
-frente a la pregunta de si siempre es mejor clusterizar al nivel más agregado, la respuesta no es unívoca. Si bien clusterizar a un nivel agregado es necesario para reconocer la estructura de correlación y evitar falsos positivos, esto depende crucialmente del número de grupos ($G$) disponibles. Como sugiere la literatura, con un $G$ muy pequeño los estimadores de varianza clusterizados se vuelven sesgados e inestables, haciendo que nuestros tests de hipótesis sean poco confiables.
+Como podemos notar, el promedio de los errores estándar clusterizados es considerablemente mayor al promedio de los robustos. Esto ocurre porque los primeros capturan la correlación de los errores a nivel de colegio, evitando así la subestimación del error estándar evitando así que cometamos error tipo 1. En cuanto a la cobertura, los intervalos clusterizados incluyeron el cero el 100% de las veces, lo que confirma que son más conservadores y adecuados ante la heterogeneidad de los colegios.
+
+Frente a la pregunta de si siempre es mejor clusterizar al nivel más agregado, la respuesta no es unívoca. Si bien clusterizar a un nivel agregado es necesario para reconocer la estructura de correlación y evitar falsos positivos, esto depende crucialmente del número de grupos ($G$) disponibles. Como sugiere la literatura, con un $G$ muy pequeño los estimadores de varianza clusterizados se vuelven sesgados e inestables, haciendo que nuestros tests de hipótesis sean poco confiables.
+
+## Punto 8
+
+**¿Considera usted que el referee #2 tiene razón? Escriba una breve respuesta a este comentario teniendo en cuenta los resultados del inciso anterior.**
+
+> **Comentario referee #2:** ``No queda claro por qué los autores se limitan a clusterizar los errores estándar a nivel de colegio cuando disponen de información que permitiría hacerlo a niveles más agregados, como el condado o el estado. En muestras grandes como la suya, aumentar el nivel de agregación rara vez es problemático y puede ofrecer una inferencia más conservadora. Como regla práctica, recomendaría siempre reportar errores estándar clusterizados al nivel más agregado, en lugar de decidir ex-ante si se debe clusterizar y evitar pensar en la existencia de un nivel apropiado.''.
+
+**R/:**
+
