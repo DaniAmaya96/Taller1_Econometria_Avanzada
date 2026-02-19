@@ -80,7 +80,7 @@ son asignados a cada salón.
 resultados potenciales**
 
 **a) Teniendo en cuenta el contexto presentado, defina formalmente los
-resultados potenciales** $Y_i(1)$ y $Y_i(0)$. Luego, describa el
+resultados potenciales $Y_i(1)$ y $Y_i(0)$. Luego, describa el
 problema de inferencia causal en este contexto.**
 
 **R/:** En este caso el resultado potencial $Y_i(1)$ se define como el
@@ -118,8 +118,7 @@ promedio, bien sea el efecto promedio del tramaiento $ATE$, el efecto
 promedio del tratamiento en los tratados $ATT$ y el efecto promedio del
 tratamiento en los no tratados $ATU$.
 
-**b) Define en lenguaje matemático el** $ATE$, el $ATT$ y el $ATU$.
-Interprete cada uno de estos conceptos de acuerdo al contexto del caso
+**b) Define en lenguaje matemático el $ATE$, el $ATT$ y el $ATU$. Interprete cada uno de estos conceptos de acuerdo al contexto del caso**
 
 **R/:**
 
@@ -1299,4 +1298,8 @@ Frente a la pregunta de si siempre es mejor clusterizar al nivel más agregado, 
 > **Comentario referee #2:** ``No queda claro por qué los autores se limitan a clusterizar los errores estándar a nivel de colegio cuando disponen de información que permitiría hacerlo a niveles más agregados, como el condado o el estado. En muestras grandes como la suya, aumentar el nivel de agregación rara vez es problemático y puede ofrecer una inferencia más conservadora. Como regla práctica, recomendaría siempre reportar errores estándar clusterizados al nivel más agregado, en lugar de decidir ex-ante si se debe clusterizar y evitar pensar en la existencia de un nivel apropiado.''.
 
 **R/:**
+El comentario del referee es válido parcialmente pero su regla práctica es incorrecta. Si bien tiene razón en que la clusterización captura la correlación intra-grupo y previene errores tipo 1,siendo una aproximación más conservadora que los errores robustos como evidenciamos en nuestra simulación, sugerir **siempre clusterizar al nivel más agregado y evitar pensar en el nivel apropiado** ignora los supuestos asintóticos.
 
+Esta aproximación conservadora resultó conveniente en nuestra investigación a nivel de colegio e incluso de condado. Como observamos en las regresiones del punto 6, en esos niveles se cuenta con un número de grupos ($G$) lo suficientemente grande para que la inferencia sea válida.
+
+Sin embargo, elevar la agregación arbitrariamente al nivel de estado demostró ser perjudicial. A ese nivel, el número de grupos $G$ cae al límite inferior recomendado por la literatura. Como evidenció nuestra regresión, esto genera inconsistencias y, en este caso específico, terminó subestimando los errores estándar en lugar de hacerlos más conservadores.Por lo tanto, el nivel de clusterización no debe elegirse a ciegas hacia arriba, sino que debe responder al diseño del muestreo a la asignación del tratamiento y la cantidad de grupos $G$ que se tiene aplicar el cluster. 
