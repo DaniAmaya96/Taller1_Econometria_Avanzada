@@ -84,10 +84,10 @@ resultados potenciales $Y_i(1)$ y $Y_i(0)$. Luego, describa el
 problema de inferencia causal en este contexto.**
 
 **R/:** En este caso el resultado potencial $Y_i(1)$ se define como el
-puntaje que obtendría el estudiante $i$ dado que fue asigando al aula
-tecnologica. Por su parte el resultado potencial $Y_i(0)$ es el
+puntaje que obtendría el estudiante $i$ dado que fue asignado al aula
+tecnológica. Por su parte el resultado potencial $Y_i(0)$ es el
 resultado que obtendría el estudiante $i$ dado que no fue asignado al
-aula tecnologica.
+aula tecnológica.
 
 Para recuperar el efecto causal de la participación en las aulas
 tecnologicas en el puntaje obtenido por el estudiante $i$, nos gustaria
@@ -1303,3 +1303,35 @@ El comentario del referee es válido parcialmente pero su regla práctica es inc
 Esta aproximación conservadora resultó conveniente en nuestra investigación a nivel de colegio e incluso de condado. Como observamos en las regresiones del punto 6, en esos niveles se cuenta con un número de grupos ($G$) lo suficientemente grande para que la inferencia sea válida.
 
 Sin embargo, elevar la agregación arbitrariamente al nivel de estado demostró ser perjudicial. A ese nivel, el número de grupos $G$ cae al límite inferior recomendado por la literatura. Como evidenció nuestra regresión, esto genera inconsistencias y, en este caso específico, terminó subestimando los errores estándar en lugar de hacerlos más conservadores.Por lo tanto, el nivel de clusterización no debe elegirse a ciegas hacia arriba, sino que debe responder al diseño del muestreo a la asignación del tratamiento y la cantidad de grupos $G$ que se tiene aplicar el cluster. 
+
+# **Tercer Ejercicio**
+
+Los experimentos aleatorizados controlados (RCTs, por sus siglas en inglés) se han consolidado como el estándar para la evaluación de políticas públicas y programas de desarrollo. A diferencia de los estudios observacionales, los RCTs permiten establecer relaciones causales mediante la aleatorización del tratamiento, lo cual elimina el sesgo de selección y garantiza que las diferencias observadas entre grupos sean atribuibles únicamente a la intervención evaluada. No obstante, la credibilidad de estos estudios depende de manera crítica de la **replicabilidad**: la capacidad de otros investigadores de reproducir los resultados utilizando los mismos datos y métodos.
+
+El estudio de [Dupas et al. (2025)](https://www.aeaweb.org/articles?id=10.1257/aer.20241305), publicado en la *American Economic Review*, implementa un RCT a gran escala en Burkina Faso con 14,545 mujeres distribuidas en 499 aldeas, 100 centros de salud y 20 provincias, empleando múltiples niveles de aleatorización y estratificación. Los resultados desafían décadas de políticas públicas: **el acceso completamente gratuito a anticonceptivos no redujo la fecundidad ni incrementó su uso**. Este hallazgo nulo tiene profundas implicaciones para programas de desarrollo que representan miles de millones de dólares en inversión. Dada la naturaleza contraintuitiva de estos resultados, resulta particularmente valioso comprender cómo los investigadores garantizaron la robustez de sus conclusiones, desde el diseño experimental hasta el análisis de datos. Este ejercicio le permitirá verificar la replicabilidad de los resultados principales del estudio de [Dupas et al. (2025)](https://www.aeaweb.org/articles?id=10.1257/aer.20241305). Para ello, deberá familiarizarse tanto con el artículo como con su paquete de replicación. Se recomienda enfáticamente la lectura del texto original para facilitar la solución de este ejercicio, a la hora de evaluar sus respuestas vamos a buscar evidencia de lo anterior.
+
+
+**Datos disponibles:** Para este ejercicio utilizará muestras aleatorias del 60% de los datos originales, porque el resto se perdieron (vamos a asumir esto para el ejercicio):
+
+- `baseline_sample.dta`: Muestra del 60% de la encuesta de línea base (primavera 2018).
+- `endline_sample.dta`: Muestra emparejada del 60% de la encuesta de seguimiento (primavera 2021). Menor N que baseline debido a atrición.
+- `listing_sample.dta`: Censo de hogares en las aldeas incluidas en la muestra.
+- Puede usar el `codebook.xlsx` del paquete de replicación para identificar las variables.
+
+## Punto1
+1. **Diseño experimental:Antes de poder verificar los resultados de un estudio, es fundamental entender cómo fue diseñado e implementado el experimento. El diseño experimental no solo determina qué preguntas pueden responderse, sino también qué supuestos son necesarios para la identificación causal y qué amenazas a la validez interna deben considerarse.**  
+
+**Describa el diseño experimental del estudio de Dupas et al. (2025). Explique cómo fue implementada la aleatorización (incluyendo los diferentes niveles y la estratificación), qué tratamientos fueron aleatorizados y los principales desafíos metodológicos que enfrentaron los autores durante la implementación del estudio. (máx. 300 palabras)**
+
+En la investigación entregaron cupones válidos por tres años que cubrían el 100% (subsidio total) o el 10% (grupo de comparación) del costo de cualquier método anticonceptivo moderno y servicios médicos asociados. Dado que los autores sospechaban que el costo financiero podría no ser la única barrera, introdujeron intervenciones para corregir fricciones de información en la demanda. Por un lado, proveyeron infografías sobre las tasas de mortalidad infantil locales para corregir la sobreestimación del riesgo de muerte supiniendo que al notar que la supervivencia había mejorado las familias no sentirían la necesidad de tener tantos hijos. Por otro lado, organizaron reuniones comunitarias con debates públicos y proyecciones audiovisuales para desafiar las normas sociales a favor de la natalidad y para tramitar los estigma frente a la anticoncepción.
+
+El diseño experimental consistió en tres niveles de aleatorización, empleando diferentes niveles de estratificación. En el primer nivel, se aleatorizaron 100 centros de salud, estratificando por provincia: 50 centros fueron asignados al subsidio total (100%) y los otros 50 al grupo de comparación con el subsidio del 10%. En el segundo nivel, se seleccionaron 5 aldeas por cada centro de salud, abarcando un total de 500 aldeas. Estratificando por centro de salud, tres de estas aldeas se asignaron a intervenciones grupales y dos a intervenciones individuales. Finalmente, en el tercer nivel y dentro de las aldeas de intervención individual, los hogares se aleatorizaron (estratificando por aldea) en tres brazos: información sobre mortalidad infantil, proyección privada del video de edu-entretenimiento, o un grupo de control puro. A traves de este diseño lograron aislar los efectos estimando así el efecto del subsidio,  de las intervenciones de demanda por sí solas, y el efecto del subsidio cuando se combina con las intervenciones de demanda.
+
+La implementación enfrentó tres principales obstaculos. En primer lugar la pendemia Covid-19 pospuso la recolección final de los datos, pues se tenia planeado el cierre a 2020 y se vieron obligados a ampliar un año. Ademas, en 2020 el gobierno de Burkina Faso anunció el lanzamiento de una política de planificación familiar gratis. Adicionalmente en 2019 se presentó un paro de trabajadores de la salud, sin embargo report que esto no afectó la provisión de servicios de acuerdo con el reporte de sus encuentas de monitoreo donde encontrar que el 92% de los centros de salud del experimento no presentaron falta de atención a los pacientes por estos motivos. Por último, cuatro centros de salud de la muestra fueron cerrados debido a condiciones de inseguridad. 
+
+## Punto2
+
+
+
+
+
