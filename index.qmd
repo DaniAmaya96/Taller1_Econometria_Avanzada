@@ -74,7 +74,7 @@ desconocido; es decir, no se conocen los criterios que determinaron la
 elección de un salón sobre el otro ni la forma en que los estudiantes
 son asignados a cada salón.
 
-## Punto1
+## Punto 1
 
 **Describa el problema de estimación utilizando el lenguaje de
 resultados potenciales**
@@ -156,7 +156,7 @@ tecnológicas y el resultado que esos mismos estudiantes hubieran
 obtenido si hubieran sido asignados. Es decir, en este caso estamos
 restringiendo el efecto promedio al grupo que no fue tratado.
 
-## Punto2
+## Punto 2
 
 **Usted se encuentra interesada en estimar el siguiente efecto causal:**
 
@@ -296,7 +296,7 @@ factores específicos del grupo o del profesor. Por lo tanto para que
 $ATE=ATT=ATU$ necesitamos tener ausencia del sesgo de hterogeneidad y de
 selección.
 
-## Punto3
+## Punto 3
 
 **Para encontrar el efecto causal promedio de participar en el programa
 de tecnología educativa sobre el resultado en el test, considere el
@@ -487,7 +487,7 @@ insesgado, no debemos tener factores no observables correlacionados con
 el tratamiento que afecten el resultado, haciendo a los grupos
 diferentes."
 
-## Punto4
+## Punto 4
 
 **Suponga ahora que la asignación de estudiantes a cada salón se realiza de manera aleatoria. De igual forma, la decisión sobre qué salón recibe el tratamiento también se tomó aleatoriamente. Además, todos los estudiantes pertenecientes al salón asignado al tratamiento efectivamente participaron en el programa. Demuestre que el estimador** 
 			$$\hat\tau_{DM} \overset{p}{\longrightarrow} \mathbb{E}[Y_{i}(1) - Y_{i}(0) | D_i = 1]$$
@@ -549,7 +549,7 @@ Esta base contiene información sobre los resultados en el SAT (examen estandari
 
 Antes de abordar las decisiones empíricas que deberá tomar en su investigación, usted decide analizar primero, desde una perspectiva teórica, los errores estándar clusterizados. De este modo, podrá comprender su formulación, sus principales propiedades y sentar las bases para determinar en qué contextos resulta apropiado utilizarlos y cómo deben implementarse.
 
-## Punto1
+## Punto 1
 
 **Realice un análisis crítico de los supuestos de homocedasticidad y no-correlación del término de error. Para ello:**
 
@@ -568,7 +568,7 @@ El supuesto de homocedasticidad resulta poco plausible en este escenario. Tal co
 Por otro lado, Abadie et al.(2023) señalan que el ajuste por cluster de errores estandar se debe hacer por nivel de muestreo y de asignación de tratamiento. En este caso el tratamiento fue asignado por salones, por lo que no solo no deberíamos asumir errores homocedasticos sino aplicar cluster. Esto tambien implica que debemos ser concientes de que es muy probable que el supuesto de no-correlación  $E[e_ie_j]= 0$ no se cumpla, pues en este caso pueden haber factores no observados en cada salon que si correlaciónen los resultados del estudiante $i$ con el estudiante $j$ que pertenecen al mismo salon, lo que vimos formalmente en clase como $E[e_{gi}e_{gh}]\neq 0$. Por ejemplo, si el profesor de un salón específico se enferma o, por el contrario, posee una motivación excepcional independientemente de su raza, estos factores afectarán simultáneamente el término de error de todos los estudiantes de ese curso, generando una correlación intra-clúster que debe ser corregida. 
 
 
-## Punto2
+## Punto 2
 
 **Por el momento, suponga que usted desea estimar el modelo sin intercepto:**
 
@@ -704,7 +704,7 @@ $$
 
 Este estimador es el adecuado porque captura la estructura de correlación intra-clúster. Al elevar al cuadrado la suma a nivel de grupo, el estimador incorpora no solo la varianza individual (heterocedasticidad), sino también todas las covarianzas entre estudiantes del mismo colegio. Es importante notar que, aunque el tratamiento se asignó a nivel de salon, el supuesto del problema indica correlación de errores a nivel de colegio. Por lo tanto, para evitar subestimar la varianza, la variable de agrupación G corresponde a los colegios.
 
-## Punto3
+## Punto 3
 
 
 **Uno de sus colegas le indica que no es necesario tener en cuenta el cluster a nivel de colegio y le propone usar la siguiente expresión como estimador de la varianza en el caso 3:**
@@ -1331,7 +1331,207 @@ La implementación enfrentó tres principales obstaculos. En primer lugar la pen
 
 ## Punto2
 
+- **Defina formalmente la variable de asignación al tratamiento de subsidio ($D_i$) donde $i$ indexa a cada mujer. Presente los posibles valores que puede tomar esta variable.**
+
+- **Defina los resultados potenciales para la variable de interés principal: $Y_i$ = tuvo al menos un nacimiento durante los 3 años del estudio. ¿Cuántos resultados potenciales existen para cada mujer?**
+
+- **Los autores decidieron que el grupo ``control'' recibiera un subsidio del 10\% en lugar de no recibir nada. ¿Por qué esta decisión tiene sentido desde una perspectiva ética? ¿Qué parámetro causal están estimando entonces? (máx. 100 palabras)**
+
+**R/:**
+
+- Definiendo formalmente la variable de asignación al tratamiento de subsidio $$
+D_i =
+\begin{cases}
+1 & \text{si la mujer } i \text{ fue asignada a recibir un subsidio del 100%} \\
+0 & \text{si la mujer } i \text{ fue asignada a recibir un subsidio del 10%}
+\end{cases}
+$$
 
 
 
+- Definiendo los resultados potenciales 
 
+
+$$
+Y_i =
+\begin{cases}
+Y_i(1) & \text{si } D_i = 1 \text{ (fue asignada al subsidio del 100%)} \\
+Y_i(0) & \text{si } D_i = 0 \text{ (fue asignada al subsidio del 10%)}
+\end{cases}
+$$
+
+Para cada mujer solo exisste un resultado potencial que vemos de la siguiente manera: 
+$$Y_i=Y_i(1) D_i+(1-D_i) Y_i(0)$$
+- La decisión ética busca mitigar la injusticia de no otorgar nada a las mujeres del grupo control. El subsidio del 10% garantiza que todas las participantes obtengan una mejora en su acceso a la salud y actúa como reconocimiento por su tiempo al responder las encuestas. En este sentido, el efecto debe interpretarse estrictamente como el efecto marginal de ofrecer un subsidio completo frente a un subsidio pequeño.
+
+## Punto 3
+
+- **Liste los tres supuestos principales necesarios para identificar el efecto causal del subsidio completo sobre fecundidad. Incluya las expresiones matemáticas para aquellos supuestos que sea posible.**
+
+- **La aleatorización fue estratificada por provincia. Escriba matemáticamente el supuesto de independencia condicional apropiado para este diseño.**
+
+**R/:**
+
+- El primer supuesto es la independencia de los resultados potenciales. Esto implica que la asignación del tratamiento ($D_i$), ya sea el subsidio del 100% o del 10%, es estadísticamente independiente de los resultados potenciales de la mujer i. En otras palabras, la asignación se comporta como si fuera completamente aleatoria, garantizando que las mujeres en ambos grupos son comparables y no hay características preexistentes que determinen quién recibe qué subsidio
+
+$$(Y_i(1),Y_i(0))\perp\!\!\!\perp D_i$$
+
+El segundo supuesto es el de no spilovers, lo que quiere decir que el resultado potencial de la mujer i  depende únicamente de si ella recibió el subsidio del 100% o del 10%, y no de la asignación que recibieron sus vecinas o amigas en la comunidad.
+
+$$Y_i(D_i,D_-i)=Y_iD_i$$
+
+El tercer supuesto es la consistencia en el tratamiento. Es decir Garantiza que el resultado empírico que observamos en los datos corresponde exactamente al resultado potencial del tratamiento y no a una doisificación del mismo. 
+
+## Punto 4
+
+**Los autores reportan pruebas de balance en la Tabla A.1 del Apéndice. Su tarea es replicar el Panel A (características de las mujeres) utilizando `baseline_sample.dta`, una muestra aleatoria del 60% de los datos originales.\footnote{Sus resultados serán similares pero no idénticos a los del paper debido al tamaño muestral.}**
+
+**1. Construya las variables analíticas necesarias para replicar las siguientes variables de la Tabla A.1:**
+
+   - **Edad de la mujer**  
+   - **La mujer reporta que su esposo es polígamo**  
+   - **Número total de hijos deseados por la mujer**  
+   - **Uso actual de anticoncepción moderna**  
+   - **La necesidad de la mujer por anticonceptivos está insatisfecha**  
+   - **No podría pagar por anticonceptivos si quisiera usarlos**  
+   - **El hogar tiene radio**  
+
+**2. Para cada una de las siete variables, estime una regresión de balance de la forma:**
+
+   $$
+   X_i = \alpha + \beta \cdot \text{Tratamiento}_i + \gamma_{\text{provincia}} + \varepsilon_i,
+   $$
+
+   **con errores estándar agrupados (clusterizados) a nivel de centro de salud.**
+
+   **Para cada variable reporte:**  
+   **(i) el coeficiente del tratamiento,**  
+   **(ii) el error estándar entre paréntesis,**  
+   **(iii) el valor-p,**  
+   **(iv) la media del grupo control y**  
+   **(v) el tamaño de muestra ($N$)**.  
+
+   **Calcule además el estadístico $F$ conjunto (y su valor-p) para la hipótesis de que todos los coeficientes son iguales a cero.**
+
+**3. Compare sus resultados con la Tabla A.1 del paper. ¿Hay evidencia de desbalance entre tratamiento y control? ¿Qué concluye sobre la correcta implementación de la aleatorización?**  
+   *(máx. 150 palabras)*
+
+**4. Analice las estadísticas descriptivas de la muestra. ¿Qué nos dicen sobre la población estudiada y sobre la plausibilidad y dirección del efecto esperado del tratamiento? Interprete.**  
+   *(máx. 200 palabras).*
+
+**R/:**
+
+```{r}
+
+#| message: false
+#| warning: false
+#Cargando librerias
+library(haven)
+library(dplyr)
+library(fixest)
+library(kableExtra)
+
+#Cargando los datos 
+
+baseline_sample_ <- read_dta("baseline_sample.dta")
+
+#Nombrando las variables 
+
+baseline_sample_<- baseline_sample_ %>% 
+  mutate(
+    Edad_Mujer = an_bw_s3q5_age, 
+    Esposo_poligamo = an_bw_polygamous,
+    N_Hijos_desados= an_bw_s8q1_childdesired,
+    Uso_Actual_Anticoncep_Moderna = an_bw_modern_cmeth_curr_s11q5,
+    Insatisfaccion_Acceso_Anticoncep = an_unmet,
+    No_puede_pagar_anticoncep= an_able_contra, 
+    Hogar_Con_Radio=bw_s2q19a_radioyn, 
+    D_i= arm_free,
+    Centro_Salud = new_csps
+  )
+
+#Estimando las regresiones 
+
+reg1<-feols(Edad_Mujer~ D_i | PROVINCE , baseline_sample_, vcov = ~ Centro_Salud )
+reg2<-feols(Esposo_poligamo~ D_i | PROVINCE , baseline_sample_, vcov = ~ Centro_Salud )
+reg3<-feols(N_Hijos_desados~ D_i |  PROVINCE , baseline_sample_, vcov = ~ Centro_Salud )
+reg4<-feols(Uso_Actual_Anticoncep_Moderna~ D_i |  PROVINCE , baseline_sample_, vcov = ~ Centro_Salud )
+reg5<-feols(Insatisfaccion_Acceso_Anticoncep~ D_i |  PROVINCE , baseline_sample_, vcov = ~ Centro_Salud )
+reg6 <- feols(No_puede_pagar_anticoncep~ D_i |  PROVINCE , baseline_sample_, vcov = ~ Centro_Salud )
+reg7 <- feols(Hogar_Con_Radio~ D_i |  PROVINCE , baseline_sample_, vcov = ~ Centro_Salud )
+
+#Calculando estadistico F conjunto 
+reg_f <- feols(D_i ~ Edad_Mujer + Esposo_poligamo + N_Hijos_desados + 
+                     Uso_Actual_Anticoncep_Moderna + Insatisfaccion_Acceso_Anticoncep + 
+                     No_puede_pagar_anticoncep + Hogar_Con_Radio | PROVINCE, 
+               data = baseline_sample_, vcov = ~ Centro_Salud)
+
+invisible(capture.output(test_conjunto <- wald(reg_f)))
+f_stat <- test_conjunto$stat
+f_pval <- test_conjunto$p
+
+#Se tuvo problemas con la estimación del estadistico F 
+#El resultado es contraintuitivo, se intentó sin cluster
+#Con robustos y aún así el resultado siguió siendo poco coherente
+
+
+# Preparando vectores para la tabla
+modelos <- list(reg1, reg2, reg3, reg4, reg5, reg6, reg7)
+var_nombres <- c("Edad de la mujer", "La mujer reporta que su esposo es polígamo", 
+                 "Número total de hijos deseados por la mujer", "Uso actual de anticoncepción moderna", 
+                 "La necesidad de la mujer por anticonceptivos está insatisfecha", 
+                 "No podría pagar por anticonceptivos si quisiera usarlos", "El hogar tiene radio")
+var_datos <- c("Edad_Mujer", "Esposo_poligamo", "N_Hijos_desados", "Uso_Actual_Anticoncep_Moderna", 
+               "Insatisfaccion_Acceso_Anticoncep", "No_puede_pagar_anticoncep", "Hogar_Con_Radio")
+
+# Creando matriz vacia para llenarla con un loop
+resultados <- matrix(ncol = 6, nrow = 0)
+
+for(i in 1:7) {
+  m <- modelos[[i]]
+  v <- var_datos[i]
+  
+  # Medias grupo control y tratamiento
+  media_c <- mean(baseline_sample_[[v]][baseline_sample_$D_i == 0], na.rm = TRUE)
+  media_t <- mean(baseline_sample_[[v]][baseline_sample_$D_i == 1], na.rm = TRUE)
+  
+  # Fila 1: Coeficiente e info
+  fila_coef <- c(var_nombres[i], round(media_c, 3), round(media_t, 3), nobs(m), 
+                 round(coef(m)["D_i"], 3), round(pvalue(m)["D_i"], 3))
+  
+  # Fila 2: Error Estandar
+  fila_se <- c("", "", "", "", paste0("(", round(se(m)["D_i"], 3), ")"), "")
+  
+  resultados <- rbind(resultados, fila_coef, fila_se)
+}
+
+# Agregando el F al final de la matriz
+resultados <- rbind(resultados, 
+                    c("", "", "", "", "", ""), 
+                    c("Estadístico F conjunto", "", "", "", round(f_stat, 3), round(f_pval, 3)))
+
+# Convirtiendo a data.frame
+tabla_df <- as.data.frame(resultados, row.names = FALSE)
+names(tabla_df) <- c("Variable", "Control", "Tratamiento", "N", "Coeficiente / (EE)", "Valor-p")
+
+# 3. Construir y estilizar la tabla con kableExtra (Tu código exacto)
+tabla_balance <- tabla_df %>%
+  kbl(
+    col.names = c("Variable", "Control", "Tratamiento", "N", "Coeficiente / (EE)", "Valor-p"),
+    align = c("l", "c", "c", "c", "c", "c"),
+    caption = "Tabla A.1: Pruebas de balance en la encuesta de línea base",
+    booktabs = TRUE
+  ) %>%
+  add_header_above(c(" " = 1, "Medias (Línea Base)" = 2, " " = 1, "Diferencias" = 2)) %>%
+  kable_classic(full_width = FALSE, html_font = "Arial") %>%
+  kable_styling(
+    latex_options = c("hold_position"), 
+    bootstrap_options = c("hover", "condensed")
+  ) %>%
+  footnote(
+    general = "Errores estándar agrupados a nivel de centro de salud entre paréntesis",
+    general_title = "Nota: "
+  )
+
+tabla_balance
+```
