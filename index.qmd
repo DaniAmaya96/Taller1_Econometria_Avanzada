@@ -1318,7 +1318,7 @@ El estudio de [Dupas et al. (2025)](https://www.aeaweb.org/articles?id=10.1257/a
 - `listing_sample.dta`: Censo de hogares en las aldeas incluidas en la muestra.
 - Puede usar el `codebook.xlsx` del paquete de replicación para identificar las variables.
 
-## Punto1
+## Punto 1
 1. **Diseño experimental:Antes de poder verificar los resultados de un estudio, es fundamental entender cómo fue diseñado e implementado el experimento. El diseño experimental no solo determina qué preguntas pueden responderse, sino también qué supuestos son necesarios para la identificación causal y qué amenazas a la validez interna deben considerarse.**  
 
 **Describa el diseño experimental del estudio de Dupas et al. (2025). Explique cómo fue implementada la aleatorización (incluyendo los diferentes niveles y la estratificación), qué tratamientos fueron aleatorizados y los principales desafíos metodológicos que enfrentaron los autores durante la implementación del estudio. (máx. 300 palabras)**
@@ -1329,7 +1329,7 @@ El diseño experimental consistió en tres niveles de aleatorización, empleando
 
 La implementación enfrentó tres principales obstaculos. En primer lugar la pendemia Covid-19 pospuso la recolección final de los datos, pues se tenia planeado el cierre a 2020 y se vieron obligados a ampliar un año. Ademas, en 2020 el gobierno de Burkina Faso anunció el lanzamiento de una política de planificación familiar gratis. Adicionalmente en 2019 se presentó un paro de trabajadores de la salud, sin embargo report que esto no afectó la provisión de servicios de acuerdo con el reporte de sus encuentas de monitoreo donde encontrar que el 92% de los centros de salud del experimento no presentaron falta de atención a los pacientes por estos motivos. Por último, cuatro centros de salud de la muestra fueron cerrados debido a condiciones de inseguridad. 
 
-## Punto2
+## Punto 2
 
 - **Defina formalmente la variable de asignación al tratamiento de subsidio ($D_i$) donde $i$ indexa a cada mujer. Presente los posibles valores que puede tomar esta variable.**
 
@@ -1339,28 +1339,25 @@ La implementación enfrentó tres principales obstaculos. En primer lugar la pen
 
 **R/:**
 
-- Definiendo formalmente la variable de asignación al tratamiento de subsidio $$
-D_i =
+- Definiendo formalmente la variable de asignación al tratamiento de subsidio 
+$$D_i =
 \begin{cases}
-1 & \text{si la mujer } i \text{ fue asignada a recibir un subsidio del 100%} \\
-0 & \text{si la mujer } i \text{ fue asignada a recibir un subsidio del 10%}
-\end{cases}
-$$
+1 & \text{si la mujer } i \text{ fue asignada a recibir un subsidio del 100\%} \\
+0 & \text{si la mujer } i \text{ fue asignada a recibir un subsidio del 10\%}
+\end{cases}$$
 
 
 
 - Definiendo los resultados potenciales 
 
 
-$$
-Y_i =
+$$Y_i =
 \begin{cases}
-Y_i(1) & \text{si } D_i = 1 \text{ (fue asignada al subsidio del 100%)} \\
-Y_i(0) & \text{si } D_i = 0 \text{ (fue asignada al subsidio del 10%)}
-\end{cases}
-$$
+Y_i(1) & \text{si } D_i = 1 \text{ (fue asignada al subsidio del 100\%)} \\
+Y_i(0) & \text{si } D_i = 0 \text{ (fue asignada al subsidio del 10\%)}
+\end{cases}$$
 
-Para cada mujer solo exisste un resultado potencial que vemos de la siguiente manera: 
+Para cada mujer solo existe un resultado potencial que vemos de la siguiente manera: 
 $$Y_i=Y_i(1) D_i+(1-D_i) Y_i(0)$$
 - La decisión ética busca mitigar la injusticia de no otorgar nada a las mujeres del grupo control. El subsidio del 10% garantiza que todas las participantes obtengan una mejora en su acceso a la salud y actúa como reconocimiento por su tiempo al responder las encuestas. En este sentido, el efecto debe interpretarse estrictamente como el efecto marginal de ofrecer un subsidio completo frente a un subsidio pequeño.
 
@@ -1378,7 +1375,7 @@ $$(Y_i(1),Y_i(0))\perp\!\!\!\perp D_i$$
 
 El segundo supuesto es el de no spilovers, lo que quiere decir que el resultado potencial de la mujer i  depende únicamente de si ella recibió el subsidio del 100% o del 10%, y no de la asignación que recibieron sus vecinas o amigas en la comunidad.
 
-$$Y_i(D_i,D_-i)=Y_iD_i$$
+$$Y_i(D_i,D_{-i})=Y_i(D_i)$$
 
 El tercer supuesto es la consistencia en el tratamiento. Es decir Garantiza que el resultado empírico que observamos en los datos corresponde exactamente al resultado potencial del tratamiento y no a una doisificación del mismo. 
 
@@ -1452,37 +1449,54 @@ baseline_sample_<- baseline_sample_ %>%
 
 #Estimando las regresiones 
 
-reg1<-feols(Edad_Mujer~ D_i | PROVINCE , baseline_sample_, vcov = ~ Centro_Salud )
-reg2<-feols(Esposo_poligamo~ D_i | PROVINCE , baseline_sample_, vcov = ~ Centro_Salud )
-reg3<-feols(N_Hijos_desados~ D_i |  PROVINCE , baseline_sample_, vcov = ~ Centro_Salud )
-reg4<-feols(Uso_Actual_Anticoncep_Moderna~ D_i |  PROVINCE , baseline_sample_, vcov = ~ Centro_Salud )
-reg5<-feols(Insatisfaccion_Acceso_Anticoncep~ D_i |  PROVINCE , baseline_sample_, vcov = ~ Centro_Salud )
-reg6 <- feols(No_puede_pagar_anticoncep~ D_i |  PROVINCE , baseline_sample_, vcov = ~ Centro_Salud )
-reg7 <- feols(Hogar_Con_Radio~ D_i |  PROVINCE , baseline_sample_, vcov = ~ Centro_Salud )
+reg1<-feols(Edad_Mujer~ D_i | PROVINCE , 
+            baseline_sample_, vcov = ~ Centro_Salud )
+reg2<-feols(Esposo_poligamo~ D_i | PROVINCE , 
+            baseline_sample_, vcov = ~ Centro_Salud )
+reg3<-feols(N_Hijos_desados~ D_i |  PROVINCE , 
+            baseline_sample_, vcov = ~ Centro_Salud )
+reg4<-feols(Uso_Actual_Anticoncep_Moderna~ D_i |  PROVINCE , 
+            baseline_sample_, vcov = ~ Centro_Salud )
+reg5<-feols(Insatisfaccion_Acceso_Anticoncep~ D_i |  PROVINCE , 
+            baseline_sample_, vcov = ~ Centro_Salud )
+reg6 <- feols(No_puede_pagar_anticoncep~ D_i |  PROVINCE , 
+              baseline_sample_, vcov = ~ Centro_Salud )
+reg7 <- feols(Hogar_Con_Radio~ D_i |  PROVINCE , 
+              baseline_sample_, vcov = ~ Centro_Salud )
 
 #Calculando estadistico F conjunto 
-reg_f <- feols(D_i ~ Edad_Mujer + Esposo_poligamo + N_Hijos_desados + 
-                     Uso_Actual_Anticoncep_Moderna + Insatisfaccion_Acceso_Anticoncep + 
-                     No_puede_pagar_anticoncep + Hogar_Con_Radio | PROVINCE, 
-               data = baseline_sample_, vcov = ~ Centro_Salud)
+reg_f <- feols(D_i ~ Edad_Mujer + Esposo_poligamo 
+               + N_Hijos_desados + 
+                     Uso_Actual_Anticoncep_Moderna 
+               + Insatisfaccion_Acceso_Anticoncep + 
+                     No_puede_pagar_anticoncep 
+               + Hogar_Con_Radio | PROVINCE, 
+               data = baseline_sample_, 
+               vcov = ~ Centro_Salud)
 
 invisible(capture.output(test_conjunto <- wald(reg_f)))
 f_stat <- test_conjunto$stat
 f_pval <- test_conjunto$p
 
-#Se tuvo problemas con la estimación del estadistico F 
-#El resultado es contraintuitivo, se intentó sin cluster
-#Con robustos y aún así el resultado siguió siendo poco coherente
-
+#Se revisó en el material de replicación  
+#se identificó que el cluster por new_csps corresponde a centro de salud 
+#en el codebook no era claro.  
 
 # Preparando vectores para la tabla
 modelos <- list(reg1, reg2, reg3, reg4, reg5, reg6, reg7)
-var_nombres <- c("Edad de la mujer", "La mujer reporta que su esposo es polígamo", 
-                 "Número total de hijos deseados por la mujer", "Uso actual de anticoncepción moderna", 
-                 "La necesidad de la mujer por anticonceptivos está insatisfecha", 
-                 "No podría pagar por anticonceptivos si quisiera usarlos", "El hogar tiene radio")
-var_datos <- c("Edad_Mujer", "Esposo_poligamo", "N_Hijos_desados", "Uso_Actual_Anticoncep_Moderna", 
-               "Insatisfaccion_Acceso_Anticoncep", "No_puede_pagar_anticoncep", "Hogar_Con_Radio")
+var_nombres <- c("Edad de la mujer", 
+                 "La mujer reporta que su esposo es polígamo", 
+                 "Número total de hijos deseados por la mujer", 
+                 "Uso actual de anticoncepción moderna", 
+                 "Necesidad de la mujer por anticonceptivos está insatisfecha", 
+                 "No podría pagar por anticonceptivos si quisiera usarlos", 
+                 "El hogar tiene radio")
+var_datos <- c("Edad_Mujer", "Esposo_poligamo"
+               ,"N_Hijos_desados"
+               ,"Uso_Actual_Anticoncep_Moderna"
+               ,"Insatisfaccion_Acceso_Anticoncep"
+               ,"No_puede_pagar_anticoncep"
+               ,"Hogar_Con_Radio")
 
 # Creando matriz vacia para llenarla con un loop
 resultados <- matrix(ncol = 6, nrow = 0)
@@ -1492,15 +1506,20 @@ for(i in 1:7) {
   v <- var_datos[i]
   
   # Medias grupo control y tratamiento
-  media_c <- mean(baseline_sample_[[v]][baseline_sample_$D_i == 0], na.rm = TRUE)
-  media_t <- mean(baseline_sample_[[v]][baseline_sample_$D_i == 1], na.rm = TRUE)
+  media_c <- mean(baseline_sample_[[v]][baseline_sample_$D_i == 0], 
+                  na.rm = TRUE)
+  media_t <- mean(baseline_sample_[[v]][baseline_sample_$D_i == 1], 
+                  na.rm = TRUE)
   
   # Fila 1: Coeficiente e info
-  fila_coef <- c(var_nombres[i], round(media_c, 3), round(media_t, 3), nobs(m), 
-                 round(coef(m)["D_i"], 3), round(pvalue(m)["D_i"], 3))
+  fila_coef <- c(var_nombres[i], round(media_c, 3), 
+                 round(media_t, 3), nobs(m), 
+                 round(coef(m)["D_i"], 3), 
+                 round(pvalue(m)["D_i"], 3))
   
   # Fila 2: Error Estandar
-  fila_se <- c("", "", "", "", paste0("(", round(se(m)["D_i"], 3), ")"), "")
+  fila_se <- c("", "", "", "", paste0("(", 
+                                      round(se(m)["D_i"], 3), ")"), "")
   
   resultados <- rbind(resultados, fila_coef, fila_se)
 }
@@ -1508,30 +1527,71 @@ for(i in 1:7) {
 # Agregando el F al final de la matriz
 resultados <- rbind(resultados, 
                     c("", "", "", "", "", ""), 
-                    c("Estadístico F conjunto", "", "", "", round(f_stat, 3), round(f_pval, 3)))
+                    c("Estadístico F conjunto", "", 
+                      "", "", round(f_stat, 3), round(f_pval, 3)))
 
 # Convirtiendo a data.frame
 tabla_df <- as.data.frame(resultados, row.names = FALSE)
-names(tabla_df) <- c("Variable", "Control", "Tratamiento", "N", "Coeficiente / (EE)", "Valor-p")
+names(tabla_df) <- c("Variable", "Control", "Tratamiento", 
+                     "N", "Coeficiente / (EE)", "Valor-p")
 
-# 3. Construir y estilizar la tabla con kableExtra (Tu código exacto)
+# 3. Construir y estilizar la tabla con kableExtra
 tabla_balance <- tabla_df %>%
   kbl(
-    col.names = c("Variable", "Control", "Tratamiento", "N", "Coeficiente / (EE)", "Valor-p"),
+    col.names = c("Variable", "Control", "Tratamiento",
+                  "N", "Coeficiente / (EE)", "Valor-p"),
     align = c("l", "c", "c", "c", "c", "c"),
     caption = "Tabla A.1: Pruebas de balance en la encuesta de línea base",
     booktabs = TRUE
   ) %>%
-  add_header_above(c(" " = 1, "Medias (Línea Base)" = 2, " " = 1, "Diferencias" = 2)) %>%
-  kable_classic(full_width = FALSE, html_font = "Arial") %>%
+  add_header_above(c(" " = 1, "Medias (Línea Base)" = 2, 
+                     " " = 1, "Diferencias" = 2)) %>%
   kable_styling(
-    latex_options = c("hold_position"), 
-    bootstrap_options = c("hover", "condensed")
+    
+    latex_options = c("hold_position", "scale_down"), 
+    bootstrap_options = c("hover", "condensed"),
+    full_width = FALSE,
+    position = "center"
   ) %>%
   footnote(
-    general = "Errores estándar agrupados a nivel de centro de salud entre paréntesis",
-    general_title = "Nota: "
+    general = "EE agrupados a nivel de centro de salud entre paréntesis.",
+    general_title = "Nota: ",
+    # footnote_as_chunk evita que la nota se parta de forma extraña en el PDF
+    footnote_as_chunk = TRUE 
   )
 
 tabla_balance
 ```
+
+- **Comparando resultado tablas:**
+
+Al comparar el resultado de la tabla de balanceo de nuestra muestra con la tabla original, observamos que los resultados son consistentes. A pesar de utilizar solo el 60% de la muestra, las medias de ambos grupos capturan la misma tendencia.
+
+En nuestro caso, casi todas las variables presentan un valor *p* > 0.10, lo que indica que no existen diferencias estadísticamente significativas entre los grupos. No obstante, se identificó que la variable que responde a “No podría pagar por anticonceptivos” sí mostró una diferencia estadísticamente significativa, lo cual también se evidencia den la tabla del estudio original.
+
+Es importante tener en cuenta que, al evaluar múltiples variables, es esperable que alguna resulte significativa por puro azar. Esto puede corregirse fácilmente si se controla por la variable que no está balanceada. Sin embargo, también es válido señalar que esta situación puede generar dudas: si existe una variable observada desbalanceada, ¿cómo podemos estar seguros de que las variables no observadas también están balanceadas?
+
+Por último, nuestra prueba definitiva es el estadístico F de significancia conjunta, que con un $p = 0.111$ confirma que las características $X$, en conjunto, no predicen la asignación al grupo. Se puede concluir que no hay evidencia de desbalance sistemático y que la aleatorización fue implementada correctamente.
+
+- **Analizando estadisticas descriptivas:**
+
+Las estadísticas descriptivas de nuestra muestra muestran que las mujeres tienen, en promedio, 28 años y desean tener 6 hijos. Sin embargo, solo el 30% utiliza métodos anticonceptivos modernos. Aproximadamente el 38% manifiesta tener una demanda insatisfecha de anticonceptivos modernos y entre el 38% y el 42% señala que no podría pagarlos.
+
+Dado que se trata de mujeres en edades de alta fertilidad, que además expresan una demanda insatisfecha y dificultades para cubrir el costo de los anticonceptivos, es razonable esperar que,aumente significativamente el uso de anticonceptivos modernos y, en consecuencia, al eliminar esta barrera mediante un subsidio del 100% para las mujeres tratadas, el número de hijos nacidos después de la intervención sea menor.
+
+## Punto 5
+
+- **Replicación de Resultados Principales - Tabla 2:**
+
+**Use `baseline_sample.dta` y `endline_sample.dta`. Tenga en cuenta que el endline tiene menos observaciones debido a la atrición de las participantes.**
+
+**1. Construya las variables de resultado, realice el merge entre bases y reporte la tasa de atrición (total y por grupo de tratamiento). Reporte la atrición como tasas (%) y como número de observaciones (N).**
+
+**2. Escriba la ecuación econométrica que estima el efecto ITT del subsidio sobre fecundidad. Identifique claramente todos los componentes del modelo.**
+
+**3. Estime el efecto ITT del subsidio (100% vs 10%) para los cuatro resultados principales. Replique la Tabla 2 del artículo (sin contar la columna 4).**
+
+**R/:**
+
+
+
