@@ -3473,6 +3473,8 @@ window.Quarto = {
   <li><a href="#punto-3-2" id="toc-punto-3-2" class="nav-link" data-scroll-target="#punto-3-2">Punto 3</a></li>
   <li><a href="#punto-4-2" id="toc-punto-4-2" class="nav-link" data-scroll-target="#punto-4-2">Punto 4</a></li>
   <li><a href="#punto-5-1" id="toc-punto-5-1" class="nav-link" data-scroll-target="#punto-5-1">Punto 5</a></li>
+  <li><a href="#punto-6-1" id="toc-punto-6-1" class="nav-link" data-scroll-target="#punto-6-1">Punto 6</a></li>
+  <li><a href="#punto-7-1" id="toc-punto-7-1" class="nav-link" data-scroll-target="#punto-7-1">Punto 7</a></li>
   </ul></li>
   </ul>
 <div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="index.pdf"><i class="bi bi-file-pdf"></i>PDF</a></li></ul></div></nav>
@@ -5025,6 +5027,319 @@ Diferencias
 <p><strong>2. Escriba la ecuación econométrica que estima el efecto ITT del subsidio sobre fecundidad. Identifique claramente todos los componentes del modelo.</strong></p>
 <p><strong>3. Estime el efecto ITT del subsidio (100% vs 10%) para los cuatro resultados principales. Replique la Tabla 2 del artículo (sin contar la columna 4).</strong></p>
 <p><strong>R/:</strong></p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Cargando Librerias </span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(haven)</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(fixest)</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(kableExtra)</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="co">#Cargando los datos </span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>baseline<span class="ot">&lt;-</span> <span class="fu">read_dta</span>(<span class="st">&quot;baseline_sample.dta&quot;</span>)</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>endline <span class="ot">&lt;-</span> <span class="fu">read_dta</span>(<span class="st">&quot;endline_sample.dta&quot;</span>)</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a><span class="co">#Haciendo el merge de las bases y calculando atrición </span></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>endline_listo <span class="ot">&lt;-</span> endline <span class="sc">%&gt;%</span> </span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">estuvo_endline =</span> <span class="dv">1</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(</span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>    new_womid_final, </span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>    estuvo_endline,</span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>    an_ew_any_deliveries_ab_s7q4,</span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>    an_ew_at_least_1preg_ab,</span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>    an_ew_contra_modern_lst3y,</span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>    an_ew_coupon_use_s15q7,</span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>    ew_survey_date,               </span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Uniendo</span></span>
+<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a>datos_completos <span class="ot">&lt;-</span> baseline <span class="sc">%&gt;%</span> </span>
+<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(endline_listo, <span class="at">by =</span> <span class="st">&quot;new_womid_final&quot;</span>)</span>
+<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a>datos_completos <span class="ot">&lt;-</span> datos_completos <span class="sc">%&gt;%</span> </span>
+<span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">atricion =</span> <span class="fu">ifelse</span>(<span class="fu">is.na</span>(estuvo_endline), <span class="dv">1</span>, <span class="dv">0</span>))</span>
+<span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-33"><a href="#cb7-33" aria-hidden="true" tabindex="-1"></a>datos_completos <span class="ot">&lt;-</span> datos_completos <span class="sc">%&gt;%</span> </span>
+<span id="cb7-34"><a href="#cb7-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb7-35"><a href="#cb7-35" aria-hidden="true" tabindex="-1"></a>    <span class="at">Y1_nacimiento =</span> an_ew_any_deliveries_ab_s7q4,</span>
+<span id="cb7-36"><a href="#cb7-36" aria-hidden="true" tabindex="-1"></a>    <span class="at">Y2_embarazo   =</span> an_ew_at_least_1preg_ab,</span>
+<span id="cb7-37"><a href="#cb7-37" aria-hidden="true" tabindex="-1"></a>    <span class="at">Y3_uso_anti   =</span> an_ew_contra_modern_lst3y,</span>
+<span id="cb7-38"><a href="#cb7-38" aria-hidden="true" tabindex="-1"></a>    <span class="at">Y4_cupon      =</span> an_ew_coupon_use_s15q7,</span>
+<span id="cb7-39"><a href="#cb7-39" aria-hidden="true" tabindex="-1"></a>    <span class="at">D_i           =</span> arm_free </span>
+<span id="cb7-40"><a href="#cb7-40" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb7-41"><a href="#cb7-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-42"><a href="#cb7-42" aria-hidden="true" tabindex="-1"></a><span class="co"># Atrición por grupo de tratamiento</span></span>
+<span id="cb7-43"><a href="#cb7-43" aria-hidden="true" tabindex="-1"></a>atricion_grupos <span class="ot">&lt;-</span> datos_completos <span class="sc">%&gt;%</span></span>
+<span id="cb7-44"><a href="#cb7-44" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(D_i) <span class="sc">%&gt;%</span></span>
+<span id="cb7-45"><a href="#cb7-45" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb7-46"><a href="#cb7-46" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">N Inicial</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">n</span>(),</span>
+<span id="cb7-47"><a href="#cb7-47" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">N Atrición</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">sum</span>(atricion),</span>
+<span id="cb7-48"><a href="#cb7-48" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">Tasa de Atrición (%)</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">round</span>(<span class="fu">mean</span>(atricion) <span class="sc">*</span> <span class="dv">100</span>, <span class="dv">2</span>)</span>
+<span id="cb7-49"><a href="#cb7-49" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb7-50"><a href="#cb7-50" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Grupo =</span> <span class="fu">ifelse</span>(D_i <span class="sc">==</span> <span class="dv">1</span>, <span class="st">&quot;Tratamiento (100%)&quot;</span>, <span class="st">&quot;Control (10%)&quot;</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb7-51"><a href="#cb7-51" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(Grupo, <span class="st">`</span><span class="at">N Inicial</span><span class="st">`</span>, <span class="st">`</span><span class="at">N Atrición</span><span class="st">`</span>, <span class="st">`</span><span class="at">Tasa de Atrición (%)</span><span class="st">`</span>)</span>
+<span id="cb7-52"><a href="#cb7-52" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-53"><a href="#cb7-53" aria-hidden="true" tabindex="-1"></a><span class="co"># Atrición Total</span></span>
+<span id="cb7-54"><a href="#cb7-54" aria-hidden="true" tabindex="-1"></a>atricion_total <span class="ot">&lt;-</span> datos_completos <span class="sc">%&gt;%</span></span>
+<span id="cb7-55"><a href="#cb7-55" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb7-56"><a href="#cb7-56" aria-hidden="true" tabindex="-1"></a>    <span class="at">Grupo =</span> <span class="st">&quot;Total Muestra&quot;</span>,</span>
+<span id="cb7-57"><a href="#cb7-57" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">N Inicial</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">n</span>(),</span>
+<span id="cb7-58"><a href="#cb7-58" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">N Atrición</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">sum</span>(atricion),</span>
+<span id="cb7-59"><a href="#cb7-59" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">Tasa de Atrición (%)</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">round</span>(<span class="fu">mean</span>(atricion) <span class="sc">*</span> <span class="dv">100</span>, <span class="dv">2</span>)</span>
+<span id="cb7-60"><a href="#cb7-60" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb7-61"><a href="#cb7-61" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-62"><a href="#cb7-62" aria-hidden="true" tabindex="-1"></a><span class="co"># Unimos las filas para crear la tabla final</span></span>
+<span id="cb7-63"><a href="#cb7-63" aria-hidden="true" tabindex="-1"></a>tabla_atricion <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(atricion_grupos, atricion_total)</span>
+<span id="cb7-64"><a href="#cb7-64" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-65"><a href="#cb7-65" aria-hidden="true" tabindex="-1"></a><span class="co">#generando tabla</span></span>
+<span id="cb7-66"><a href="#cb7-66" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-67"><a href="#cb7-67" aria-hidden="true" tabindex="-1"></a><span class="co"># Generamos la tabla para el PDF con kableExtra</span></span>
+<span id="cb7-68"><a href="#cb7-68" aria-hidden="true" tabindex="-1"></a>tabla_atricion <span class="sc">%&gt;%</span></span>
+<span id="cb7-69"><a href="#cb7-69" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kbl</span>(</span>
+<span id="cb7-70"><a href="#cb7-70" aria-hidden="true" tabindex="-1"></a>    <span class="at">caption =</span> <span class="st">&quot;Tasa de Atrición entre Línea Base y Seguimiento&quot;</span>,</span>
+<span id="cb7-71"><a href="#cb7-71" aria-hidden="true" tabindex="-1"></a>    <span class="at">align =</span> <span class="fu">c</span>(<span class="st">&quot;l&quot;</span>, <span class="st">&quot;c&quot;</span>, <span class="st">&quot;c&quot;</span>, <span class="st">&quot;c&quot;</span>),</span>
+<span id="cb7-72"><a href="#cb7-72" aria-hidden="true" tabindex="-1"></a>    <span class="at">booktabs =</span> <span class="cn">TRUE</span></span>
+<span id="cb7-73"><a href="#cb7-73" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb7-74"><a href="#cb7-74" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling</span>(</span>
+<span id="cb7-75"><a href="#cb7-75" aria-hidden="true" tabindex="-1"></a>    <span class="at">latex_options =</span> <span class="st">&quot;hold_position&quot;</span>, </span>
+<span id="cb7-76"><a href="#cb7-76" aria-hidden="true" tabindex="-1"></a>    <span class="at">bootstrap_options =</span> <span class="st">&quot;condensed&quot;</span>,</span>
+<span id="cb7-77"><a href="#cb7-77" aria-hidden="true" tabindex="-1"></a>    <span class="at">full_width =</span> <span class="cn">FALSE</span></span>
+<span id="cb7-78"><a href="#cb7-78" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<table class="table table-condensed caption-top table-sm table-striped small" data-quarto-postprocess="true">
+<caption>Tasa de Atrición entre Línea Base y Seguimiento</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;" data-quarto-table-cell-role="th">Grupo</th>
+<th style="text-align: center;" data-quarto-table-cell-role="th">N Inicial</th>
+<th style="text-align: center;" data-quarto-table-cell-role="th">N Atrición</th>
+<th style="text-align: center;" data-quarto-table-cell-role="th">Tasa de Atrición (%)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Control (10%)</td>
+<td style="text-align: center;">4376</td>
+<td style="text-align: center;">551</td>
+<td style="text-align: center;">12.59</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Tratamiento (100%)</td>
+<td style="text-align: center;">4313</td>
+<td style="text-align: center;">649</td>
+<td style="text-align: center;">15.05</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Total Muestra</td>
+<td style="text-align: center;">8689</td>
+<td style="text-align: center;">1200</td>
+<td style="text-align: center;">13.81</td>
+</tr>
+</tbody>
+</table>
+
+
+</div>
+</div>
+<ul>
+<li><strong>Escribiendo la ecuacción econometrica que identifica el efecto ITT del subsidio sobre fecundidad:</strong></li>
+</ul>
+<p>La estimación del efecto de intencion del tratamiento (ITT) del del subsidio en el paper es:</p>
+<p><span class="math display">\[
+Y_{ivcp}=\beta_1 SubsidioCompleto_c + \gamma_p + \boldsymbol{X}&#39;_{iv}\boldsymbol{\rho} + \varepsilon_{ivcp}
+\]</span> Donde:</p>
+<ul>
+<li><p><span class="math inline">\(Y_{ivcp}\)</span> es la variable de resultado, por ejemplo: por ejemplo, si tuvo un embarazo, si tuvo un nacimiento o si usó anticoncepción moderna en los últimos 3 años para la mujer <span class="math inline">\(i\)</span>, residente en la aldea <span class="math inline">\(v\)</span>, perteneciente al área de influencia del centro de salud <span class="math inline">\(c\)</span>, ubicado en la provincia <span class="math inline">\(p\)</span>.</p></li>
+<li><p><span class="math inline">\(SubsidioCompleto_c\)</span> es la variable de tratamiento. Toma el valor de 1 si el centro de salud c fue asignado aleatoriamente al grupo que ofrece el subsidio completo y 0 si fue asignado al grupo de comparación que ofrece el subsidio parcial. En ese sentido <span class="math inline">\(\beta_1\)</span> captura el efecto del tratamiento.</p></li>
+<li><p><span class="math inline">\(\gamma_p\)</span> Efectos fijos a nivel de provincia.</p></li>
+<li><p><span class="math inline">\(\boldsymbol{X}&#39;_{iv}\)</span> Es un vector de covariables de control a nivel individual (i) y de aldea (v). Incluye controles del seguimiento como la fecha de la encuesta y si fue telefónica y características de la línea base como edad, brecha de edad con el esposo, si es una unión polígama, hijos deseados, uso previo de anticonceptivos, escolaridad, entre otros. En línea con esto <span class="math inline">\(\boldsymbol{\rho}\)</span> representa el vector de coeficientes asociados a la covariables.</p></li>
+<li><p>Por último <span class="math inline">\(\varepsilon_{ivcp}\)</span> representa el error idiosincratico. En este caso los errores estandar se clusterizan a nivel de centro de salud <span class="math inline">\(c\)</span></p></li>
+<li><p><strong>Estime el efecto ITT del subsidio (100% vs 10%) para los cuatro resultados principales</strong></p></li>
+</ul>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Cargando librerías</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(haven)</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(fixest)</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(modelsummary)</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(kableExtra)</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Definimos el vector covariables</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>controles <span class="ot">&lt;-</span> <span class="st">&quot;an_bw_s3q5_age + an_bw_polygamous + an_bw_s8q1_childdesired + an_bw_modern_cmeth_curr_s11q5 + ew_survey_date + TELEPHONIQUE_endline&quot;</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Estimamos los modelos </span></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>reg_itt1 <span class="ot">&lt;-</span> <span class="fu">feols</span>(<span class="fu">as.formula</span>(<span class="fu">paste</span>(<span class="st">&quot;Y1_nacimiento ~ D_i +&quot;</span>,</span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>                                   controles, <span class="st">&quot;| PROVINCE&quot;</span>)), </span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>                  <span class="at">data =</span> datos_completos, <span class="at">vcov =</span> <span class="sc">~</span> new_csps)</span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>reg_itt2 <span class="ot">&lt;-</span> <span class="fu">feols</span>(<span class="fu">as.formula</span>(<span class="fu">paste</span>(<span class="st">&quot;Y2_embarazo ~ D_i +&quot;</span>, </span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>                                   controles, <span class="st">&quot;| PROVINCE&quot;</span>)), </span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>                  <span class="at">data =</span> datos_completos, <span class="at">vcov =</span> <span class="sc">~</span> new_csps)</span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>reg_itt3 <span class="ot">&lt;-</span> <span class="fu">feols</span>(<span class="fu">as.formula</span>(<span class="fu">paste</span>(<span class="st">&quot;Y3_uso_anti ~ D_i +&quot;</span>, </span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>                                   controles, <span class="st">&quot;| PROVINCE&quot;</span>)), </span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a>                  <span class="at">data =</span> datos_completos, <span class="at">vcov =</span> <span class="sc">~</span> new_csps)</span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a>reg_itt4 <span class="ot">&lt;-</span> <span class="fu">feols</span>(<span class="fu">as.formula</span>(<span class="fu">paste</span>(<span class="st">&quot;Y4_cupon ~ D_i +&quot;</span>, </span>
+<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a>                                   controles, <span class="st">&quot;| PROVINCE&quot;</span>)), </span>
+<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a>                  <span class="at">data =</span> datos_completos, <span class="at">vcov =</span> <span class="sc">~</span> new_csps)</span>
+<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculando medias grupo control para tabla</span></span>
+<span id="cb8-29"><a href="#cb8-29" aria-hidden="true" tabindex="-1"></a>mean_y1 <span class="ot">&lt;-</span> <span class="fu">mean</span>(datos_completos<span class="sc">$</span>Y1_nacimiento[datos_completos<span class="sc">$</span>D_i <span class="sc">==</span> <span class="dv">0</span>], </span>
+<span id="cb8-30"><a href="#cb8-30" aria-hidden="true" tabindex="-1"></a>                <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb8-31"><a href="#cb8-31" aria-hidden="true" tabindex="-1"></a>mean_y2 <span class="ot">&lt;-</span> <span class="fu">mean</span>(datos_completos<span class="sc">$</span>Y2_embarazo[datos_completos<span class="sc">$</span>D_i <span class="sc">==</span> <span class="dv">0</span>], </span>
+<span id="cb8-32"><a href="#cb8-32" aria-hidden="true" tabindex="-1"></a>                <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb8-33"><a href="#cb8-33" aria-hidden="true" tabindex="-1"></a>mean_y3 <span class="ot">&lt;-</span> <span class="fu">mean</span>(datos_completos<span class="sc">$</span>Y3_uso_anti[datos_completos<span class="sc">$</span>D_i <span class="sc">==</span> <span class="dv">0</span>],</span>
+<span id="cb8-34"><a href="#cb8-34" aria-hidden="true" tabindex="-1"></a>                <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb8-35"><a href="#cb8-35" aria-hidden="true" tabindex="-1"></a>mean_y4 <span class="ot">&lt;-</span> <span class="fu">mean</span>(datos_completos<span class="sc">$</span>Y4_cupon[datos_completos<span class="sc">$</span>D_i <span class="sc">==</span> <span class="dv">0</span>], </span>
+<span id="cb8-36"><a href="#cb8-36" aria-hidden="true" tabindex="-1"></a>                <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb8-37"><a href="#cb8-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-38"><a href="#cb8-38" aria-hidden="true" tabindex="-1"></a><span class="co"># Sacando las observaciones de los modelos para tabla</span></span>
+<span id="cb8-39"><a href="#cb8-39" aria-hidden="true" tabindex="-1"></a>obs_1 <span class="ot">&lt;-</span> <span class="fu">nobs</span>(reg_itt1)</span>
+<span id="cb8-40"><a href="#cb8-40" aria-hidden="true" tabindex="-1"></a>obs_2 <span class="ot">&lt;-</span> <span class="fu">nobs</span>(reg_itt2)</span>
+<span id="cb8-41"><a href="#cb8-41" aria-hidden="true" tabindex="-1"></a>obs_3 <span class="ot">&lt;-</span> <span class="fu">nobs</span>(reg_itt3)</span>
+<span id="cb8-42"><a href="#cb8-42" aria-hidden="true" tabindex="-1"></a>obs_4 <span class="ot">&lt;-</span> <span class="fu">nobs</span>(reg_itt4)</span>
+<span id="cb8-43"><a href="#cb8-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-44"><a href="#cb8-44" aria-hidden="true" tabindex="-1"></a><span class="co"># Dando forma a la parte inferior de la tabla</span></span>
+<span id="cb8-45"><a href="#cb8-45" aria-hidden="true" tabindex="-1"></a>filas_extra <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb8-46"><a href="#cb8-46" aria-hidden="true" tabindex="-1"></a>  <span class="at">term =</span> <span class="fu">c</span>(<span class="st">&quot;Controles de línea base&quot;</span>, <span class="st">&quot;Efectos fijos (Provincia)&quot;</span>, </span>
+<span id="cb8-47"><a href="#cb8-47" aria-hidden="true" tabindex="-1"></a>           <span class="st">&quot;Observaciones&quot;</span>, <span class="st">&quot;Media del control (10%)&quot;</span>),</span>
+<span id="cb8-48"><a href="#cb8-48" aria-hidden="true" tabindex="-1"></a>  <span class="at">reg1 =</span> <span class="fu">c</span>(<span class="st">&quot;Sí&quot;</span>, <span class="st">&quot;Sí&quot;</span>, <span class="fu">as.character</span>(obs_1), <span class="fu">sprintf</span>(<span class="st">&quot;%.3f&quot;</span>, mean_y1)),</span>
+<span id="cb8-49"><a href="#cb8-49" aria-hidden="true" tabindex="-1"></a>  <span class="at">reg2 =</span> <span class="fu">c</span>(<span class="st">&quot;Sí&quot;</span>, <span class="st">&quot;Sí&quot;</span>, <span class="fu">as.character</span>(obs_2), <span class="fu">sprintf</span>(<span class="st">&quot;%.3f&quot;</span>, mean_y2)),</span>
+<span id="cb8-50"><a href="#cb8-50" aria-hidden="true" tabindex="-1"></a>  <span class="at">reg3 =</span> <span class="fu">c</span>(<span class="st">&quot;Sí&quot;</span>, <span class="st">&quot;Sí&quot;</span>, <span class="fu">as.character</span>(obs_3), <span class="fu">sprintf</span>(<span class="st">&quot;%.3f&quot;</span>, mean_y3)),</span>
+<span id="cb8-51"><a href="#cb8-51" aria-hidden="true" tabindex="-1"></a>  <span class="at">reg4 =</span> <span class="fu">c</span>(<span class="st">&quot;Sí&quot;</span>, <span class="st">&quot;Sí&quot;</span>, <span class="fu">as.character</span>(obs_4), <span class="fu">sprintf</span>(<span class="st">&quot;%.3f&quot;</span>, mean_y4))</span>
+<span id="cb8-52"><a href="#cb8-52" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb8-53"><a href="#cb8-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-54"><a href="#cb8-54" aria-hidden="true" tabindex="-1"></a><span class="co"># Generando tabla</span></span>
+<span id="cb8-55"><a href="#cb8-55" aria-hidden="true" tabindex="-1"></a>mapa_coef <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;D_i&quot;</span> <span class="ot">=</span> <span class="st">&quot;Subsidio Completo (100%)&quot;</span>)</span>
+<span id="cb8-56"><a href="#cb8-56" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-57"><a href="#cb8-57" aria-hidden="true" tabindex="-1"></a><span class="fu">modelsummary</span>(</span>
+<span id="cb8-58"><a href="#cb8-58" aria-hidden="true" tabindex="-1"></a>  <span class="fu">list</span>(</span>
+<span id="cb8-59"><a href="#cb8-59" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;(1) Tuvo Nacimiento&quot;</span>     <span class="ot">=</span> reg_itt1,</span>
+<span id="cb8-60"><a href="#cb8-60" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;(2) Tuvo Embarazo&quot;</span>       <span class="ot">=</span> reg_itt2,</span>
+<span id="cb8-61"><a href="#cb8-61" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;(3) Usó Anticoncepción&quot;</span> <span class="ot">=</span> reg_itt3,</span>
+<span id="cb8-62"><a href="#cb8-62" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;(4) Usó Cupón&quot;</span>      <span class="ot">=</span> reg_itt4 </span>
+<span id="cb8-63"><a href="#cb8-63" aria-hidden="true" tabindex="-1"></a>  ),</span>
+<span id="cb8-64"><a href="#cb8-64" aria-hidden="true" tabindex="-1"></a>  <span class="at">coef_map =</span> mapa_coef,</span>
+<span id="cb8-65"><a href="#cb8-65" aria-hidden="true" tabindex="-1"></a>  <span class="at">stars =</span> <span class="fu">c</span>(<span class="st">&#39;*&#39;</span> <span class="ot">=</span> .<span class="dv">1</span>, <span class="st">&#39;**&#39;</span> <span class="ot">=</span> .<span class="dv">05</span>, <span class="st">&#39;***&#39;</span> <span class="ot">=</span> .<span class="dv">01</span>),</span>
+<span id="cb8-66"><a href="#cb8-66" aria-hidden="true" tabindex="-1"></a>  <span class="at">gof_omit =</span> <span class="st">&quot;.*&quot;</span>,</span>
+<span id="cb8-67"><a href="#cb8-67" aria-hidden="true" tabindex="-1"></a>  <span class="at">add_rows =</span> filas_extra,</span>
+<span id="cb8-68"><a href="#cb8-68" aria-hidden="true" tabindex="-1"></a>  <span class="at">title =</span> <span class="st">&quot;Tabla 2. Efectos del tratamiento resultados principales&quot;</span>,</span>
+<span id="cb8-69"><a href="#cb8-69" aria-hidden="true" tabindex="-1"></a>  <span class="at">notes =</span> <span class="fu">list</span>(<span class="st">&quot;Nota: Errores estándar clusterizados </span></span>
+<span id="cb8-70"><a href="#cb8-70" aria-hidden="true" tabindex="-1"></a><span class="st">               a nivel de centro de salud entre paréntesis. </span></span>
+<span id="cb8-71"><a href="#cb8-71" aria-hidden="true" tabindex="-1"></a><span class="st">               Réplica basada en Panel B (Dupas et al., 2025).&quot;</span>),</span>
+<span id="cb8-72"><a href="#cb8-72" aria-hidden="true" tabindex="-1"></a>  <span class="at">output =</span> <span class="st">&quot;kableExtra&quot;</span></span>
+<span id="cb8-73"><a href="#cb8-73" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span></span>
+<span id="cb8-74"><a href="#cb8-74" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling</span>(</span>
+<span id="cb8-75"><a href="#cb8-75" aria-hidden="true" tabindex="-1"></a>    <span class="at">latex_options =</span> <span class="fu">c</span>(<span class="st">&quot;hold_position&quot;</span>, <span class="st">&quot;scale_down&quot;</span>, <span class="st">&quot;booktabs&quot;</span>),</span>
+<span id="cb8-76"><a href="#cb8-76" aria-hidden="true" tabindex="-1"></a>    <span class="at">bootstrap_options =</span> <span class="st">&quot;condensed&quot;</span>,</span>
+<span id="cb8-77"><a href="#cb8-77" aria-hidden="true" tabindex="-1"></a>    <span class="at">full_width =</span> <span class="cn">FALSE</span></span>
+<span id="cb8-78"><a href="#cb8-78" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<table class="table table-condensed caption-top table-sm table-striped small" data-quarto-postprocess="true">
+<caption>Tabla 2. Efectos del tratamiento resultados principales</caption>
+<colgroup>
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;" data-quarto-table-cell-role="th"></th>
+<th style="text-align: center;" data-quarto-table-cell-role="th">&amp;nbsp;(1) Tuvo Nacimiento</th>
+<th style="text-align: center;" data-quarto-table-cell-role="th">&amp;nbsp;(2) Tuvo Embarazo</th>
+<th style="text-align: center;" data-quarto-table-cell-role="th">&amp;nbsp;(3) Usó Anticoncepción</th>
+<th style="text-align: center;" data-quarto-table-cell-role="th">&amp;nbsp;(4) Usó Cupón</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Subsidio Completo (100%)</td>
+<td style="text-align: center;">−0.012</td>
+<td style="text-align: center;">−0.013</td>
+<td style="text-align: center;">0.004</td>
+<td style="text-align: center;">0.044***</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: center;">(0.012)</td>
+<td style="text-align: center;">(0.013)</td>
+<td style="text-align: center;">(0.016)</td>
+<td style="text-align: center;">(0.011)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Controles de línea base</td>
+<td style="text-align: center;">Sí</td>
+<td style="text-align: center;">Sí</td>
+<td style="text-align: center;">Sí</td>
+<td style="text-align: center;">Sí</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Efectos fijos (Provincia)</td>
+<td style="text-align: center;">Sí</td>
+<td style="text-align: center;">Sí</td>
+<td style="text-align: center;">Sí</td>
+<td style="text-align: center;">Sí</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Observaciones</td>
+<td style="text-align: center;">6768</td>
+<td style="text-align: center;">6769</td>
+<td style="text-align: center;">6558</td>
+<td style="text-align: center;">6755</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Media del control (10%)</td>
+<td style="text-align: center;">0.625</td>
+<td style="text-align: center;">0.703</td>
+<td style="text-align: center;">0.531</td>
+<td style="text-align: center;">0.135</td>
+</tr>
+</tbody><tfoot>
+<tr class="odd">
+<td style="text-align: left; padding: 0;"><sup></sup> * p &lt; 0.1, ** p &lt; 0.05, *** p &lt; 0.01</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: left; padding: 0;"><sup></sup> Nota: Errores estándar clusterizados<br>
+a nivel de centro de salud entre paréntesis.<br>
+Réplica basada en Panel B (Dupas et al., 2025).</td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+</tr>
+</tfoot>
+
+</table>
+
+
+</div>
+</div>
+</section>
+<section id="punto-6-1" class="level2">
+<h2 class="anchored" data-anchor-id="punto-6-1">Punto 6</h2>
+<ul>
+<li><p><strong>Validez de Supuestos:</strong></p>
+<p><strong>1. En julio de 2020, el gobierno anunció la gratuidad nacional de la anticoncepción. Explique:(i) de qué manera este anuncio puede violar el supuesto SUTVA, (ii) cuál sería la dirección esperada del sesgo que introduce, y (iii) si considera convincente el argumento de los autores basado en la implementación gradual de la política y en el rezago biológico de nueve meses para observar nacimientos.</strong></p>
+<p><strong>2. Defina y proporcione ejemplos en el contexto de este estudio de los siguientes efectos: Hawthorne, John Henry, demanda del experimentador (<em>experimenter demand</em>) y placebo. ¿En qué dirección sesgaría cada uno de estos efectos los resultados estimados?</strong></p></li>
+</ul>
+<p><strong>R/:</strong></p>
+</section>
+<section id="punto-7-1" class="level2">
+<h2 class="anchored" data-anchor-id="punto-7-1">Punto 7</h2>
 </section>
 </section>
 

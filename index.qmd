@@ -1593,5 +1593,211 @@ Dado que se trata de mujeres en edades de alta fertilidad, que además expresan 
 
 **R/:**
 
+```{r}
+#Cargando Librerias 
+
+library(dplyr)
+library(haven)
+library(fixest)
+library(kableExtra)
+
+#Cargando los datos 
+
+baseline<- read_dta("baseline_sample.dta")
+endline <- read_dta("endline_sample.dta")
+
+#Haciendo el merge de las bases y calculando atrición 
+
+endline_listo <- endline %>% 
+  mutate(estuvo_endline = 1) %>%
+  select(
+    new_womid_final, 
+    estuvo_endline,
+    an_ew_any_deliveries_ab_s7q4,
+    an_ew_at_least_1preg_ab,
+    an_ew_contra_modern_lst3y,
+    an_ew_coupon_use_s15q7,
+    ew_survey_date,               
+  )
+
+# 2. Uniendo
+datos_completos <- baseline %>% 
+  left_join(endline_listo, by = "new_womid_final")
+datos_completos <- datos_completos %>% 
+  mutate(atricion = ifelse(is.na(estuvo_endline), 1, 0))
+
+datos_completos <- datos_completos %>% 
+  mutate(
+    Y1_nacimiento = an_ew_any_deliveries_ab_s7q4,
+    Y2_embarazo   = an_ew_at_least_1preg_ab,
+    Y3_uso_anti   = an_ew_contra_modern_lst3y,
+    Y4_cupon      = an_ew_coupon_use_s15q7,
+    D_i           = arm_free 
+  )
+
+# Atrición por grupo de tratamiento
+atricion_grupos <- datos_completos %>%
+  group_by(D_i) %>%
+  summarise(
+    `N Inicial` = n(),
+    `N Atrición` = sum(atricion),
+    `Tasa de Atrición (%)` = round(mean(atricion) * 100, 2)
+  ) %>%
+  mutate(Grupo = ifelse(D_i == 1, "Tratamiento (100%)", "Control (10%)")) %>%
+  select(Grupo, `N Inicial`, `N Atrición`, `Tasa de Atrición (%)`)
+
+# Atrición Total
+atricion_total <- datos_completos %>%
+  summarise(
+    Grupo = "Total Muestra",
+    `N Inicial` = n(),
+    `N Atrición` = sum(atricion),
+    `Tasa de Atrición (%)` = round(mean(atricion) * 100, 2)
+  )
+
+# Unimos las filas para crear la tabla final
+tabla_atricion <- bind_rows(atricion_grupos, atricion_total)
+
+#generando tabla
+
+# Generamos la tabla para el PDF con kableExtra
+tabla_atricion %>%
+  kbl(
+    caption = "Tasa de Atrición entre Línea Base y Seguimiento",
+    align = c("l", "c", "c", "c"),
+    booktabs = TRUE
+  ) %>%
+  kable_styling(
+    latex_options = "hold_position", 
+    bootstrap_options = "condensed",
+    full_width = FALSE
+  )
+  
+  
+
+
+```
+
+- **Escribiendo la ecuacción econometrica que identifica el efecto ITT del subsidio sobre fecundidad:**
+
+La estimación del efecto de intencion del tratamiento (ITT) del del subsidio en el paper es: 
+
+$$
+Y_{ivcp}=\beta_1 SubsidioCompleto_c + \gamma_p + \boldsymbol{X}'_{iv}\boldsymbol{\rho} + \varepsilon_{ivcp}
+$$
+Donde: 
+
+- $Y_{ivcp}$ es la variable de resultado, por ejemplo: por ejemplo, si tuvo un embarazo, si tuvo un nacimiento o si usó anticoncepción moderna en los últimos 3 años para la mujer $i$, residente en la aldea $v$, perteneciente al área de influencia del centro de salud $c$, ubicado en la provincia $p$.
+
+- $SubsidioCompleto_c$ es la variable de tratamiento. Toma el valor de 1 si el centro de salud c fue asignado aleatoriamente al grupo que ofrece el subsidio completo y 0 si fue asignado al grupo de comparación que ofrece el subsidio parcial. En ese sentido $\beta_1$ captura  el efecto del tratamiento. 
+
+- $\gamma_p$ Efectos fijos a nivel de provincia. 
+
+- $\boldsymbol{X}'_{iv}$ Es un vector de covariables de control a nivel individual (i) y de aldea (v). Incluye controles del seguimiento como la fecha de la encuesta y si fue telefónica y características de la línea base como edad, brecha de edad con el esposo, si es una unión polígama, hijos deseados, uso previo de anticonceptivos, escolaridad, entre otros. En línea con esto $\boldsymbol{\rho}$ representa el vector de coeficientes asociados a la covariables. 
+
+- Por último $\varepsilon_{ivcp}$ representa el error idiosincratico. En este caso los errores estandar se clusterizan a nivel de centro de salud $c$ 
+
+- **Estime el efecto ITT del subsidio (100% vs 10%) para los cuatro resultados principales**
+
+
+```{r}
+#| message: false
+#| warning: false
+
+# Cargando librerías
+library(dplyr)
+library(haven)
+library(fixest)
+library(modelsummary)
+library(kableExtra)
+
+# Definimos el vector covariables
+controles <- "an_bw_s3q5_age + an_bw_polygamous + an_bw_s8q1_childdesired + an_bw_modern_cmeth_curr_s11q5 + ew_survey_date + TELEPHONIQUE_endline"
+
+# Estimamos los modelos 
+reg_itt1 <- feols(as.formula(paste("Y1_nacimiento ~ D_i +",
+                                   controles, "| PROVINCE")), 
+                  data = datos_completos, vcov = ~ new_csps)
+
+reg_itt2 <- feols(as.formula(paste("Y2_embarazo ~ D_i +", 
+                                   controles, "| PROVINCE")), 
+                  data = datos_completos, vcov = ~ new_csps)
+
+reg_itt3 <- feols(as.formula(paste("Y3_uso_anti ~ D_i +", 
+                                   controles, "| PROVINCE")), 
+                  data = datos_completos, vcov = ~ new_csps)
+
+reg_itt4 <- feols(as.formula(paste("Y4_cupon ~ D_i +", 
+                                   controles, "| PROVINCE")), 
+                  data = datos_completos, vcov = ~ new_csps)
+
+# Calculando medias grupo control para tabla
+mean_y1 <- mean(datos_completos$Y1_nacimiento[datos_completos$D_i == 0], 
+                na.rm = TRUE)
+mean_y2 <- mean(datos_completos$Y2_embarazo[datos_completos$D_i == 0], 
+                na.rm = TRUE)
+mean_y3 <- mean(datos_completos$Y3_uso_anti[datos_completos$D_i == 0],
+                na.rm = TRUE)
+mean_y4 <- mean(datos_completos$Y4_cupon[datos_completos$D_i == 0], 
+                na.rm = TRUE)
+
+# Sacando las observaciones de los modelos para tabla
+obs_1 <- nobs(reg_itt1)
+obs_2 <- nobs(reg_itt2)
+obs_3 <- nobs(reg_itt3)
+obs_4 <- nobs(reg_itt4)
+
+# Dando forma a la parte inferior de la tabla
+filas_extra <- data.frame(
+  term = c("Controles de línea base", "Efectos fijos (Provincia)", 
+           "Observaciones", "Media del control (10%)"),
+  reg1 = c("Sí", "Sí", as.character(obs_1), sprintf("%.3f", mean_y1)),
+  reg2 = c("Sí", "Sí", as.character(obs_2), sprintf("%.3f", mean_y2)),
+  reg3 = c("Sí", "Sí", as.character(obs_3), sprintf("%.3f", mean_y3)),
+  reg4 = c("Sí", "Sí", as.character(obs_4), sprintf("%.3f", mean_y4))
+)
+
+# Generando tabla
+mapa_coef <- c("D_i" = "Subsidio Completo (100%)")
+
+modelsummary(
+  list(
+    "(1) Tuvo Nacimiento"     = reg_itt1,
+    "(2) Tuvo Embarazo"       = reg_itt2,
+    "(3) Usó Anticoncepción" = reg_itt3,
+    "(4) Usó Cupón"      = reg_itt4 
+  ),
+  coef_map = mapa_coef,
+  stars = c('*' = .1, '**' = .05, '***' = .01),
+  gof_omit = ".*",
+  add_rows = filas_extra,
+  title = "Tabla 2. Efectos del tratamiento resultados principales",
+  notes = list("Nota: Errores estándar clusterizados 
+               a nivel de centro de salud entre paréntesis. 
+               Réplica basada en Panel B (Dupas et al., 2025)."),
+  output = "kableExtra"
+) %>%
+  kable_styling(
+    latex_options = c("hold_position", "scale_down", "booktabs"),
+    bootstrap_options = "condensed",
+    full_width = FALSE
+  )
+```
+
+## Punto 6
+
+- **Validez de Supuestos:**
+
+  **1. En julio de 2020, el gobierno anunció la gratuidad nacional de la anticoncepción. Explique:(i) de qué manera este anuncio puede violar el supuesto SUTVA, (ii) cuál sería la dirección esperada del sesgo que introduce, y (iii) si considera convincente el argumento de los autores basado en la implementación gradual de la política y en el rezago biológico de nueve meses para observar nacimientos.**  
+
+  **2. Defina y proporcione ejemplos en el contexto de este estudio de los siguientes efectos: Hawthorne, John Henry, demanda del experimentador (*experimenter demand*) y placebo. ¿En qué dirección sesgaría cada uno de estos efectos los resultados estimados?**
+  
+**R/:**
+
+
+
+## Punto 7
+
+
 
 
