@@ -608,7 +608,7 @@ Ahora veamos la varianza en cada uno de los casos:
 
 * **Caso 1:** Se cumplen los supuestos de homocedasticidad y no-correlación del término de error.
 
-el caso nos plantea que $Var(e_i|x_i)=\sigma^2$ y que $E[e_ie_j]= 0, ∀i\neq j$.
+el caso nos plantea que $Var(e_i|X)=\sigma^2$ y que $E[e_ie_j]= 0, ∀i\neq j$.
 
 Para encontrar la varianza peimro organicemos remplazando $Y_i$:
 
@@ -621,17 +621,24 @@ $$\hat\beta= \frac{\beta∑_{i=1}^N X_i^2+∑_{i=1}^N  e_iX_i}{∑_{i=1}^N X_i^2
 
 $$\hat\beta= \beta+ \frac{∑_{i=1}^N e_iX_i}{∑_{i=1}^N X_i^2}$$
 
-Aplicamos el operador de la varianza:
+Aplicamos el operador de la varianza condicional:
 
-$$\operatorname{Var}(\hat\beta|x_i)= \underbrace{\operatorname{Var}(\beta)}_{\text{Var de conste = 0 }}+ \operatorname{Var}\left( \frac{∑_{i=1}^N X_ie_i}{∑_{i=1}^N X_i^2}\right)$$
+$$\operatorname{Var}(\hat{\beta}\mid X)
+= \underbrace{\operatorname{Var}(\beta)}_{\text{Var(constante)=0}}+
+\operatorname{Var}\left(\frac{\sum_{i=1}^{N} X_i e_i}
+{\sum_{i=1}^{N} X_i^{2}}\;\middle|\; X\right)$$
 
-Aplicamos la propiedad de la varianza $Var(aX+b)=a^2Var(X)$:
+Aplicamos la propiedad de la varianza $Var(aX+b)=a^2Var(X)$ y que cuando hay distribución conjunta $\operatorname{Var}(A+B)=\operatorname{Var}(A)+\operatorname{Var}(B)+2\operatorname{Cov}(A,B)$
 
-$$\operatorname{Var}(\hat\beta|x_i)= \operatorname{Var}\left( \frac{∑_{i=1}^N X_ie_i}{∑_{i=1}^N X_i^2} \right)$$
+$$\operatorname{Var}(\hat\beta|X)= \operatorname{Var}\left( \frac{∑_{i=1}^N X_ie_i}{∑_{i=1}^N X_i^2};\middle|X \right)$$
+$$\operatorname{Var}(\hat\beta|X)= \frac{1}{\left(∑_{i=1}^N X_i^2\right)^2}\operatorname{Var}\left(∑_{i=1}^N X_ie_i;\middle|X \right)$$
+$$\operatorname{Var}(\hat\beta|X)= \frac{1}{\left(∑_{i=1}^N X_i^2\right)^2}\left[∑_{i=1}^N X_i^2\operatorname{Var}(e_i|X)+ \underbrace{\sum_{i=1}^N\sum_{i\neq j}^N\operatorname{Cov}(X_ie_iX_je_j)}_{0}\right] $$ 
+$$\operatorname{Var}(\hat\beta|X)= \frac{1}{\left(∑_{i=1}^N X_i^2\right)^2}\left[∑_{i=1}^N X_i^2\operatorname{Var}(e_i|X)+ \sum_{i=1}^N\sum_{i\neq j}^NX_iX_j\underbrace{\operatorname{Cov}(e_ie_j)}_{0}\right] $$ 
 
-$$\operatorname{Var}(\hat\beta|x_i)= \frac{1}{\left(∑_{i=1}^N X_i^2\right)^2}∑_{i=1}^N X_i^2 \underbrace{\operatorname{Var}(e_i|x_i)}_{\sigma^2} $$
 
-$$\operatorname{Var}(\hat\beta|x_i)= \frac{\sigma^2}{∑_{i=1}^N X_i^2}$$
+$$\operatorname{Var}(\hat\beta|X)= \frac{1}{\left(∑_{i=1}^N X_i^2\right)^2}∑_{i=1}^N X_i^2 \underbrace{\operatorname{Var}(e_i|X)}_{\sigma^2} $$
+
+$$\operatorname{Var}(\hat\beta|X)= \frac{\sigma^2}{∑_{i=1}^N X_i^2}$$
 
 Una vez obtenido nuestro estimando, como no conocemos $\sigma^2$ usamos su estimador $\hat\sigma^2$. Por lo tanto nuestro estimador de la varianza es:
 
@@ -644,12 +651,14 @@ $$\hat\sigma^2= \frac{∑_{i=1}^N e_i^2}{N-\underbrace{K}_{\text{en este caso = 
 
 * **Caso 2:** Se cumple el supuesto de no-correlación, pero existe heterocedasticidad.
 
-Este caso nos plantea que que $\operatorname{Var}(e_i|x_i)=\sigma^2_i$ y que $E[e_ie_j]= 0, ∀i\neq j$.
+Este caso nos plantea que que $\operatorname{Var}(e_i|x_i)=\sigma^2_i$ y que $E[e_ie_j]= 0, ∀i\neq j$. Entonces: 
+
+$$\operatorname{Var}(\hat\beta|X)= \frac{1}{\left(∑_{i=1}^N X_i^2\right)^2}\left[∑_{i=1}^N X_i^2\operatorname{Var}(e_i|X)+ \sum_{i=1}^N\sum_{i\neq j}^NX_iX_j\underbrace{\operatorname{Cov}(e_ie_j)}_{0}\right] $$
 
 
-$$\operatorname{Var}(\hat\beta|x_i)= \frac{1}{\left(∑_{i=1}^N X_i^2\right)^2}∑_{i=1}^N X_i^2 \underbrace{\operatorname{Var}(e_i|x_i)}_{\sigma^2} $$
+$$\operatorname{Var}(\hat\beta|X)= \frac{1}{\left(∑_{i=1}^N X_i^2\right)^2}∑_{i=1}^N X_i^2 \underbrace{\operatorname{Var}(e_i|X)}_{\sigma^2_i} $$
 
-$$\operatorname{Var}(\hat\beta|x_i)= \frac{1}{\left(∑_{i=1}^N X_i^2\right)^2}∑_{i=1}^N X_i^2 \sigma^2_i $$
+$$\operatorname{Var}(\hat\beta|x_i)= \frac{1}{\left(∑_{i=1}^N X_i^2\right)^2}∑_{i=1}^N X_i^2 \sigma^2_i$$
 
 
 $$\operatorname{Var}(\hat\beta|x_i)= \frac{∑_{i=1}^N X_i^2 \sigma^2_i}{\left(∑_{i=1}^N X_i^2\right)^2}$$
@@ -669,16 +678,16 @@ Este caso nos plantea que que $\operatorname{Var}(e_{gi}|X)=\sigma^2_{gi}$, que 
 entonces:
 
 
-$$\hat\beta -\beta = \frac{∑_{i=1}^N X_ie_i}{∑_{i=1}^N X_i^2}$$
+$$\hat\beta  =\beta+ \frac{∑_{i=1}^N X_ie_i}{∑_{i=1}^N X_i^2}$$
 
 Como tenemos correlación al interior de los colegios, agrupamos la suma del numerador por grupos (colegios) $g$, en lugar de individuos $i$:
 
-$$\hat\beta -\beta = \frac{∑_{g=1}^G \left( ∑_{i\in g} X_{gi} e_{gi}\right)}{∑_{i=1}^N X_i^2}$$
+$$\hat\beta = \beta+ \frac{∑_{g=1}^G \left( ∑_{i\in g} X_{gi} e_{gi}\right)}{∑_{i=1}^N X_i^2}$$
 
-Aplicamos la varianza recordando que $E[e_{gi}e_{hj}]= 0$ y que la varianza de la suma es la vianza de cada grupo: 
+Aplicamos la varianza condicional recordando que $E[e_{gi}e_{hj}]= 0$ y que la varianza de la suma es la vianza de cada grupo: 
 
 
-$$\operatorname{Var}(\hat\beta|x_i) = \frac{∑_{g=1}^G \operatorname{Var}\left( ∑_{i\in g} X_{gi} e_{gi}\right)}{\left(∑_{i=1}^N X_i^2\right)^2}$$
+$$\operatorname{Var}(\hat\beta|X) = \frac{∑_{g=1}^G \operatorname{Var}\left( ∑_{i\in g} X_{gi} e_{gi};\middle|X\right)}{\left(∑_{i=1}^N X_i^2\right)^2}$$
 
 Que es lo mismo que:
 
@@ -1794,7 +1803,21 @@ modelsummary(
   
 **R/:**
 
+(i). Este anunció puede violar SUTVA debido a que la oferta del Gobierno pudo afectar la consistencia del tratamiento, pues el anuncio de gratuidad  intorduce un tratmiento paralelo para el grupo de control.
 
+(ii). En este sentido la dirección esperada del sesgo sería   una subestimación del efecto del tratamiento. Si el grupo de control también reduce su fertilidad gracias a la política del gobierno, la diferencia observable entre el grupo de tratamiento y el grupo de control se reduce drásticamente.
+
+(iii). Por otro lado, en el apéndice $C$ los autores argumentan que este evento al ocurrir en Julio de 2020 no tiene efectos en los hallazgos. Este argumento es creible en tanto, un embarazo dura nueve meses, por lo tanto cualquier reducción en los emabrazos de esta política solo hubiera tenido efecto en los resultados desde abril de 2021. Teniendo en cuenta que la recolección final de los datos se dió entre febero y junio de 2021, esto solo hubiera afectado una fracción pequeña del estudio. Ademas los autores demuestran con el resultado de la tabla A7 que el resultado nulo encontrado se mantiene incluso cuando se excluyen regiones de Cascades y Centre Ouest, donde el gobierno hizo las pruebas piloto de la política en 2019. Por último, el resultado mismo del experimento evita que este posible sesgo sea un problema pues, al encontrar un efecto nulo general, no se observó ningún cambio en la tendencia de natalidad ni en controles ni en tratados. Si este shock hubiera alterado los resultados, la no afectación sería menos creíble. 
+
+- **Definiendo y dando ejemplos:**
+
+El efecto Hawthorne ocurre cuando los tratados modifican su conducta porque saben que están siendo observados. En el contexto de este experimento, las mujeres tanto del grupo de tratamiento como del grupo de control podrían prestar mayor atención a su planificación familiar y usar más anticonceptivos solo por recibir la visita de los encuestadores y responder preguntas detalladas sobre sus historiales de embarazo. Lo anterior causaría una subsetimación del efecto. 
+
+Por otro lado el efecto John Henry aduce a cuando los no tratados cambian su conducta por el hecho de no recibir tratamiento. En este caso un podría suponer que al saber que no recibieron tratamiento las mujeres que recibieron el bono del 10% se esfuerzan para completar su tratamiento poniendo el 90% del costo, de esta manera  modificarían sus comportamientos reproductivos causando una subestimación del efecto del programa en los tratados. 
+
+El sesgo de demanda del experimentador ocurre cuando los participantes ajustan su comportamiento de acuerdo a lo que consideran que la persona investigadora espera. En este estudio, las mujeres tratadas podrían reportar en las encuestas un mayor deseo de usar anticonceptivos o intenciones de tener menos hijos, simplemente para complacer a los investigadores o encuestadores del proyecto. El sesgo generaría una sobreestimación del efecto del subsidio, haciendo que parezca más exitoso de lo que es. 
+
+Por último el efecto placebo ocurre cuando los individuos saben que están hacindo parte de un experimento y solo por eso cambian su comportamiento. En este contexto, el simple hecho de entregar un  un descuento del 10% a las mujeres del grupo de control  podría hacerlas sentir apoyadas institucionalmente o servir como un recordatorio psicológico que las motive a visitar la clínica de salud. Esto podría causar una subestimación del efecto. 
 
 ## Punto 7
 
