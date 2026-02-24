@@ -687,7 +687,24 @@ $$\hat\beta = \beta+ \frac{∑_{g=1}^G \left( ∑_{i\in g} X_{gi} e_{gi}\right)}
 Aplicamos la varianza condicional recordando que $E[e_{gi}e_{hj}]= 0$ y que la varianza de la suma es la vianza de cada grupo: 
 
 
-$$\operatorname{Var}(\hat\beta|X) = \frac{∑_{g=1}^G \operatorname{Var}\left( ∑_{i\in g} X_{gi} e_{gi};\middle|X\right)}{\left(∑_{i=1}^N X_i^2\right)^2}$$
+$$\operatorname{Var}(\hat{\beta}\mid X)
+=\frac{\operatorname{Var}\left(
+\sum_{g=1}^{G}\left(\sum_{i \in g} X_{gi} e_{gi}
+\right)\;\middle|\; X\right)}{\left(\sum_{i=1}^{N} X_i^{2}\right)^{2}}$$
+
+$$\operatorname{Var}(\hat{\beta}\mid X)
+=\frac{\sum_{g=1}^{G}\operatorname{Var}\left(\sum_{i \in g} X_{gi} e_{gi}
+\;\middle|\; X\right)+\sum_{g=1}^{G}\sum_{h\neq g}^{G}\operatorname{COV}\left(X_{gi} e_{gi},X_{hj} e_{hj}\middle|\; X\right)}{\left(\sum_{i=1}^{N} X_i^{2}\right)^{2}}$$
+
+El termino 
+
+$$\sum_{g=1}^{G}\sum_{h\neq g}^{G}\operatorname{COV}\left(X_{gi} e_{gi},X_{hj} e_{hj}\middle|\; X\right) = 0$$
+porque tenemo independencia entre coelgios $E[e_{gi}e_{hj}]= 0$
+
+Entonce tenemos: 
+$$\operatorname{Var}(\hat{\beta}\mid X)
+=\frac{\sum_{g=1}^{G}\operatorname{Var}\left(\sum_{i \in g} X_{gi} e_{gi}
+\;\middle|\; X\right)}{\left(\sum_{i=1}^{N} X_i^{2}\right)^{2}}$$
 
 Que es lo mismo que:
 
@@ -696,7 +713,7 @@ $$
 =
 \frac{\sum_{g=1}^{G}
 E\left[
-\left( \sum_{i \in g} X_{gi} e_{gi} \right)^2
+\left( \sum_{i \in g} X_{gi} e_{gi};\middle|\; X \right)^2
 \right]}
 {\left(\sum_{i=1}^{N} X_i^2\right)^2}
 $$
@@ -704,7 +721,7 @@ $$
 En este caso nuestro estimador sería:
 
 $$
-\widehat{\operatorname{Var}(\hat{\beta}\mid x_i)}
+\widehat{\operatorname{Var}(\hat{\beta}\mid X)}
 =
 \frac{\sum_{g=1}^{G}  
 \left( \sum_{i \in g} X_{gi} \hat e_{gi} \right)^2 }
@@ -904,11 +921,11 @@ $$
 $$
 
 $$
-\sum_{i=1}^N [(Y_i-\bar{Y})-(D_i-\bar{D})hat\beta_1]D_i = 0
+\sum_{i=1}^N [(Y_i-\bar{Y})-(D_i-\bar{D})\hat\beta_1]D_i = 0
 $$
 
 $$
-\sum_{i=1}^N D_i(Y_i-\bar{Y})-hat\beta_1\sum_{i=1}^ND_i(D_i-\bar{D}) = 0
+\sum_{i=1}^N D_i(Y_i-\bar{Y})-\hat\beta_1\sum_{i=1}^ND_i(D_i-\bar{D}) = 0
 $$
 
 Que es lo mismo que: 
