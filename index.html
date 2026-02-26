@@ -6,7 +6,8 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="Daniel Ricardo Amaya Alba">
+<meta name="author" content="Daniel Ricardo Amaya Alba - 202023156">
+<meta name="author" content="Mauricio J. Aragón R. - 201729052">
 
 <title>Taller 1. Econometría Avanzada</title>
 <style>
@@ -3484,6 +3485,7 @@ window.Quarto = {
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
 <h1 class="title">Taller 1. Econometría Avanzada</h1>
+<p class="subtitle lead">Profesor: Manuel Fernández - Universidad de los Andes</p>
 </div>
 
 
@@ -3491,9 +3493,10 @@ window.Quarto = {
 <div class="quarto-title-meta">
 
     <div>
-    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-heading">Authors</div>
     <div class="quarto-title-meta-contents">
-             <p>Daniel Ricardo Amaya Alba </p>
+             <p>Daniel Ricardo Amaya Alba - 202023156 </p>
+             <p>Mauricio J. Aragón R. - 201729052 </p>
           </div>
   </div>
     
@@ -3501,6 +3504,12 @@ window.Quarto = {
     
   </div>
   
+<div>
+  <div class="abstract">
+    <div class="block-title">Abstract</div>
+    Nota: Para el desarrollo de este taller se usó IA para garantizar el ajuste del formato de las tablas a PDF con la librería kableExtra y model summary pues al reportar los resultados en ocasiones obteniamos un errore en el codigo. Por ejemplo en el punto 4 del tercer ejercicio duramos bastante tiempo intentando entender como solucionar un problema al usa rbind con los outputs obtenidos con la funcion feols del paquete fixest. Para generar el bucle del punto 7 del ejercicio dos tambien nos apollamos en la IA, intentando comprender la sintaxis del proceso. En cuanto a notación es muy probable que se identifiquen incosistencias.
+  </div>
+</div>
 
 
 </header>
@@ -3524,18 +3533,18 @@ window.Quarto = {
 <p>Sin embargo, acá nos encontramos con el problema de la inferencia causal. En nuestra muestra <span class="math inline">\(N\)</span> para el estudiante <span class="math inline">\(i\)</span> solo se puede observar uno de los dos caminos, o el estudiante fue asignado (<span class="math inline">\(D_i=1\)</span>) o no fue asignado (<span class="math inline">\(D_i=0\)</span>). Es decir, lo que realmente tenemos en nuestra base de datos es:</p>
 <p><span class="math display">\[Y_i=Y_i(1)D_i+(1-D_i)Y_i(0) \]</span></p>
 <p>De tal manera que el resultado observado <span class="math inline">\(Y_i\)</span> para el estudiante con <span class="math inline">\(D_i = 1\)</span> sera su resultado potencial dado que participó <span class="math inline">\(Y_i(1)\)</span> y para el estudiante con <span class="math inline">\(D_i = 0\)</span> observaremos su resultado potencial dado que no participó <span class="math inline">\(Y_i(0)\)</span>. Pero nunca seremos capaces de ver para el mismo estudiante <span class="math inline">\(i\)</span> su resultado dado que participo <span class="math inline">\(D_i = 1\)</span> y su contrafactual <span class="math inline">\(D_i = 0\)</span>.</p>
-<p>Es por lo anterior que para trabajar con nuestra muestra utilizaremos no el resultado del inddividuo <span class="math inline">\(i\)</span> sino que trabajaremos con el promedio de los resultados potenciales, es decir buscaremos estumar los efectos promedio, bien sea el efecto promedio del tramaiento <span class="math inline">\(ATE\)</span>, el efecto promedio del tratamiento en los tratados <span class="math inline">\(ATT\)</span> y el efecto promedio del tratamiento en los no tratados <span class="math inline">\(ATU\)</span>.</p>
+<p>Es por lo anterior que para trabajar con nuestra muestra utilizaremos no el resultado del individuo <span class="math inline">\(i\)</span> sino que trabajaremos con el promedio de los resultados potenciales, es decir buscaremos estumar los efectos promedio, bien sea el efecto promedio del tramaiento <span class="math inline">\(ATE\)</span>, el efecto promedio del tratamiento en los tratados <span class="math inline">\(ATT\)</span> y el efecto promedio del tratamiento en los no tratados <span class="math inline">\(ATU\)</span>.</p>
 <p><strong>b) Define en lenguaje matemático el <span class="math inline">\(ATE\)</span>, el <span class="math inline">\(ATT\)</span> y el <span class="math inline">\(ATU\)</span>. Interprete cada uno de estos conceptos de acuerdo al contexto del caso</strong></p>
 <p><strong>R/:</strong></p>
-<p>El <span class="math inline">\(ATE\)</span> se define como el efectro promedio del tratamiento:</p>
+<p>El <span class="math inline">\(ATE\)</span> se define como el efecto promedio del tratamiento:</p>
 <p><span class="math display">\[τ_{ATE} = E[Y_i(1)-Y_i(0)]\]</span> <span class="math display">\[τ_{ATE} = E[Y_i(1)]-E[Y_i(0)]\]</span></p>
 <p>Que para el caso de nuestra investigación representa la diferencia entre el puntaje promedio en el test de habilidad cognitivas si toda la población de estudiantes de tercer grado hubieran asistido a las aulas tecnológicas, frente al promedio si ninguno hubiera asisitido a dichas aulas.</p>
-<p>El <span class="math inline">\(ATT\)</span> se define como el efectro promedio del tratamiento en los tratados:</p>
+<p>El <span class="math inline">\(ATT\)</span> se define como el efecto promedio del tratamiento en los tratados:</p>
 <p><span class="math display">\[τ_{ATT} = E[Y_i(1)-Y_i(0)| D_i= 1]\]</span> <span class="math display">\[τ_{ATT} = E[Y_i(1)| D_i=1]-E[Y_i(0)| D_i=1]\]</span></p>
-<p>En este caso representa la diferencia en el puntaje promedio del test de habilidades cognitivas del salon que fue asignado a las aulas tecnológicas y el resultado que esos mismos estudiantes hubieran obtenido si no hubieran sido asignados. Es decir, en este caso estamos restringiendo el efecto promedio al grupo que fue tratado.</p>
-<p>El <span class="math inline">\(ATU\)</span> se define como el efectro promedio del tratamiento en los no tratados:</p>
+<p>En este caso representa la diferencia en el puntaje promedio del test de habilidades cognitivas del salón que fue asignado a las aulas tecnológicas y el resultado que esos mismos estudiantes hubieran obtenido si no hubieran sido asignados. Es decir, en este caso estamos restringiendo el efecto promedio al grupo que fue tratado.</p>
+<p>El <span class="math inline">\(ATU\)</span> se define como el efecto promedio del tratamiento en los no tratados:</p>
 <p><span class="math display">\[τ_{ATU} = E[Y_i(1)-Y_i(0)| D_i= 0]\]</span> <span class="math display">\[τ_{ATU} = E[Y_i(1)| D_i=0]-E[Y_i(0)| D_i=0]\]</span></p>
-<p>En este caso representa la diferencia en el puntaje promedio del test de habilidades cognitivas del salon que no fue asignado a las aulas tecnológicas y el resultado que esos mismos estudiantes hubieran obtenido si hubieran sido asignados. Es decir, en este caso estamos restringiendo el efecto promedio al grupo que no fue tratado.</p>
+<p>En este caso representa la diferencia en el puntaje promedio del test de habilidades cognitivas del salón que no fue asignado a las aulas tecnológicas y el resultado que esos mismos estudiantes hubieran obtenido si hubieran sido asignados. Es decir, en este caso estamos restringiendo el efecto promedio al grupo que no fue tratado.</p>
 </section>
 <section id="punto-2" class="level2">
 <h2 class="anchored" data-anchor-id="punto-2">Punto 2</h2>
@@ -3550,7 +3559,7 @@ window.Quarto = {
 \tau_{naive} &amp;= E[Y_i | D_i=1] - E[Y_i | D_i=0] \\
 \tau_{naive} &amp;= E[Y_i(1) | D_i=1] - E[Y_i(0) | D_i=0] + \color{red}{E[Y_i(0) | D_i=1]} - \color{red}{E[Y_i(0) | D_i=1]}\\
 \tau_{naive} &amp;= \underbrace{E[Y_i(1) | D_i=1]- \color{red}{E[Y_i(0) | D_i=1]}}_{ATT} +\color{red}{E[Y_i(0) | D_i=1]} - E[Y_i(0) | D_i=0]\\
-\tau_{naive} &amp;= ATT  +\color{red}{E[Y_i(0) | D_i=1]} - E[Y_i(0) | D_i=0]
+\tau_{naive} &amp;= ATT  +\underbrace{\color{red}{E[Y_i(0) | D_i=1]} - E[Y_i(0) | D_i=0]}_{\text{Selection Bias}}
 \end{aligned}
 \]</span></p>
 <p><strong>b). Muestre formalmente que:</strong></p>
@@ -3559,14 +3568,14 @@ window.Quarto = {
 <p><span class="math display">\[
 \begin{aligned}
 \tau_{naive} &amp;= E[Y_i | D_i=1] - E[Y_i | D_i=0] \\
-\tau_{naive} &amp;= E[Y_i(1) | D_i=1] - E[Y_i(0) | D_i=0] + \color{red}{E[Y_i(0) | D_i=1]} - \color{red}{E[Y_i(0) | D_i=1]}\\
-\tau_{naive} &amp;= \underbrace{E[Y_i(1) | D_i=0]- \color{red}{E[Y_i(0) | D_i=0]}}_{ATU} +\color{red}{E[Y_i(1) | D_i=1]} - E[Y_i(1) | D_i=0]\\
-\tau_{naive} &amp;= ATU  +\color{red}{E[Y_i(1) | D_i=1]} - E[Y_i(1) | D_i=0]
+\tau_{naive} &amp;= E[Y_i(1) | D_i=1] - E[Y_i(0) | D_i=0] + \color{red}{E[Y_i(1) | D_i=0]} - \color{red}{E[Y_i(1) | D_i=0]}\\
+\tau_{naive} &amp;= \underbrace{\color{red}{E[Y_i(1) | D_i=0]} - E[Y_i(0) | D_i=0]}_{ATU} +E[Y_i(1) | D_i=1] - \color{red}{E[Y_i(1) | D_i=0]}\\
+\tau_{naive} &amp;= ATU  +\underbrace{E[Y_i(1) | D_i=1] - \color{red}{E[Y_i(1) | D_i=0]}]}_{\text{Heterogeneity Bias}}
 \end{aligned}
 \]</span></p>
 <p><strong>c). Muestre formalmente que:</strong></p>
 <p><span class="math display">\[ ATE = \pi ATT + (1-\pi) ATU\]</span></p>
-<p><strong>R/:</strong> Esta demostración es diferente a las anteriores, es menos intuitiva. Sin embargo, podemos aplicar la ley de esperanzas iteradas a la definición de <span class="math inline">\(ATE\)</span>:</p>
+<p><strong>R/:</strong> Esta demostración es diferente a las anteriores, es menos intuitiva. Sin embargo, podemos aplicar la ley de esperanzas iteradas a la definición de <span class="math inline">\(ATE\)</span>. Recordemos que la ley de esperanzas iteradas <span class="math inline">\(E[X]=E[E[X|Y]]\)</span>, de tal fomra tenemos:</p>
 <p><span class="math display">\[
 \begin{aligned}
 \tau_{ATE}&amp;= E[Y_i(1)] - E[Y_i(0)]\\
@@ -3581,13 +3590,13 @@ window.Quarto = {
 <p>Esta expresión indica que el <span class="math inline">\(\tau_{naive}\)</span> recupera el efecto causal sobre los tratados (<span class="math inline">\(ATT\)</span>) si y solo si el sesgo de selección es igual a cero. Esto ocurre cuando el resultado promedio contrafactual del grupo tratado <span class="math inline">\(E[Y_i(0) | D_i=1]\)</span> es idéntico al resultado promedio observado del grupo de control <span class="math inline">\(E[Y_i (0)|D_i =0]\)</span>. Para que esto se cumpla la composición de los salones debería ser homogénea o el proceso de asignación debería haber sido aleatorio, garantizando que no existan diferencias pre-existentes entre ambos grupos.</p>
 <p><strong>b).</strong></p>
 <p><span class="math display">\[\tau_{naive} = ATU + \underbrace{E[Y_i(1) | D_i=1]-E[Y_i (1)|D_i =0]}_{\text{Heterogeneity Bias}}\]</span></p>
-<p>Por tro lado esta expresión nos indica que el <span class="math inline">\(\tau_{naive}\)</span> recupera el efecto promedio causal sobre los no tratado (<span class="math inline">\(ATU\)</span>) si y solo si el sesgo de heterogeneidad en resultados del tratamiento es igual a cero. Esto ocurre cuando el resultado promedio de los estudiantes tratados <span class="math inline">\(E[Y_i(1)|D_i=1]\)</span> es igual al resultado promedio que hubieran obtenido los estudiantes del grupo de control si se les hubiera asignado el tratamiento <span class="math inline">\(E[Y_i(1)|D_i=0]\)</span>. Esto quiere decir que el efecto de las computadoras sería el mismo, independientemente dle salon que hubiera sido seleccionado.</p>
+<p>Por tro lado esta expresión nos indica que el <span class="math inline">\(\tau_{naive}\)</span> recupera el efecto promedio causal sobre los no tratado (<span class="math inline">\(ATU\)</span>) si y solo si el sesgo de heterogeneidad en resultados del tratamiento es igual a cero. Esto ocurre cuando el resultado promedio de los estudiantes tratados <span class="math inline">\(E[Y_i(1)|D_i=1]\)</span> es igual al resultado promedio que hubieran obtenido los estudiantes del grupo de control si se les hubiera asignado el tratamiento <span class="math inline">\(E[Y_i(1)|D_i=0]\)</span>. Esto quiere decir que el efecto de las computadoras sería el mismo, independientemente del salón que hubiera sido seleccionado. <strong>PREGUNTAR A MANUEL</strong>.</p>
 <p><strong>c).</strong></p>
 <p><span class="math display">\[ ATE = \pi \cdot ATT + (1-\pi) \cdot ATU\]</span></p>
 <p>Por úlimo esta expresión nos dice que el efecto promedio del tratamiento es un promedio ponderado del efecto promedio en los tratado <span class="math inline">\(ATT\)</span> y en los no tratados <span class="math inline">\(ATU\)</span>.</p>
 <p><strong>¿Es cierto que si <span class="math inline">\(\tau_{naive}= ATT\)</span>, entonces <span class="math inline">\(\tau_{naive}=ATU\)</span>?</strong></p>
 <p>Esta afirmación no es cierta. Como vimos, el <span class="math inline">\(\tau_{naive}= ATT\)</span> sí y solo sí el resultado promedio contrafactual del grupo tratado <span class="math inline">\(E[Y_i(0) | D_i=1]\)</span> es idéntico al resultado promedio observado del grupo de control <span class="math inline">\(E[Y_i (0)|D_i =0]\)</span>, lo cual no nos esta brindando ninguna información al respecto de algún posible sesgo de heterogeneidad del tratamiento, es decir no nos garantiza que el efecto del tratamiento sea el mismo para ambos grupos. Por su parte, si el <span class="math inline">\(\tau_{naive}=ATU\)</span> solo sabemos que hay ausencia de sesgo de heterogeneidad, pero no tenemos certeza al respecto de la comparabilidad de los grupos (sesgo de selección).</p>
-<p>Teniendo como base la descomposicón que se hace en libro Causal Inference: The Mixtape de Scott Cunningham podemos demostrar la relación entre estos parametros:</p>
+<p>Teniendo como base la descomposicón que se hace en libro Causal Inference: The Mixtape Scott Cunningham podemos demostrar la relación entre estos parametros:</p>
 <p><span class="math display">\[
 \begin{aligned}
 \tau_{ATE} &amp;=\pi.ATT+(1-\pi).ATU\\
@@ -3602,7 +3611,7 @@ window.Quarto = {
 <p><span class="math display">\[
 \begin{aligned}
 \tau_{naive} &amp;= ATT + \underbrace{E[Y_i(0) | D_i=1]-E[Y_i (0)|D_i =0]}_{\text{Selection Bias}}\\
-\tau_{naive} &amp;= ATE+ \underbrace{(1-\pi).(ATT-ATU)}_{\text{Heterogenity Bias}} + \underbrace{E[Y_i(0) | D_i=1]-E[Y_i (0)|D_i =0]}_{\text{Selection Bias}}
+\tau_{naive} &amp;= ATE+ \underbrace{(1-\pi).(ATT-ATU)}_{\text{Heterogeneity Bias}} + \underbrace{E[Y_i(0) | D_i=1]-E[Y_i (0)|D_i =0]}_{\text{Selection Bias}}
 \end{aligned}
 \]</span> Por lo tanto en nuestro caso , es posible que el salón elegido fuera comparable inicialmente al de control (sin sesgo de selección), pero que las laptops tengan un retorno mayor en el salón tratado debido a factores específicos del grupo o del profesor. Por lo tanto para que <span class="math inline">\(ATE=ATT=ATU\)</span> necesitamos tener ausencia del sesgo de hterogeneidad y de selección.</p>
 </section>
@@ -3707,7 +3716,7 @@ E[\hat\tau_{DM}]&amp;=E[Y_i|D_i=1]-E[Y_i|D_i=0]\\
 \]</span> Como en la primera demostración del taller, si sumamos y restamos el contrafactual tenemos que:</p>
 <p><span class="math display">\[E[\hat\tau_{DM}]= \underbrace{E[Y_i(1)|D_i=1]-\color{red}{E[Y_i(0)|D_i=1]}}_{ATT}+\underbrace{\color{red}{E[Y_i(0)|D_i=1]}-E[Y_i (0)|D_i=0]}_{\text{Selectión Bias}}\]</span></p>
 <p>Por lo tanto, para que nuestro estimador <span class="math inline">\(\hat\tau_{DM}\)</span> se insesgado necesitamos evitar el sesgo de selección lo cual se logra por medio de la aleatorización garantizando que <span class="math inline">\((Y_i(1),Y_i(0))\perp D_i\)</span></p>
-<p>Ahora veamos esto como lo podemos obtener tambien de la recta de regresión. Recordemos que nuestra linea de regresión es:</p>
+<p>Ahora veamos esto como lo podemos obtener también de la recta de regresión. Recordemos que nuestra linea de regresión es:</p>
 <p><span class="math display">\[
 Y_i=\beta_0+ \tau D_i+ U_i
 \]</span></p>
@@ -3726,7 +3735,7 @@ E[Y_i|D_i=0]&amp;=\beta_0+E[U_i|D_i=0]
 <p><span class="math display">\[E[\hat\tau_{DM}]=\beta_0+\tau+ E[U-i|D_i=1]-(\beta_0+E[U_i|D_i=0])\]</span></p>
 <p>tal que:</p>
 <p><span class="math display">\[E[\hat\tau_{DM}]=\tau+ \underbrace{E[U_i|D_i=1]-E[U-i|D_i=0]}_{\text{Selection Bias}}\]</span></p>
-<p>Por lo tanto en terminos de la recta de regresión el supuesto de independencia <span class="math inline">\((Y_i(1),Y_i(0))\perp D_i\)</span> se traduce en el supuesto de exogenidad <span class="math inline">\(E[U_i| D_i]=0\)</span>. Esto nos señala que, para tener un estimador insesgado, no debemos tener factores no observables correlacionados con el tratamiento que afecten el resultado, haciendo a los grupos diferentes.”</p>
+<p>Por lo tanto en términos de la recta de regresión el supuesto de independencia <span class="math inline">\((Y_i(1),Y_i(0))\perp D_i\)</span> se traduce en el supuesto de exogenidad <span class="math inline">\(E[U_i| D_i]=0\)</span>. Esto nos señala que, para tener un estimador insesgado, no debemos tener factores no observables correlacionados con el tratamiento que afecten el resultado, haciendo a los grupos diferentes.</p>
 </section>
 <section id="punto-4" class="level2">
 <h2 class="anchored" data-anchor-id="punto-4">Punto 4</h2>
@@ -3759,6 +3768,7 @@ E[Y_i|D_i=0]&amp;=\beta_0+E[U_i|D_i=0]
 \operatorname{plim} [\hat\tau_{DM}] = \underbrace{E[Y_i(1)- Y_i(0)|D_i=1]}_{ATT}
 \]</span></p>
 <p>que es lo mismo que <span class="math inline">\(\hat\tau_{DM} \overset{p}{\longrightarrow} \mathbb{E}[Y_{i}(1) - Y_{i}(0) | D_i = 1]\)</span></p>
+<p><strong>Entonces respecto a la definición intitutiva y explicación de la propieda de consistencia, podemos decir que esta permite que el efecto recuperado a nivel muestral sea una aproximación que converge en probabilidad al efecto poblacional, lo que permite estar seguros de que nos estamos aproximando al efecto real.</strong></p>
 </section>
 </section>
 <section id="segundo-ejercicio" class="level1">
@@ -3772,14 +3782,14 @@ E[Y_i|D_i=0]&amp;=\beta_0+E[U_i|D_i=0]
 <h2 class="anchored" data-anchor-id="punto-1-1">Punto 1</h2>
 <p><strong>Realice un análisis crítico de los supuestos de homocedasticidad y no-correlación del término de error. Para ello:</strong></p>
 <ul>
-<li><p>Defina ambos supuestos, tanto desde un punto de vista matemático como intuitivo, en el contexto del caso de estudio.</p></li>
-<li><p>Discuta si resulta razonable asumir el cumplimiento de estos supuestos dada la pregunta de investigación. Justifique su respuesta utilizando un ejemplo intuitivo para cada supuesto.</p></li>
+<li><p><strong>Defina ambos supuestos, tanto desde un punto de vista matemático como intuitivo, en el contexto del caso de estudio.</strong></p></li>
+<li><p><strong>Discuta si resulta razonable asumir el cumplimiento de estos supuestos dada la pregunta de investigación. Justifique su respuesta utilizando un ejemplo intuitivo para cada supuesto.</strong></p></li>
 </ul>
 <p><strong>R/:</strong></p>
-<p>El supuesto de homocedasticidad implica que <span class="math inline">\(E[e^{2}_i|x]=σ^2\)</span> que tambien podría ser visto como <span class="math inline">\(E[e^{2}_i|D_i=1]=σ^2\)</span> y <span class="math inline">\(E[e^{2}_i|D_i=0]=σ^2\)</span>, lo que quiere decir que la varianza de los errores es constante para cada estudiante independientemente de sus caracteristicas (<span class="math inline">\(X\)</span>). En este caso, quiere decir que la dispersión en los resultados de la prueba SAT para cada estudiante es la misma para el grupo de estudiantes tratados y no tratados.</p>
-<p>Por otro lado, el supuesto de no-correlación implica que <span class="math inline">\(E[e_ie_j]= 0\)</span>. Esto quiere decier que conocer el error del estudiante <span class="math inline">\(i\)</span> no me dice nada al respecto del resultado del estudiante <span class="math inline">\(j\)</span>. Es decir, si a un estudiante le va muy bien en la prueba, por algun factor diferente al tratamiento, eso no quiere decir que a otro estudiante le vaya a ir igual de bien. Es decir, si un estudiante el dia del examen se desperto con dolor de cabeza, eso no nos dice nada respecto de otros estudiantes.</p>
-<p>El supuesto de homocedasticidad resulta poco plausible en este escenario. Tal como lo señalan Angrist y Pischke (2009) en la vida real, aunque no conocemos la <span class="math inline">\(CEF\)</span>, es viable pensar que esta no es lineal necesarimente, por lo que el hecho que no sea lineal ya va a generar por si mismo que tengamos variabilidad en la forma en que la línea de regresión se aproxima a la <span class="math inline">\(CEF\)</span>. Así mismo, hay que tener en cuenta que una de nuestras variables dependientes es binaria (asístencia a la universidad), de acuerdo con los autores mencionados, esto anula el supusto de homocedasticidad porque por simple construcción va a haber variación en los errores.</p>
-<p>Por otro lado, Abadie et al.(2023) señalan que el ajuste por cluster de errores estandar se debe hacer por nivel de muestreo y de asignación de tratamiento. En este caso el tratamiento fue asignado por salones, por lo que no solo no deberíamos asumir errores homocedasticos sino aplicar cluster. Esto tambien implica que debemos ser concientes de que es muy probable que el supuesto de no-correlación <span class="math inline">\(E[e_ie_j]= 0\)</span> no se cumpla, pues en este caso pueden haber factores no observados en cada salon que si correlaciónen los resultados del estudiante <span class="math inline">\(i\)</span> con el estudiante <span class="math inline">\(j\)</span> que pertenecen al mismo salon, lo que vimos formalmente en clase como <span class="math inline">\(E[e_{gi}e_{gh}]\neq 0\)</span>. Por ejemplo, si el profesor de un salón específico se enferma o, por el contrario, posee una motivación excepcional independientemente de su raza, estos factores afectarán simultáneamente el término de error de todos los estudiantes de ese curso, generando una correlación intra-clúster que debe ser corregida.</p>
+<p>El supuesto de homocedasticidad implica que <span class="math inline">\(E[e^{2}_i|X]=σ^2\)</span> que también podría ser visto como <span class="math inline">\(E[e^{2}_i|D_i=1]=σ^2\)</span> y <span class="math inline">\(E[e^{2}_i|D_i=0]=σ^2\)</span>, lo que quiere decir que la varianza de los errores es constante para cada estudiante, independientemente de sus caracteristicas (<span class="math inline">\(X\)</span>). En este caso, quiere decir que la dispersión en los resultados de la prueba SAT para cada estudiante es la misma para el grupo de estudiantes tratados y no tratados.</p>
+<p>Por otro lado, el supuesto de no-correlación implica que <span class="math inline">\(E[e_ie_j]= 0\)</span>. Esto quiere decier que conocer el error del estudiante <span class="math inline">\(i\)</span> no me dice nada al respecto del resultado del estudiante <span class="math inline">\(j\)</span>. Es decir, si a un estudiante le va muy bien en la prueba, por algun factor diferente al tratamiento, eso no quiere decir que a otro estudiante le vaya a ir igual de bien. Es decir, si un estudiante el día del examen se despertó con dolor de cabeza, eso no nos dice nada respecto de otros estudiantes.</p>
+<p>El supuesto de homocedasticidad resulta poco plausible en este escenario. Tal como lo señalan Angrist y Pischke (2009) en la vida real, aunque no conocemos la <span class="math inline">\(CEF\)</span>, es viable pensar que esta no es lineal necesariamente, por lo que el hecho que no sea lineal ya va a generar por si mismo que tengamos variabilidad en la forma en que la línea de regresión se aproxima a la <span class="math inline">\(CEF\)</span>. Así mismo, hay que tener en cuenta que una de nuestras variables dependientes es binaria (asístencia a la universidad), de acuerdo con los autores mencionados, esto anula el supuesto de homocedasticidad porque por simple construcción va a haber variación en los errores.</p>
+<p>Por otro lado, Abadie et al.(2023) señalan que el ajuste por cluster de errores estándar se debe hacer por nivel de muestreo y de asignación de tratamiento. En este caso el tratamiento fue asignado por salones, por lo que no solo no deberíamos asumir errores homocedasticos sino aplicar cluster. Esto también implica que debemos ser cocientes de que es muy probable que el supuesto de no-correlación <span class="math inline">\(E[e_ie_j]= 0\)</span> no se cumpla, pues en este caso pueden haber factores no observados en cada salón que si correlaciónen los resultados del estudiante <span class="math inline">\(i\)</span> con el estudiante <span class="math inline">\(j\)</span> que pertenecen al mismo salón, lo que vimos formalmente en clase como <span class="math inline">\(E[e_{gi}e_{gh}]\neq 0, \forall i\neq h\)</span>. Por ejemplo, si el profesor de un salón específico se enferma o, por el contrario, posee una motivación excepcional independientemente de su raza, estos factores afectarán simultáneamente el término de error de todos los estudiantes de ese salón, generando una correlación intra-clúster que debe ser corregida.</p>
 </section>
 <section id="punto-2-1" class="level2">
 <h2 class="anchored" data-anchor-id="punto-2-1">Punto 2</h2>
@@ -3790,11 +3800,11 @@ E[Y_i|D_i=0]&amp;=\beta_0+E[U_i|D_i=0]
 </blockquote>
 <p><strong>Donde <span class="math inline">\(X_i\)</span> es una variable determinística. Determine la varianza del estimador de <span class="math inline">\(\beta\)</span> bajo los siguientes escenarios:</strong></p>
 <ul>
-<li><strong>Caso 1:</strong> Se cumplen los supuestos de homocedasticidad y no-correlación del término de error.</li>
-<li><strong>Caso 2:</strong> Se cumple el supuesto de no-correlación, pero existe heterocedasticidad.</li>
-<li><strong>Caso 3:</strong> Existe heterocedasticidad y correlación entre las características no-observadas de los individuos que asisten al mismo colegio.</li>
+<li><strong>Caso 1: Se cumplen los supuestos de homocedasticidad y no-correlación del término de error.</strong></li>
+<li><strong>Caso 2: Se cumple el supuesto de no-correlación, pero existe heterocedasticidad.</strong></li>
+<li><strong>Caso 3: Existe heterocedasticidad y correlación entre las características no-observadas de los individuos que asisten al mismo colegio.</strong></li>
 </ul>
-<p><strong>Para cada caso, identifique el estimando poblacional correspondiente y proponga un estimador adecuado de la varianza. Justifique brevemente su respuesta.</strong></p>
+<p><strong>Para cada caso, identifique el estimando población correspondiente y proponga un estimador adecuado de la varianza. Justifique brevemente su respuesta.</strong></p>
 <p><strong>R/:</strong></p>
 <p>En primer lugar partamos de la definción de nuestro esmitado <span class="math inline">\(\hat\beta\)</span>:</p>
 <p>Nuestro modelo es: <span class="math inline">\(Y_i = \beta X_i + \varepsilon_i\)</span></p>
@@ -3808,19 +3818,23 @@ E[Y_i|D_i=0]&amp;=\beta_0+E[U_i|D_i=0]
 <ul>
 <li><strong>Caso 1:</strong> Se cumplen los supuestos de homocedasticidad y no-correlación del término de error.</li>
 </ul>
-<p>el caso nos plantea que <span class="math inline">\(Var(e_i|x_i)=\sigma^2\)</span> y que <span class="math inline">\(E[e_ie_j]= 0, ∀i\neq j\)</span>.</p>
-<p>Para encontrar la varianza peimro organicemos remplazando <span class="math inline">\(Y_i\)</span>:</p>
+<p>el caso nos plantea que <span class="math inline">\(Var(e_i|X)=\sigma^2\)</span> y que <span class="math inline">\(E[e_ie_j]= 0, ∀i\neq j\)</span>.</p>
+<p>Para encontrar la varianza primero organicemos remplazando <span class="math inline">\(Y_i\)</span>:</p>
 <p><span class="math display">\[\hat\beta= \frac{∑_{i=1}^N ((\beta X_i+e_i) X_i)}{∑_{i=1}^N X_i^2} \]</span></p>
 <p><span class="math display">\[\hat\beta= \frac{∑_{i=1}^N (\beta X_i^2+e_iX_i) }{∑_{i=1}^N X_i^2} \]</span></p>
 <p><span class="math display">\[\hat\beta= \frac{\beta∑_{i=1}^N X_i^2+∑_{i=1}^N  e_iX_i}{∑_{i=1}^N X_i^2} \]</span></p>
 <p><span class="math display">\[\hat\beta= \beta+ \frac{∑_{i=1}^N e_iX_i}{∑_{i=1}^N X_i^2}\]</span></p>
-<p>Aplicamos el operador de la varianza:</p>
-<p><span class="math display">\[\operatorname{Var}(\hat\beta|x_i)= \underbrace{\operatorname{Var}(\beta)}_{\text{Var de conste = 0 }}+ \operatorname{Var}\left( \frac{∑_{i=1}^N X_ie_i}{∑_{i=1}^N X_i^2}\right)\]</span></p>
-<p>Aplicamos la propiedad de la varianza <span class="math inline">\(Var(aX+b)=a^2Var(X)\)</span>:</p>
-<p><span class="math display">\[\operatorname{Var}(\hat\beta|x_i)= \operatorname{Var}\left( \frac{∑_{i=1}^N X_ie_i}{∑_{i=1}^N X_i^2} \right)\]</span></p>
-<p><span class="math display">\[\operatorname{Var}(\hat\beta|x_i)= \frac{1}{\left(∑_{i=1}^N X_i^2\right)^2}∑_{i=1}^N X_i^2 \underbrace{\operatorname{Var}(e_i|x_i)}_{\sigma^2} \]</span></p>
-<p><span class="math display">\[\operatorname{Var}(\hat\beta|x_i)= \frac{\sigma^2}{∑_{i=1}^N X_i^2}\]</span></p>
-<p>Una vez obtenido nuestro estimando, como no conocemos <span class="math inline">\(\sigma^2\)</span> usamos su estimador <span class="math inline">\(\hat\sigma^2\)</span>. Por lo tanto nuestro estimador de la varianza es:</p>
+<p>Aplicamos el operador de la varianza condicional:</p>
+<p><span class="math display">\[\operatorname{Var}(\hat{\beta}\mid X)
+= \underbrace{\operatorname{Var}(\beta)}_{\text{Var(constante)=0}}+
+\operatorname{Var}\left(\frac{\sum_{i=1}^{N} X_i e_i}
+{\sum_{i=1}^{N} X_i^{2}}\;\middle|\; X\right)\]</span></p>
+<p>Aplicamos la propiedad de la varianza <span class="math inline">\(Var(aX+b)=a^2Var(X)\)</span> y que cuando hay distribución conjunta <span class="math inline">\(\operatorname{Var}(A+B)=\operatorname{Var}(A)+\operatorname{Var}(B)+2\operatorname{Cov}(A,B)\)</span></p>
+<p><span class="math display">\[\operatorname{Var}(\hat\beta|X)= \operatorname{Var}\left( \frac{∑_{i=1}^N X_ie_i}{∑_{i=1}^N X_i^2};\middle|X \right)\]</span> <span class="math display">\[\operatorname{Var}(\hat\beta|X)= \frac{1}{\left(∑_{i=1}^N X_i^2\right)^2}\operatorname{Var}\left(∑_{i=1}^N X_ie_i;\middle|X \right)\]</span></p>
+<p><span class="math display">\[\operatorname{Var}(\hat\beta|X)= \frac{1}{\left(∑_{i=1}^N X_i^2\right)^2}\left[∑_{i=1}^N X_i^2\operatorname{Var}(e_i|X)+ \sum_{i=1}^N\sum_{i\neq j}^NX_iX_j\underbrace{\operatorname{Cov}(e_ie_j)}_{0}\right] \]</span></p>
+<p><span class="math display">\[\operatorname{Var}(\hat\beta|X)= \frac{1}{\left(∑_{i=1}^N X_i^2\right)^2}∑_{i=1}^N X_i^2 \underbrace{\operatorname{Var}(e_i|X)}_{\sigma^2} \]</span></p>
+<p><span class="math display">\[\operatorname{Var}(\hat\beta|X)= \frac{\sigma^2}{∑_{i=1}^N X_i^2}\]</span></p>
+<p>Una vez obtenido nuestro estimandor, como no conocemos <span class="math inline">\(\sigma^2\)</span> usamos su estimador <span class="math inline">\(\hat\sigma^2\)</span>. Por lo tanto nuestro estimador de la varianza es:</p>
 <p><span class="math display">\[
 \widehat{\operatorname{Var}(\hat{\beta})} = \frac{\widehat{\sigma}^2}{\sum_{i=1}^{N} X_i^2}
 \]</span> Donde:</p>
@@ -3828,9 +3842,10 @@ E[Y_i|D_i=0]&amp;=\beta_0+E[U_i|D_i=0]
 <ul>
 <li><strong>Caso 2:</strong> Se cumple el supuesto de no-correlación, pero existe heterocedasticidad.</li>
 </ul>
-<p>Este caso nos plantea que que <span class="math inline">\(\operatorname{Var}(e_i|x_i)=\sigma^2_i\)</span> y que <span class="math inline">\(E[e_ie_j]= 0, ∀i\neq j\)</span>.</p>
-<p><span class="math display">\[\operatorname{Var}(\hat\beta|x_i)= \frac{1}{\left(∑_{i=1}^N X_i^2\right)^2}∑_{i=1}^N X_i^2 \underbrace{\operatorname{Var}(e_i|x_i)}_{\sigma^2} \]</span></p>
-<p><span class="math display">\[\operatorname{Var}(\hat\beta|x_i)= \frac{1}{\left(∑_{i=1}^N X_i^2\right)^2}∑_{i=1}^N X_i^2 \sigma^2_i \]</span></p>
+<p>Este caso nos plantea que que <span class="math inline">\(\operatorname{Var}(e_i|X)=\sigma^2_i\)</span> y que <span class="math inline">\(E[e_ie_j]= 0, ∀i\neq j\)</span>. Entonces:</p>
+<p><span class="math display">\[\operatorname{Var}(\hat\beta|X)= \frac{1}{\left(∑_{i=1}^N X_i^2\right)^2}\left[∑_{i=1}^N X_i^2\operatorname{Var}(e_i|X)+ \sum_{i=1}^N\sum_{i\neq j}^NX_iX_j\underbrace{\operatorname{Cov}(e_ie_j)}_{0}\right] \]</span></p>
+<p><span class="math display">\[\operatorname{Var}(\hat\beta|X)= \frac{1}{\left(∑_{i=1}^N X_i^2\right)^2}∑_{i=1}^N X_i^2 \underbrace{\operatorname{Var}(e_i|X)}_{\sigma^2_i} \]</span></p>
+<p><span class="math display">\[\operatorname{Var}(\hat\beta|x_i)= \frac{1}{\left(∑_{i=1}^N X_i^2\right)^2}∑_{i=1}^N X_i^2 \sigma^2_i\]</span></p>
 <p><span class="math display">\[\operatorname{Var}(\hat\beta|x_i)= \frac{∑_{i=1}^N X_i^2 \sigma^2_i}{\left(∑_{i=1}^N X_i^2\right)^2}\]</span></p>
 <p>Por lo tanto el estimador de la varianza siguiendo la formulación de errores robustos de White es:</p>
 <p><span class="math display">\[
@@ -3840,26 +3855,37 @@ E[Y_i|D_i=0]&amp;=\beta_0+E[U_i|D_i=0]
 <ul>
 <li><strong>Caso 3:</strong> Existe heterocedasticidad y correlación entre las características no-observadas de los individuos que asisten al mismo colegio.</li>
 </ul>
-<p>Este caso nos plantea que que <span class="math inline">\(\operatorname{Var}(e_{gi}|X)=\sigma^2_{gi}\)</span>, que existe correlación dentro de los grupostal que <span class="math inline">\(E[e_{gi}e_{gj}]\neq 0\)</span> para estudiantes del mismo colegio, pero hay independencia entre coelgios <span class="math inline">\(E[e_{gi}e_{hj}]= 0\)</span>.</p>
+<p>Este caso nos plantea que que <span class="math inline">\(\operatorname{Var}(e_{gi}|X)=\sigma^2_{gi}\)</span>, que existe correlación dentro de los grupos tal que <span class="math inline">\(E[e_{gi}e_{gj}]\neq 0\)</span> para estudiantes del mismo colegio, pero hay independencia entre coelgios <span class="math inline">\(E[e_{gi}e_{hj}]= 0\)</span>.</p>
 <p>entonces:</p>
-<p><span class="math display">\[\hat\beta -\beta = \frac{∑_{i=1}^N X_ie_i}{∑_{i=1}^N X_i^2}\]</span></p>
+<p><span class="math display">\[\hat\beta  =\beta+ \frac{∑_{i=1}^N X_ie_i}{∑_{i=1}^N X_i^2}\]</span></p>
 <p>Como tenemos correlación al interior de los colegios, agrupamos la suma del numerador por grupos (colegios) <span class="math inline">\(g\)</span>, en lugar de individuos <span class="math inline">\(i\)</span>:</p>
-<p><span class="math display">\[\hat\beta -\beta = \frac{∑_{g=1}^G \left( ∑_{i\in g} X_{gi} e_{gi}\right)}{∑_{i=1}^N X_i^2}\]</span></p>
-<p>Aplicamos la varianza recordando que <span class="math inline">\(E[e_{gi}e_{hj}]= 0\)</span> y que la varianza de la suma es la vianza de cada grupo:</p>
-<p><span class="math display">\[\operatorname{Var}(\hat\beta|x_i) = \frac{∑_{g=1}^G \operatorname{Var}\left( ∑_{i\in g} X_{gi} e_{gi}\right)}{\left(∑_{i=1}^N X_i^2\right)^2}\]</span></p>
+<p><span class="math display">\[\hat\beta = \beta+ \frac{∑_{g=1}^G \left( ∑_{i\in g} X_{gi} e_{gi}\right)}{∑_{i=1}^N X_i^2}\]</span></p>
+<p>Aplicamos la varianza condicional recordando que <span class="math inline">\(E[e_{gi}e_{hj}]= 0\)</span> y que la varianza de la suma es la vianza de cada grupo:</p>
+<p><span class="math display">\[\operatorname{Var}(\hat{\beta}\mid X)
+=\frac{\operatorname{Var}\left(
+\sum_{g=1}^{G}\left(\sum_{i \in g} X_{gi} e_{gi}
+\right)\;\middle|\; X\right)}{\left(\sum_{i=1}^{N} X_i^{2}\right)^{2}}\]</span></p>
+<p><span class="math display">\[\operatorname{Var}(\hat{\beta}\mid X)
+=\frac{\sum_{g=1}^{G}\operatorname{Var}\left(\sum_{i \in g} X_{gi} e_{gi}
+\;\middle|\; X\right)+\sum_{g=1}^{G}\sum_{h\neq g}^{G}\operatorname{COV}\left(X_{gi} e_{gi},X_{hj} e_{hj}\middle|\; X\right)}{\left(\sum_{i=1}^{N} X_i^{2}\right)^{2}}\]</span></p>
+<p>El termino</p>
+<p><span class="math display">\[\sum_{g=1}^{G}\sum_{h\neq g}^{G}\operatorname{COV}\left(X_{gi} e_{gi},X_{hj} e_{hj}\middle|\; X\right) = 0\]</span> porque tenemo independencia entre coelgios <span class="math inline">\(E[e_{gi}e_{hj}]= 0\)</span></p>
+<p>Entonce tenemos: <span class="math display">\[\operatorname{Var}(\hat{\beta}\mid X)
+=\frac{\sum_{g=1}^{G}\operatorname{Var}\left(\sum_{i \in g} X_{gi} e_{gi}
+\;\middle|\; X\right)}{\left(\sum_{i=1}^{N} X_i^{2}\right)^{2}}\]</span></p>
 <p>Que es lo mismo que:</p>
 <p><span class="math display">\[
 \operatorname{Var}(\hat{\beta}\mid x_i)
 =
 \frac{\sum_{g=1}^{G}
 E\left[
-\left( \sum_{i \in g} X_{gi} e_{gi} \right)^2
+\left( \sum_{i \in g} X_{gi} e_{gi} \middle|\; X \right)^2
 \right]}
 {\left(\sum_{i=1}^{N} X_i^2\right)^2}
 \]</span></p>
 <p>En este caso nuestro estimador sería:</p>
 <p><span class="math display">\[
-\widehat{\operatorname{Var}(\hat{\beta}\mid x_i)}
+\widehat{\operatorname{Var}(\hat{\beta}\mid X)}
 =
 \frac{\sum_{g=1}^{G}  
 \left( \sum_{i \in g} X_{gi} \hat e_{gi} \right)^2 }
@@ -3900,7 +3926,7 @@ E\left[
 \]</span></p>
 <p>soluciona el problema porque ordena y agrupa las operaciones de manera correcta.</p>
 <p>Para poder entender esto, centrémonos de nuevo el numerador <span class="math inline">\(\sum_{g=1}^{G} \left( \sum_{i \in g} X_{gi} \hat e_{gi} \right)^2\)</span>.</p>
-<p>En primer lugar, calcula la suma de los productos cruzados para cada colegio <span class="math inline">\(g\)</span>. En este caso, al ser la suma de cada colegio (local), se evita que la condición de ortogonalidad tenga efecto, pues no es la suma total de los productos; un colegio puede tener contribuciones positivas y otro negativas a los errores. Luego, al elevar eso al cuadrado, convertimos esos balances positivos y negativos en estrictamente positivos. Finalmente, aplicamos la sumatoria de todos los colegios, logrando así capturar la verdadera variabilidad intra-clúster y respetando la independencia entre colegios.</p>
+<p>En primer lugar, calcula la suma de los productos cruzados para cada colegio <span class="math inline">\(g\)</span>. En este caso, al ser la suma de cada colegio, se evita que la condición de ortogonalidad tenga efecto, pues no es la suma total de los productos; un colegio puede tener contribuciones positivas y otro negativas a los errores. Luego, al elevar eso al cuadrado, convertimos esos balances positivos y negativos en estrictamente positivos. Finalmente, aplicamos la sumatoria de todos los colegios, logrando así capturar la verdadera variabilidad intra-clúster y respetando la independencia entre colegios.</p>
 </section>
 <section id="punto-4-1" class="level2">
 <h2 class="anchored" data-anchor-id="punto-4-1">Punto 4</h2>
@@ -3933,10 +3959,10 @@ E\left[
 \sum_{g=1}^{G} \left[ \left( \sum_{i \in g} X_{gi}^2 \hat e_{gi}^2 \right) + \left(\sum_{i \in g}\sum_{j\in g, j \neq i} X_{gi} X_{gj} \hat e_{gi} \hat e_{gj} \right) \right]
 \]</span></p>
 <p>Como se puede notar, el término de la izquierda es la expresión del estimador dos, que reconoce la heterocedasticidad.</p>
-<p>Por otro lado, al verlo, se nota que es la parte del estimador de White <strong>más</strong> otra cosa, que representa la correlación intracluster. Por lo tanto, al permitir la correlación intracluster (generalmente positiva), solo viendo la ecuación podemos notar que la varianza va a ser mayor con el estimador de cluster.</p>
-<p>Habiendo adquirido una mayor claridad sobre la teoría detrás de los errores estándar clusterizados, usted procede a intentar replicar algunos de los resultados del trabajo de <a href="https://www.aeaweb.org/articles?id=10.1257/pol.20190573">Gershenson et al. (2022)</a>, integrando los conocimientos sobre errores estándar clusterizados desarrollados en los incisos anteriores.</p>
-<p>En particular, recuerde que el experimento se llevó a cabo sobre estudiantes de kínder de raza negra y que la exposición a profesores de distinta raza fue aleatorizada <em>dentro de cada colegio</em>, asignando estudiantes y docentes a diferentes salones. Una ilustración intuitiva de este contexto puede verse en la serie <em>Abbott Elementary</em>, que retrata un colegio con una población estudiantil predominantemente negra cuyos docentes pertenecen a distintas razas. El experimento se implementó en múltiples condados y estados de E.E.U.U.</p>
-<p>Bajo este diseño, los estudiantes de kínder de raza negra fueron expuestos de manera aleatoria a profesores de la misma raza o de razas distintas <em>condicional en el colegio</em>. En consecuencia, haciendo uso de sus conocimientos sobre diseños experimentales, usted estima la siguiente ecuación:</p>
+<p>Por otro lado, al verlo, se nota que es la parte del estimador de White <strong>más</strong> otra cosa, que representa la correlación intracluster. Por lo tanto, al permitir la correlación intracluster, solo viendo la ecuación podemos notar que la varianza va a ser mayor con el estimador de cluster.</p>
+<p><strong>Habiendo adquirido una mayor claridad sobre la teoría detrás de los errores estándar clusterizados, usted procede a intentar replicar algunos de los resultados del trabajo de <a href="https://www.aeaweb.org/articles?id=10.1257/pol.20190573">Gershenson et al. (2022)</a>, integrando los conocimientos sobre errores estándar clusterizados desarrollados en los incisos anteriores.</strong></p>
+<p><strong>En particular, recuerde que el experimento se llevó a cabo sobre estudiantes de kínder de raza negra y que la exposición a profesores de distinta raza fue aleatorizada <em>dentro de cada colegio</em>, asignando estudiantes y docentes a diferentes salones. Una ilustración intuitiva de este contexto puede verse en la serie <em>Abbott Elementary</em>, que retrata un colegio con una población estudiantil predominantemente negra cuyos docentes pertenecen a distintas razas. El experimento se implementó en múltiples condados y estados de E.E.U.U. </strong></p>
+<p><strong>Bajo este diseño, los estudiantes de kínder de raza negra fueron expuestos de manera aleatoria a profesores de la misma raza o de razas distintas <em>condicional en el colegio</em>. En consecuencia, haciendo uso de sus conocimientos sobre diseños experimentales, usted estima la siguiente ecuación:</strong></p>
 <p><span class="math display">\[
 Y_i = \beta_0 + \beta_1 D_i + \varepsilon_i.
 \]</span></p>
@@ -3996,10 +4022,10 @@ N\hat\beta_0=\sum_{i=1}^{N}Y_i-\hat\beta_1 \sum_{i=1}^{N}D_i
 \sum_{i=1}^N (Y_i-\bar{Y}+\hat\beta_1  \bar{D}-\hat\beta_1 D_i)D_i = 0
 \]</span></p>
 <p><span class="math display">\[
-\sum_{i=1}^N [(Y_i-\bar{Y})-(D_i-\bar{D})hat\beta_1]D_i = 0
+\sum_{i=1}^N [(Y_i-\bar{Y})-(D_i-\bar{D})\hat\beta_1]D_i = 0
 \]</span></p>
 <p><span class="math display">\[
-\sum_{i=1}^N D_i(Y_i-\bar{Y})-hat\beta_1\sum_{i=1}^ND_i(D_i-\bar{D}) = 0
+\sum_{i=1}^N D_i(Y_i-\bar{Y})-\hat\beta_1\sum_{i=1}^ND_i(D_i-\bar{D}) = 0
 \]</span></p>
 <p>Que es lo mismo que:</p>
 <p><span class="math display">\[
@@ -4028,7 +4054,7 @@ N\hat\beta_0=\sum_{i=1}^{N}Y_i-\hat\beta_1 \sum_{i=1}^{N}D_i
 <p><span class="math display">\[
 \sum_{g=1}^{G} \left[ \left( \sum_{i \in g} (D_{gi}-\bar{D})^2 \hat e_{gi}^2 \right) + \left(\sum_{i \in g}\sum_{j\in g, j \neq i} (D_{gi}-\bar{D}) (D_{gj}-\bar{D}) \hat e_{gi} \hat e_{gj} \right) \right]
 \]</span></p>
-<p>Veamos, el primer mecanismo asociado a la varianza individual. Como ya mencionamos Se observa un incremento si hay factores residualesgrandes no explicados por el tratamiento. Por ejemplo, un shock exógeno, como una ola de desempleo o divorcios en las familias de un grupo específico de estudiantes, aumentaría sus residuos individuales inflando la varianza total.</p>
+<p>Veamos, el primer mecanismo asociado a la varianza individual. Como ya mencionamos, se observa un incremento si hay factores residuales grandes no explicados por el tratamiento. Por ejemplo, un shock exógeno, como una ola de desempleo o divorcios en las familias de un grupo específico de estudiantes, aumentaría sus residuos individuales inflando la varianza total.</p>
 <p>Por otro lado, en cuanto a la correlación intra-cluster, sabemos que a mayor correlación entre compañeros de colegio, mayor varianza. Supongamos que el colegio <span class="math inline">\(g=1\)</span> sufrió un fallo eléctrico y se quedó sin aire acondicionado durante los exámenes. Este factor ambiental afecta negativamente a todos los estudiantes de ese colegio simultáneamente. Sus errores estarán correlacionados positivamente, incrementando drásticamente el segundo término del numerador.</p>
 <p>Por úlitmo, veamos como funcionaría el mecanismo del denominador, que en este caso sería:</p>
 <p><span class="math display">\[\left(\sum_{i=1}^{N} (D_i - \bar{D})^2\right)^2\]</span></p>
@@ -4198,8 +4224,8 @@ Ingreso Universidad
 </ul>
 <p><strong>(Pendiente demostración matematica la hago después no se como hacerla)</strong></p>
 <p>Siguiendo a Angrist y Pischke y los apuntes de Hansen, y considerando que la unidad de colegio se encuentra anidada dentro de condado y este a su vez en estado, la teoría predice el comportamiento de la varianza. Siempre que exista una correlación intra-cluster positiva a un nivel superior (es decir, que los colegios dentro del mismo condado o estado compartan choques comunes), la varianza estimada clusterizada a estos niveles debería ser mayor que la varianza robusta o clusterizada a niveles inferiores</p>
-<p>Respecto a la validez de esta inferencia, Angrist menciona que la corrección por cluster funciona adecuadamente cuando el número de grupos es suficientemente grande <span class="math inline">\(G\approx 42\)</span>. Hansen advierte que con un G pequeño, los errores estándar clusterizados pueden volverse imprecisos y sufrir de un sesgo hacia abajo.</p>
-<p>En la práctica econométrica, se sugiere clusterizar al nivel más agregado donde exista correlación de los errores o donde se haya asignado el tratamiento. Si al subir el nivel de clusterización los errores estándar aumentan, estamos corrigiendo un sesgo negativo y evitando falsos positivos. Por otro lado, si los errores estándar permanecen estables al subir de nivel, es indica que no hay una correlación espacia a ese nivel. Sin embargo, considero que debe ser una buena práctica reportar estos niveles superiores como prueba de robustez por transparencia con los resultados.</p>
+<p>Respecto a la validez de esta inferencia, Angrist menciona que la corrección por cluster funciona adecuadamente cuando el número de grupos es suficientemente grande <span class="math inline">\(G\approx 42\)</span>. Hansen advierte que con un <span class="math inline">\(G\)</span> pequeño, los errores estándar clusterizados pueden volverse imprecisos y sufrir de un sesgo hacia abajo.</p>
+<p>En la práctica econométrica, se sugiere clusterizar al nivel más agregado donde exista correlación de los errores o donde se haya asignado el tratamiento. Si al subir el nivel de clusterización los errores estándar aumentan, estamos corrigiendo un sesgo negativo y evitando falsos positivos. Por otro lado, si los errores estándar permanecen estables al subir de nivel, eso indica que no hay una correlación espacial a ese nivel. Sin embargo, consideramos que debe ser una buena práctica reportar estos niveles superiores como prueba de robustez por transparencia con los resultados.</p>
 <p>Ahora veamos la estimación del modelo tomando como variable <span class="math inline">\(Y_i\)</span> el puntaje en matematicas en la prueba SAT usando errores robustos para heterocedasticidad y errores clusterizados a nivel de los modelos con errores robustos para heterocedasticidad y con cluster de errores estandar a nivel i) colegio, ii) condado y iii) estado:</p>
 <div class="cell">
 <details class="code-fold">
@@ -4355,8 +4381,8 @@ Puntaje SAT
 
 </div>
 </div>
-<p>El resultado de nuestra estimación da cuenta de lo que dijimos anteriormente. El estimador puntual es idéntico en todos los casos <span class="math inline">\(4.607\)</span> con le mismo nivel de significacia estadistica <span class="math inline">\(p&lt;0.001\)</span>. Tambien podemos ver que el error estándar aumenta a <span class="math inline">\(0.065\)</span> cuando aplicamos cluste de colegio y a <span class="math inline">\(0.067\)</span> cuando aplicamos cluster de condado. No obstante al agrupar por estado los eerores estandar caen <span class="math inline">\(0.060\)</span>.</p>
-<p>Entoces podemos decir que el incremento de colegio a condado da cuenta de la existencia de correlación positiva entre colegios del mismo condado, lo que nos indica que el cluster a nivel Condado sería la estimación más adecuada sobreto si tenemos en cuenta que en nuestra muestra <span class="math inline">\(G&gt;500\)</span> para el nivel de condado. Por su parte la disminución cuando se aplica cluster a nivel de estado seguramente tiene que ver con un sesgo en el calculo de los errores asociado a un <span class="math inline">\(G=50\)</span> que si bien es superior al aproximado mencionado por Angrist, como explica Hansen en sus notas, aún hay mucho por aprender sobre el correcto nivel para aplicar la correcta clusterización de los errores estandar.</p>
+<p>El resultado de nuestra estimación da cuenta de lo que dijimos anteriormente. El estimador puntual es idéntico en todos los casos <span class="math inline">\(4.607\)</span> con le mismo nivel de significacia estadistica <span class="math inline">\(p&lt;0.001\)</span>. Tambien podemos ver que el error estándar aumenta a <span class="math inline">\(0.065\)</span> cuando aplicamos cluster de colegio y a <span class="math inline">\(0.067\)</span> cuando aplicamos cluster de condado. No obstante al agrupar por estado los eerores estandar caen <span class="math inline">\(0.060\)</span>.</p>
+<p>Entoces podemos decir que el incremento de colegio a condado da cuenta de la existencia de correlación positiva entre colegios del mismo condado, lo que nos indica que el cluster a nivel Condado sería la estimación más adecuada sobretodo si tenemos en cuenta que en nuestra muestra <span class="math inline">\(G&gt;500\)</span> para el nivel de condado. Por su parte la disminución cuando se aplica cluster a nivel de estado seguramente tiene que ver con un sesgo en el calculo de los errores asociado a un <span class="math inline">\(G=50\)</span> que si bien es superior al aproximado mencionado por Angrist, como explica Hansen en sus notas, aún hay mucho por aprender sobre el correcto nivel para aplicar la correcta clusterización de los errores estandar.</p>
 </section>
 <section id="punto-7" class="level2">
 <h2 class="anchored" data-anchor-id="punto-7">Punto 7</h2>
@@ -4435,7 +4461,7 @@ Puntaje SAT
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co">#Tomando 1000 muestras y estimando modelos</span></span>
 <span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="co">#___________________________________________________________________________</span></span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(fixest) <span class="co">#Usammos fixest por facilidad</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(fixest) </span>
 <span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Semilla para replicación, ponemos nuestra propia semilla :3.</span></span>
 <span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2896</span>)</span>
@@ -4443,7 +4469,7 @@ Puntaje SAT
 <span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Número de simulaciones.</span></span>
 <span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>n_sim1 <span class="ot">&lt;-</span> <span class="dv">1000</span></span>
 <span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a><span class="co">#Definimos tamaño muestra </span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a><span class="co">#Definimos tamaño muestra. </span></span>
 <span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>Tamano_muestra <span class="ot">&lt;-</span> n_population<span class="sc">*</span>p_sample</span>
 <span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a></span>
@@ -4574,7 +4600,7 @@ Cluster
 
 </div>
 </div>
-<p>Como podemos notar, el promedio de los errores estándar clusterizados es considerablemente mayor al promedio de los robustos. Esto ocurre porque los primeros capturan la correlación de los errores a nivel de colegio, evitando así la subestimación del error estándar evitando así que cometamos error tipo 1. En cuanto a la cobertura, los intervalos clusterizados incluyeron el cero el 100% de las veces, lo que confirma que son más conservadores y adecuados ante la heterogeneidad de los colegios.</p>
+<p>Como podemos notar, el promedio de los errores estándar clusterizados es considerablemente mayor al promedio de los robustos. Esto ocurre porque los primeros capturan la correlación de los errores a nivel de colegio, evitando así la subestimación del error estándar, evitando que cometamos error tipo 1. En cuanto a la cobertura, los intervalos clusterizados incluyeron el cero el 100% de las veces, lo que confirma que son más conservadores y adecuados ante la heterogeneidad de los colegios.</p>
 <p>Frente a la pregunta de si siempre es mejor clusterizar al nivel más agregado, la respuesta no es unívoca. Si bien clusterizar a un nivel agregado es necesario para reconocer la estructura de correlación y evitar falsos positivos, esto depende crucialmente del número de grupos (<span class="math inline">\(G\)</span>) disponibles. Como sugiere la literatura, con un <span class="math inline">\(G\)</span> muy pequeño los estimadores de varianza clusterizados se vuelven sesgados e inestables, haciendo que nuestros tests de hipótesis sean poco confiables.</p>
 </section>
 <section id="punto-8" class="level2">
@@ -4585,7 +4611,7 @@ Cluster
 </blockquote>
 <p><strong>R/:</strong> El comentario del referee es válido parcialmente pero su regla práctica es incorrecta. Si bien tiene razón en que la clusterización captura la correlación intra-grupo y previene errores tipo 1,siendo una aproximación más conservadora que los errores robustos como evidenciamos en nuestra simulación, sugerir <strong>siempre clusterizar al nivel más agregado y evitar pensar en el nivel apropiado</strong> ignora los supuestos asintóticos.</p>
 <p>Esta aproximación conservadora resultó conveniente en nuestra investigación a nivel de colegio e incluso de condado. Como observamos en las regresiones del punto 6, en esos niveles se cuenta con un número de grupos (<span class="math inline">\(G\)</span>) lo suficientemente grande para que la inferencia sea válida.</p>
-<p>Sin embargo, elevar la agregación arbitrariamente al nivel de estado demostró ser perjudicial. A ese nivel, el número de grupos <span class="math inline">\(G\)</span> cae al límite inferior recomendado por la literatura. Como evidenció nuestra regresión, esto genera inconsistencias y, en este caso específico, terminó subestimando los errores estándar en lugar de hacerlos más conservadores.Por lo tanto, el nivel de clusterización no debe elegirse a ciegas hacia arriba, sino que debe responder al diseño del muestreo a la asignación del tratamiento y la cantidad de grupos <span class="math inline">\(G\)</span> que se tiene aplicar el cluster.</p>
+<p>Sin embargo, elevar la agregación arbitrariamente al nivel de estado demostró ser perjudicial. A ese nivel, el número de grupos <span class="math inline">\(G\)</span> cae al límite inferior recomendado por la literatura. Como evidenció nuestra regresión, esto genera inconsistencias y, en este caso específico, terminó subestimando los errores estándar en lugar de hacerlos más conservadores.Por lo tanto, el nivel de clusterización no debe elegirse a ciegas hacia arriba, sino que debe responder al diseño del muestreo a la asignación del tratamiento y la cantidad de grupos <span class="math inline">\(G\)</span> que se tienen para aplicar el cluster.</p>
 </section>
 </section>
 <section id="tercer-ejercicio" class="level1">
@@ -4606,8 +4632,8 @@ Cluster
 </ol>
 <p><strong>Describa el diseño experimental del estudio de Dupas et al. (2025). Explique cómo fue implementada la aleatorización (incluyendo los diferentes niveles y la estratificación), qué tratamientos fueron aleatorizados y los principales desafíos metodológicos que enfrentaron los autores durante la implementación del estudio. (máx. 300 palabras)</strong></p>
 <p>En la investigación entregaron cupones válidos por tres años que cubrían el 100% (subsidio total) o el 10% (grupo de comparación) del costo de cualquier método anticonceptivo moderno y servicios médicos asociados. Dado que los autores sospechaban que el costo financiero podría no ser la única barrera, introdujeron intervenciones para corregir fricciones de información en la demanda. Por un lado, proveyeron infografías sobre las tasas de mortalidad infantil locales para corregir la sobreestimación del riesgo de muerte supiniendo que al notar que la supervivencia había mejorado las familias no sentirían la necesidad de tener tantos hijos. Por otro lado, organizaron reuniones comunitarias con debates públicos y proyecciones audiovisuales para desafiar las normas sociales a favor de la natalidad y para tramitar los estigma frente a la anticoncepción.</p>
-<p>El diseño experimental consistió en tres niveles de aleatorización, empleando diferentes niveles de estratificación. En el primer nivel, se aleatorizaron 100 centros de salud, estratificando por provincia: 50 centros fueron asignados al subsidio total (100%) y los otros 50 al grupo de comparación con el subsidio del 10%. En el segundo nivel, se seleccionaron 5 aldeas por cada centro de salud, abarcando un total de 500 aldeas. Estratificando por centro de salud, tres de estas aldeas se asignaron a intervenciones grupales y dos a intervenciones individuales. Finalmente, en el tercer nivel y dentro de las aldeas de intervención individual, los hogares se aleatorizaron (estratificando por aldea) en tres brazos: información sobre mortalidad infantil, proyección privada del video de edu-entretenimiento, o un grupo de control puro. A traves de este diseño lograron aislar los efectos estimando así el efecto del subsidio, de las intervenciones de demanda por sí solas, y el efecto del subsidio cuando se combina con las intervenciones de demanda.</p>
-<p>La implementación enfrentó tres principales obstaculos. En primer lugar la pendemia Covid-19 pospuso la recolección final de los datos, pues se tenia planeado el cierre a 2020 y se vieron obligados a ampliar un año. Ademas, en 2020 el gobierno de Burkina Faso anunció el lanzamiento de una política de planificación familiar gratis. Adicionalmente en 2019 se presentó un paro de trabajadores de la salud, sin embargo report que esto no afectó la provisión de servicios de acuerdo con el reporte de sus encuentas de monitoreo donde encontrar que el 92% de los centros de salud del experimento no presentaron falta de atención a los pacientes por estos motivos. Por último, cuatro centros de salud de la muestra fueron cerrados debido a condiciones de inseguridad.</p>
+<p>El diseño experimental consistió en tres niveles de aleatorización, empleando diferentes niveles de estratificación. En el primer nivel, se aleatorizaron 100 centros de salud, estratificando por provincia: 50 centros fueron asignados al subsidio total (100%) y los otros 50 al grupo de comparación con el subsidio del 10%. En el segundo nivel, se seleccionaron 5 aldeas por cada centro de salud (en torno a cada centro había aproximandamente 10), abarcando un total de 500 aldeas. Estratificando por centro de salud, tres de estas aldeas se asignaron a intervenciones grupales y dos a intervenciones individuales. Finalmente, en el tercer nivel y dentro de las aldeas de intervención individual, los hogares se aleatorizaron (estratificando por aldea) en tres brazos: información sobre mortalidad infantil, proyección privada del video de edu-entretenimiento, o un grupo de control puro. A traves de este diseño lograron aislar los efectos estimando así el efecto del subsidio, de las intervenciones de demanda por sí solas, y el efecto del subsidio cuando se combina con las intervenciones de demanda.</p>
+<p>La implementación enfrentó tres principales obstaculos. En primer lugar la pendemia Covid-19 pospuso la recolección final de los datos, pues se tenia planeado el cierre a 2020 y se vieron obligados a ampliar un año. Ademas, en 2020 el gobierno de Burkina Faso anunció el lanzamiento de una política de planificación familiar gratis. Adicionalmente en 2019 se presentó un paro de trabajadores de la salud, sin embargo reportaron que esto no afectó la provisión de servicios de acuerdo con el reporte de sus encuentas de monitoreo donde encontraron que el 92% de los centros de salud del experimento no presentaron falta de atención a los pacientes por estos motivos. Por último, cuatro centros de salud de la muestra fueron cerrados debido a condiciones de inseguridad.</p>
 </section>
 <section id="punto-2-2" class="level2">
 <h2 class="anchored" data-anchor-id="punto-2-2">Punto 2</h2>
@@ -4630,7 +4656,7 @@ Cluster
 Y_i(1) &amp; \text{si } D_i = 1 \text{ (fue asignada al subsidio del 100\%)} \\
 Y_i(0) &amp; \text{si } D_i = 0 \text{ (fue asignada al subsidio del 10\%)}
 \end{cases}\]</span></p>
-<p>Para cada mujer solo existe un resultado potencial que vemos de la siguiente manera: <span class="math display">\[Y_i=Y_i(1) D_i+(1-D_i) Y_i(0)\]</span> - La decisión ética busca mitigar la injusticia de no otorgar nada a las mujeres del grupo control. El subsidio del 10% garantiza que todas las participantes obtengan una mejora en su acceso a la salud y actúa como reconocimiento por su tiempo al responder las encuestas. En este sentido, el efecto debe interpretarse estrictamente como el efecto marginal de ofrecer un subsidio completo frente a un subsidio pequeño.</p>
+<p>Para cada mujer solo existe un resultado potencial que vemos de la siguiente manera: <span class="math display">\[Y_i=Y_i(1) D_i+(1-D_i) Y_i(0)\]</span> - La decisión ética busca mitigar la injusticia de no otorgar nada a las mujeres del grupo control. El subsidio del 10% garantiza que todas las participantes obtengan una mejora en su acceso a la salud y actúa como reconocimiento por su tiempo al responder las encuestas. En este sentido, el efecto debe interpretarse estrictamente como el efecto marginal de ofrecer un subsidio completo frente a un subsidio pequeño como lo señalan en el papper.</p>
 </section>
 <section id="punto-3-2" class="level2">
 <h2 class="anchored" data-anchor-id="punto-3-2">Punto 3</h2>
@@ -4646,6 +4672,11 @@ Y_i(0) &amp; \text{si } D_i = 0 \text{ (fue asignada al subsidio del 10\%)}
 <p>El segundo supuesto es el de no spilovers, lo que quiere decir que el resultado potencial de la mujer i depende únicamente de si ella recibió el subsidio del 100% o del 10%, y no de la asignación que recibieron sus vecinas o amigas en la comunidad.</p>
 <p><span class="math display">\[Y_i(D_i,D_{-i})=Y_i(D_i)\]</span></p>
 <p>El tercer supuesto es la consistencia en el tratamiento. Es decir Garantiza que el resultado empírico que observamos en los datos corresponde exactamente al resultado potencial del tratamiento y no a una doisificación del mismo.</p>
+<ul>
+<li>Este sería el supuesto de infependencia conficional</li>
+</ul>
+<p><span class="math display">\[(Y_i(1),Y_i(0))\perp\!\!\!\perp D_i |X_i\]</span> Lo que imploca que:</p>
+<p><span class="math display">\[E[Y_i|D_i,X_i]=E[Y_i|X_i]\]</span></p>
 </section>
 <section id="punto-4-2" class="level2">
 <h2 class="anchored" data-anchor-id="punto-4-2">Punto 4</h2>
@@ -4757,76 +4788,73 @@ Y_i(0) &amp; \text{si } D_i = 0 \text{ (fue asignada al subsidio del 10\%)}
 <span id="cb6-69"><a href="#cb6-69" aria-hidden="true" tabindex="-1"></a>                 <span class="st">&quot;Necesidad de la mujer por anticonceptivos está insatisfecha&quot;</span>, </span>
 <span id="cb6-70"><a href="#cb6-70" aria-hidden="true" tabindex="-1"></a>                 <span class="st">&quot;No podría pagar por anticonceptivos si quisiera usarlos&quot;</span>, </span>
 <span id="cb6-71"><a href="#cb6-71" aria-hidden="true" tabindex="-1"></a>                 <span class="st">&quot;El hogar tiene radio&quot;</span>)</span>
-<span id="cb6-72"><a href="#cb6-72" aria-hidden="true" tabindex="-1"></a>var_datos <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Edad_Mujer&quot;</span>, <span class="st">&quot;Esposo_poligamo&quot;</span></span>
-<span id="cb6-73"><a href="#cb6-73" aria-hidden="true" tabindex="-1"></a>               ,<span class="st">&quot;N_Hijos_desados&quot;</span></span>
-<span id="cb6-74"><a href="#cb6-74" aria-hidden="true" tabindex="-1"></a>               ,<span class="st">&quot;Uso_Actual_Anticoncep_Moderna&quot;</span></span>
-<span id="cb6-75"><a href="#cb6-75" aria-hidden="true" tabindex="-1"></a>               ,<span class="st">&quot;Insatisfaccion_Acceso_Anticoncep&quot;</span></span>
-<span id="cb6-76"><a href="#cb6-76" aria-hidden="true" tabindex="-1"></a>               ,<span class="st">&quot;No_puede_pagar_anticoncep&quot;</span></span>
-<span id="cb6-77"><a href="#cb6-77" aria-hidden="true" tabindex="-1"></a>               ,<span class="st">&quot;Hogar_Con_Radio&quot;</span>)</span>
+<span id="cb6-72"><a href="#cb6-72" aria-hidden="true" tabindex="-1"></a>var_datos <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Edad_Mujer&quot;</span>, <span class="st">&quot;Esposo_poligamo&quot;</span>, <span class="st">&quot;N_Hijos_desados&quot;</span>,</span>
+<span id="cb6-73"><a href="#cb6-73" aria-hidden="true" tabindex="-1"></a>               <span class="st">&quot;Uso_Actual_Anticoncep_Moderna&quot;</span>, <span class="st">&quot;Insatisfaccion_Acceso_Anticoncep&quot;</span>,</span>
+<span id="cb6-74"><a href="#cb6-74" aria-hidden="true" tabindex="-1"></a>               <span class="st">&quot;No_puede_pagar_anticoncep&quot;</span>, <span class="st">&quot;Hogar_Con_Radio&quot;</span>)</span>
+<span id="cb6-75"><a href="#cb6-75" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-76"><a href="#cb6-76" aria-hidden="true" tabindex="-1"></a><span class="co"># Creando matriz vacia para llenarla con un loop</span></span>
+<span id="cb6-77"><a href="#cb6-77" aria-hidden="true" tabindex="-1"></a>resultados <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="at">ncol =</span> <span class="dv">6</span>, <span class="at">nrow =</span> <span class="dv">0</span>)</span>
 <span id="cb6-78"><a href="#cb6-78" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-79"><a href="#cb6-79" aria-hidden="true" tabindex="-1"></a><span class="co"># Creando matriz vacia para llenarla con un loop</span></span>
-<span id="cb6-80"><a href="#cb6-80" aria-hidden="true" tabindex="-1"></a>resultados <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="at">ncol =</span> <span class="dv">6</span>, <span class="at">nrow =</span> <span class="dv">0</span>)</span>
-<span id="cb6-81"><a href="#cb6-81" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-82"><a href="#cb6-82" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">7</span>) {</span>
-<span id="cb6-83"><a href="#cb6-83" aria-hidden="true" tabindex="-1"></a>  m <span class="ot">&lt;-</span> modelos[[i]]</span>
-<span id="cb6-84"><a href="#cb6-84" aria-hidden="true" tabindex="-1"></a>  v <span class="ot">&lt;-</span> var_datos[i]</span>
-<span id="cb6-85"><a href="#cb6-85" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb6-86"><a href="#cb6-86" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Medias grupo control y tratamiento</span></span>
-<span id="cb6-87"><a href="#cb6-87" aria-hidden="true" tabindex="-1"></a>  media_c <span class="ot">&lt;-</span> <span class="fu">mean</span>(baseline_sample_[[v]][baseline_sample_<span class="sc">$</span>D_i <span class="sc">==</span> <span class="dv">0</span>], </span>
-<span id="cb6-88"><a href="#cb6-88" aria-hidden="true" tabindex="-1"></a>                  <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb6-89"><a href="#cb6-89" aria-hidden="true" tabindex="-1"></a>  media_t <span class="ot">&lt;-</span> <span class="fu">mean</span>(baseline_sample_[[v]][baseline_sample_<span class="sc">$</span>D_i <span class="sc">==</span> <span class="dv">1</span>], </span>
-<span id="cb6-90"><a href="#cb6-90" aria-hidden="true" tabindex="-1"></a>                  <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb6-91"><a href="#cb6-91" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb6-92"><a href="#cb6-92" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Fila 1: Coeficiente e info</span></span>
-<span id="cb6-93"><a href="#cb6-93" aria-hidden="true" tabindex="-1"></a>  fila_coef <span class="ot">&lt;-</span> <span class="fu">c</span>(var_nombres[i], <span class="fu">round</span>(media_c, <span class="dv">3</span>), </span>
-<span id="cb6-94"><a href="#cb6-94" aria-hidden="true" tabindex="-1"></a>                 <span class="fu">round</span>(media_t, <span class="dv">3</span>), <span class="fu">nobs</span>(m), </span>
-<span id="cb6-95"><a href="#cb6-95" aria-hidden="true" tabindex="-1"></a>                 <span class="fu">round</span>(<span class="fu">coef</span>(m)[<span class="st">&quot;D_i&quot;</span>], <span class="dv">3</span>), </span>
-<span id="cb6-96"><a href="#cb6-96" aria-hidden="true" tabindex="-1"></a>                 <span class="fu">round</span>(<span class="fu">pvalue</span>(m)[<span class="st">&quot;D_i&quot;</span>], <span class="dv">3</span>))</span>
-<span id="cb6-97"><a href="#cb6-97" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb6-98"><a href="#cb6-98" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Fila 2: Error Estandar</span></span>
-<span id="cb6-99"><a href="#cb6-99" aria-hidden="true" tabindex="-1"></a>  fila_se <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;&quot;</span>, <span class="st">&quot;&quot;</span>, <span class="st">&quot;&quot;</span>, <span class="st">&quot;&quot;</span>, <span class="fu">paste0</span>(<span class="st">&quot;(&quot;</span>, </span>
-<span id="cb6-100"><a href="#cb6-100" aria-hidden="true" tabindex="-1"></a>                                      <span class="fu">round</span>(<span class="fu">se</span>(m)[<span class="st">&quot;D_i&quot;</span>], <span class="dv">3</span>), <span class="st">&quot;)&quot;</span>), <span class="st">&quot;&quot;</span>)</span>
+<span id="cb6-79"><a href="#cb6-79" aria-hidden="true" tabindex="-1"></a><span class="co"># --- Loop Corregido ---</span></span>
+<span id="cb6-80"><a href="#cb6-80" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">7</span>) {</span>
+<span id="cb6-81"><a href="#cb6-81" aria-hidden="true" tabindex="-1"></a>  m <span class="ot">&lt;-</span> modelos[[i]]</span>
+<span id="cb6-82"><a href="#cb6-82" aria-hidden="true" tabindex="-1"></a>  v <span class="ot">&lt;-</span> var_datos[i]</span>
+<span id="cb6-83"><a href="#cb6-83" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb6-84"><a href="#cb6-84" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Medias grupo control y tratamiento</span></span>
+<span id="cb6-85"><a href="#cb6-85" aria-hidden="true" tabindex="-1"></a>  media_c <span class="ot">&lt;-</span> <span class="fu">mean</span>(baseline_sample_[[v]][baseline_sample_<span class="sc">$</span>D_i <span class="sc">==</span> <span class="dv">0</span>], <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb6-86"><a href="#cb6-86" aria-hidden="true" tabindex="-1"></a>  media_t <span class="ot">&lt;-</span> <span class="fu">mean</span>(baseline_sample_[[v]][baseline_sample_<span class="sc">$</span>D_i <span class="sc">==</span> <span class="dv">1</span>], <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb6-87"><a href="#cb6-87" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb6-88"><a href="#cb6-88" aria-hidden="true" tabindex="-1"></a>  <span class="co"># EXTRACCIÓN SEGURA: Sacamos la tabla de coeficientes del modelo</span></span>
+<span id="cb6-89"><a href="#cb6-89" aria-hidden="true" tabindex="-1"></a>  tabla_coefs <span class="ot">&lt;-</span> <span class="fu">summary</span>(m)<span class="sc">$</span>coeftable</span>
+<span id="cb6-90"><a href="#cb6-90" aria-hidden="true" tabindex="-1"></a>  coef_val <span class="ot">&lt;-</span> tabla_coefs[<span class="st">&quot;D_i&quot;</span>, <span class="st">&quot;Estimate&quot;</span>]</span>
+<span id="cb6-91"><a href="#cb6-91" aria-hidden="true" tabindex="-1"></a>  se_val   <span class="ot">&lt;-</span> tabla_coefs[<span class="st">&quot;D_i&quot;</span>, <span class="st">&quot;Std. Error&quot;</span>]</span>
+<span id="cb6-92"><a href="#cb6-92" aria-hidden="true" tabindex="-1"></a>  pval_val <span class="ot">&lt;-</span> tabla_coefs[<span class="st">&quot;D_i&quot;</span>, <span class="st">&quot;Pr(&gt;|t|)&quot;</span>]</span>
+<span id="cb6-93"><a href="#cb6-93" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb6-94"><a href="#cb6-94" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Fila 1: Coeficiente e info</span></span>
+<span id="cb6-95"><a href="#cb6-95" aria-hidden="true" tabindex="-1"></a>  fila_coef <span class="ot">&lt;-</span> <span class="fu">c</span>(var_nombres[i], </span>
+<span id="cb6-96"><a href="#cb6-96" aria-hidden="true" tabindex="-1"></a>                 <span class="fu">round</span>(media_c, <span class="dv">3</span>), </span>
+<span id="cb6-97"><a href="#cb6-97" aria-hidden="true" tabindex="-1"></a>                 <span class="fu">round</span>(media_t, <span class="dv">3</span>), </span>
+<span id="cb6-98"><a href="#cb6-98" aria-hidden="true" tabindex="-1"></a>                 <span class="fu">nobs</span>(m), </span>
+<span id="cb6-99"><a href="#cb6-99" aria-hidden="true" tabindex="-1"></a>                 <span class="fu">round</span>(coef_val, <span class="dv">3</span>), </span>
+<span id="cb6-100"><a href="#cb6-100" aria-hidden="true" tabindex="-1"></a>                 <span class="fu">round</span>(pval_val, <span class="dv">3</span>))</span>
 <span id="cb6-101"><a href="#cb6-101" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb6-102"><a href="#cb6-102" aria-hidden="true" tabindex="-1"></a>  resultados <span class="ot">&lt;-</span> <span class="fu">rbind</span>(resultados, fila_coef, fila_se)</span>
-<span id="cb6-103"><a href="#cb6-103" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb6-104"><a href="#cb6-104" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-105"><a href="#cb6-105" aria-hidden="true" tabindex="-1"></a><span class="co"># Agregando el F al final de la matriz</span></span>
-<span id="cb6-106"><a href="#cb6-106" aria-hidden="true" tabindex="-1"></a>resultados <span class="ot">&lt;-</span> <span class="fu">rbind</span>(resultados, </span>
-<span id="cb6-107"><a href="#cb6-107" aria-hidden="true" tabindex="-1"></a>                    <span class="fu">c</span>(<span class="st">&quot;&quot;</span>, <span class="st">&quot;&quot;</span>, <span class="st">&quot;&quot;</span>, <span class="st">&quot;&quot;</span>, <span class="st">&quot;&quot;</span>, <span class="st">&quot;&quot;</span>), </span>
-<span id="cb6-108"><a href="#cb6-108" aria-hidden="true" tabindex="-1"></a>                    <span class="fu">c</span>(<span class="st">&quot;Estadístico F conjunto&quot;</span>, <span class="st">&quot;&quot;</span>, </span>
-<span id="cb6-109"><a href="#cb6-109" aria-hidden="true" tabindex="-1"></a>                      <span class="st">&quot;&quot;</span>, <span class="st">&quot;&quot;</span>, <span class="fu">round</span>(f_stat, <span class="dv">3</span>), <span class="fu">round</span>(f_pval, <span class="dv">3</span>)))</span>
-<span id="cb6-110"><a href="#cb6-110" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-111"><a href="#cb6-111" aria-hidden="true" tabindex="-1"></a><span class="co"># Convirtiendo a data.frame</span></span>
-<span id="cb6-112"><a href="#cb6-112" aria-hidden="true" tabindex="-1"></a>tabla_df <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(resultados, <span class="at">row.names =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb6-113"><a href="#cb6-113" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(tabla_df) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Variable&quot;</span>, <span class="st">&quot;Control&quot;</span>, <span class="st">&quot;Tratamiento&quot;</span>, </span>
-<span id="cb6-114"><a href="#cb6-114" aria-hidden="true" tabindex="-1"></a>                     <span class="st">&quot;N&quot;</span>, <span class="st">&quot;Coeficiente / (EE)&quot;</span>, <span class="st">&quot;Valor-p&quot;</span>)</span>
-<span id="cb6-115"><a href="#cb6-115" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-116"><a href="#cb6-116" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Construir y estilizar la tabla con kableExtra</span></span>
-<span id="cb6-117"><a href="#cb6-117" aria-hidden="true" tabindex="-1"></a>tabla_balance <span class="ot">&lt;-</span> tabla_df <span class="sc">%&gt;%</span></span>
-<span id="cb6-118"><a href="#cb6-118" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kbl</span>(</span>
-<span id="cb6-119"><a href="#cb6-119" aria-hidden="true" tabindex="-1"></a>    <span class="at">col.names =</span> <span class="fu">c</span>(<span class="st">&quot;Variable&quot;</span>, <span class="st">&quot;Control&quot;</span>, <span class="st">&quot;Tratamiento&quot;</span>,</span>
-<span id="cb6-120"><a href="#cb6-120" aria-hidden="true" tabindex="-1"></a>                  <span class="st">&quot;N&quot;</span>, <span class="st">&quot;Coeficiente / (EE)&quot;</span>, <span class="st">&quot;Valor-p&quot;</span>),</span>
+<span id="cb6-102"><a href="#cb6-102" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Fila 2: Error Estandar</span></span>
+<span id="cb6-103"><a href="#cb6-103" aria-hidden="true" tabindex="-1"></a>  fila_se <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;&quot;</span>, <span class="st">&quot;&quot;</span>, <span class="st">&quot;&quot;</span>, <span class="st">&quot;&quot;</span>, <span class="fu">paste0</span>(<span class="st">&quot;(&quot;</span>, <span class="fu">round</span>(se_val, <span class="dv">3</span>), <span class="st">&quot;)&quot;</span>), <span class="st">&quot;&quot;</span>)</span>
+<span id="cb6-104"><a href="#cb6-104" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb6-105"><a href="#cb6-105" aria-hidden="true" tabindex="-1"></a>  resultados <span class="ot">&lt;-</span> <span class="fu">rbind</span>(resultados, fila_coef, fila_se)</span>
+<span id="cb6-106"><a href="#cb6-106" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb6-107"><a href="#cb6-107" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-108"><a href="#cb6-108" aria-hidden="true" tabindex="-1"></a><span class="co"># Agregando el F al final de la matriz</span></span>
+<span id="cb6-109"><a href="#cb6-109" aria-hidden="true" tabindex="-1"></a>resultados <span class="ot">&lt;-</span> <span class="fu">rbind</span>(resultados, </span>
+<span id="cb6-110"><a href="#cb6-110" aria-hidden="true" tabindex="-1"></a>                    <span class="fu">c</span>(<span class="st">&quot;&quot;</span>, <span class="st">&quot;&quot;</span>, <span class="st">&quot;&quot;</span>, <span class="st">&quot;&quot;</span>, <span class="st">&quot;&quot;</span>, <span class="st">&quot;&quot;</span>), </span>
+<span id="cb6-111"><a href="#cb6-111" aria-hidden="true" tabindex="-1"></a>                    <span class="fu">c</span>(<span class="st">&quot;Estadístico F conjunto&quot;</span>, <span class="st">&quot;&quot;</span>, <span class="st">&quot;&quot;</span>, <span class="st">&quot;&quot;</span>, <span class="fu">round</span>(f_stat, <span class="dv">3</span>), <span class="fu">round</span>(f_pval, <span class="dv">3</span>)))</span>
+<span id="cb6-112"><a href="#cb6-112" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-113"><a href="#cb6-113" aria-hidden="true" tabindex="-1"></a><span class="co"># Convirtiendo a data.frame garantizando que todo sea texto/número simple</span></span>
+<span id="cb6-114"><a href="#cb6-114" aria-hidden="true" tabindex="-1"></a>tabla_df <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(resultados, <span class="at">row.names =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb6-115"><a href="#cb6-115" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(tabla_df) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Variable&quot;</span>, <span class="st">&quot;Control&quot;</span>, <span class="st">&quot;Tratamiento&quot;</span>, <span class="st">&quot;N&quot;</span>, <span class="st">&quot;Coeficiente / (EE)&quot;</span>, <span class="st">&quot;Valor-p&quot;</span>)</span>
+<span id="cb6-116"><a href="#cb6-116" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-117"><a href="#cb6-117" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Construir y estilizar la tabla con kableExtra</span></span>
+<span id="cb6-118"><a href="#cb6-118" aria-hidden="true" tabindex="-1"></a>tabla_balance <span class="ot">&lt;-</span> tabla_df <span class="sc">%&gt;%</span></span>
+<span id="cb6-119"><a href="#cb6-119" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kbl</span>(</span>
+<span id="cb6-120"><a href="#cb6-120" aria-hidden="true" tabindex="-1"></a>    <span class="at">col.names =</span> <span class="fu">c</span>(<span class="st">&quot;Variable&quot;</span>, <span class="st">&quot;Control&quot;</span>, <span class="st">&quot;Tratamiento&quot;</span>, <span class="st">&quot;N&quot;</span>, <span class="st">&quot;Coeficiente / (EE)&quot;</span>, <span class="st">&quot;Valor-p&quot;</span>),</span>
 <span id="cb6-121"><a href="#cb6-121" aria-hidden="true" tabindex="-1"></a>    <span class="at">align =</span> <span class="fu">c</span>(<span class="st">&quot;l&quot;</span>, <span class="st">&quot;c&quot;</span>, <span class="st">&quot;c&quot;</span>, <span class="st">&quot;c&quot;</span>, <span class="st">&quot;c&quot;</span>, <span class="st">&quot;c&quot;</span>),</span>
 <span id="cb6-122"><a href="#cb6-122" aria-hidden="true" tabindex="-1"></a>    <span class="at">caption =</span> <span class="st">&quot;Tabla A.1: Pruebas de balance en la encuesta de línea base&quot;</span>,</span>
 <span id="cb6-123"><a href="#cb6-123" aria-hidden="true" tabindex="-1"></a>    <span class="at">booktabs =</span> <span class="cn">TRUE</span></span>
 <span id="cb6-124"><a href="#cb6-124" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
-<span id="cb6-125"><a href="#cb6-125" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_header_above</span>(<span class="fu">c</span>(<span class="st">&quot; &quot;</span> <span class="ot">=</span> <span class="dv">1</span>, <span class="st">&quot;Medias (Línea Base)&quot;</span> <span class="ot">=</span> <span class="dv">2</span>, </span>
-<span id="cb6-126"><a href="#cb6-126" aria-hidden="true" tabindex="-1"></a>                     <span class="st">&quot; &quot;</span> <span class="ot">=</span> <span class="dv">1</span>, <span class="st">&quot;Diferencias&quot;</span> <span class="ot">=</span> <span class="dv">2</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb6-127"><a href="#cb6-127" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling</span>(</span>
-<span id="cb6-128"><a href="#cb6-128" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb6-129"><a href="#cb6-129" aria-hidden="true" tabindex="-1"></a>    <span class="at">latex_options =</span> <span class="fu">c</span>(<span class="st">&quot;hold_position&quot;</span>, <span class="st">&quot;scale_down&quot;</span>), </span>
-<span id="cb6-130"><a href="#cb6-130" aria-hidden="true" tabindex="-1"></a>    <span class="at">bootstrap_options =</span> <span class="fu">c</span>(<span class="st">&quot;hover&quot;</span>, <span class="st">&quot;condensed&quot;</span>),</span>
-<span id="cb6-131"><a href="#cb6-131" aria-hidden="true" tabindex="-1"></a>    <span class="at">full_width =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb6-132"><a href="#cb6-132" aria-hidden="true" tabindex="-1"></a>    <span class="at">position =</span> <span class="st">&quot;center&quot;</span></span>
-<span id="cb6-133"><a href="#cb6-133" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
-<span id="cb6-134"><a href="#cb6-134" aria-hidden="true" tabindex="-1"></a>  <span class="fu">footnote</span>(</span>
-<span id="cb6-135"><a href="#cb6-135" aria-hidden="true" tabindex="-1"></a>    <span class="at">general =</span> <span class="st">&quot;EE agrupados a nivel de centro de salud entre paréntesis.&quot;</span>,</span>
-<span id="cb6-136"><a href="#cb6-136" aria-hidden="true" tabindex="-1"></a>    <span class="at">general_title =</span> <span class="st">&quot;Nota: &quot;</span>,</span>
-<span id="cb6-137"><a href="#cb6-137" aria-hidden="true" tabindex="-1"></a>    <span class="co"># footnote_as_chunk evita que la nota se parta de forma extraña en el PDF</span></span>
-<span id="cb6-138"><a href="#cb6-138" aria-hidden="true" tabindex="-1"></a>    <span class="at">footnote_as_chunk =</span> <span class="cn">TRUE</span> </span>
-<span id="cb6-139"><a href="#cb6-139" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb6-140"><a href="#cb6-140" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-141"><a href="#cb6-141" aria-hidden="true" tabindex="-1"></a>tabla_balance</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb6-125"><a href="#cb6-125" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_header_above</span>(<span class="fu">c</span>(<span class="st">&quot; &quot;</span> <span class="ot">=</span> <span class="dv">1</span>, <span class="st">&quot;Medias (Línea Base)&quot;</span> <span class="ot">=</span> <span class="dv">2</span>, <span class="st">&quot; &quot;</span> <span class="ot">=</span> <span class="dv">1</span>, <span class="st">&quot;Diferencias&quot;</span> <span class="ot">=</span> <span class="dv">2</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb6-126"><a href="#cb6-126" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling</span>(</span>
+<span id="cb6-127"><a href="#cb6-127" aria-hidden="true" tabindex="-1"></a>    <span class="at">latex_options =</span> <span class="fu">c</span>(<span class="st">&quot;hold_position&quot;</span>, <span class="st">&quot;scale_down&quot;</span>), </span>
+<span id="cb6-128"><a href="#cb6-128" aria-hidden="true" tabindex="-1"></a>    <span class="at">bootstrap_options =</span> <span class="fu">c</span>(<span class="st">&quot;hover&quot;</span>, <span class="st">&quot;condensed&quot;</span>),</span>
+<span id="cb6-129"><a href="#cb6-129" aria-hidden="true" tabindex="-1"></a>    <span class="at">full_width =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb6-130"><a href="#cb6-130" aria-hidden="true" tabindex="-1"></a>    <span class="at">position =</span> <span class="st">&quot;center&quot;</span></span>
+<span id="cb6-131"><a href="#cb6-131" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb6-132"><a href="#cb6-132" aria-hidden="true" tabindex="-1"></a>  <span class="fu">footnote</span>(</span>
+<span id="cb6-133"><a href="#cb6-133" aria-hidden="true" tabindex="-1"></a>    <span class="at">general =</span> <span class="st">&quot;EE agrupados a nivel de centro de salud entre paréntesis.&quot;</span>,</span>
+<span id="cb6-134"><a href="#cb6-134" aria-hidden="true" tabindex="-1"></a>    <span class="at">general_title =</span> <span class="st">&quot;Nota: &quot;</span>,</span>
+<span id="cb6-135"><a href="#cb6-135" aria-hidden="true" tabindex="-1"></a>    <span class="at">footnote_as_chunk =</span> <span class="cn">TRUE</span> </span>
+<span id="cb6-136"><a href="#cb6-136" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb6-137"><a href="#cb6-137" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-138"><a href="#cb6-138" aria-hidden="true" tabindex="-1"></a>tabla_balance</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <table class="table table-hover table-condensed caption-top table-sm table-striped small" data-quarto-postprocess="true">
@@ -5007,15 +5035,15 @@ Diferencias
 <ul>
 <li><strong>Comparando resultado tablas:</strong></li>
 </ul>
-<p>Al comparar el resultado de la tabla de balanceo de nuestra muestra con la tabla original, observamos que los resultados son consistentes. A pesar de utilizar solo el 60% de la muestra, las medias de ambos grupos capturan la misma tendencia.</p>
+<p>Al comparar el resultado de la tabla de balanceo de nuestra muestra con la tabla original, observamos que los resultados son consistentes. A pesar de utilizar solo el 60% de la muestra, las medias capturan la misma tendencia.</p>
 <p>En nuestro caso, casi todas las variables presentan un valor <em>p</em> &gt; 0.10, lo que indica que no existen diferencias estadísticamente significativas entre los grupos. No obstante, se identificó que la variable que responde a “No podría pagar por anticonceptivos” sí mostró una diferencia estadísticamente significativa, lo cual también se evidencia den la tabla del estudio original.</p>
 <p>Es importante tener en cuenta que, al evaluar múltiples variables, es esperable que alguna resulte significativa por puro azar. Esto puede corregirse fácilmente si se controla por la variable que no está balanceada. Sin embargo, también es válido señalar que esta situación puede generar dudas: si existe una variable observada desbalanceada, ¿cómo podemos estar seguros de que las variables no observadas también están balanceadas?</p>
 <p>Por último, nuestra prueba definitiva es el estadístico F de significancia conjunta, que con un <span class="math inline">\(p = 0.111\)</span> confirma que las características <span class="math inline">\(X\)</span>, en conjunto, no predicen la asignación al grupo. Se puede concluir que no hay evidencia de desbalance sistemático y que la aleatorización fue implementada correctamente.</p>
 <ul>
 <li><strong>Analizando estadisticas descriptivas:</strong></li>
 </ul>
-<p>Las estadísticas descriptivas de nuestra muestra muestran que las mujeres tienen, en promedio, 28 años y desean tener 6 hijos. Sin embargo, solo el 30% utiliza métodos anticonceptivos modernos. Aproximadamente el 38% manifiesta tener una demanda insatisfecha de anticonceptivos modernos y entre el 38% y el 42% señala que no podría pagarlos.</p>
-<p>Dado que se trata de mujeres en edades de alta fertilidad, que además expresan una demanda insatisfecha y dificultades para cubrir el costo de los anticonceptivos, es razonable esperar que,aumente significativamente el uso de anticonceptivos modernos y, en consecuencia, al eliminar esta barrera mediante un subsidio del 100% para las mujeres tratadas, el número de hijos nacidos después de la intervención sea menor.</p>
+<p>Las estadísticas descriptivas de nuestra muestra muestran que las mujeres tienen, en promedio, 28 años y desean tener 6 hijos. Sin embargo, solo aproximandamente el 30% utiliza métodos anticonceptivos modernos, aproximadamente el 38% manifiesta tener una demanda insatisfecha de anticonceptivos modernos y entre el 38% y el 42% aproximadaamente señala que no podría pagarlos.</p>
+<p>Dado que se trata de mujeres en edades de alta fertilidad, que además expresan una demanda insatisfecha y dificultades para cubrir el costo de los anticonceptivos, es razonable esperar que,aumente significativamente el uso de anticonceptivos modernos y, en consecuencia, al eliminar esta barrera mediante un subsidio del 100% para las mujeres tratadas, el número de hijos nacidos después de la intervención sea menor. Como vimos en el resultado del papper esta intición resulto no ser cierta.</p>
 </section>
 <section id="punto-5-1" class="level2">
 <h2 class="anchored" data-anchor-id="punto-5-1">Punto 5</h2>
@@ -5043,71 +5071,72 @@ Diferencias
 <span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>endline <span class="ot">&lt;-</span> <span class="fu">read_dta</span>(<span class="st">&quot;endline_sample.dta&quot;</span>)</span>
 <span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a><span class="co">#Haciendo el merge de las bases y calculando atrición </span></span>
-<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>endline_listo <span class="ot">&lt;-</span> endline <span class="sc">%&gt;%</span> </span>
-<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">estuvo_endline =</span> <span class="dv">1</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(</span>
-<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>    new_womid_final, </span>
-<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>    estuvo_endline,</span>
-<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>    an_ew_any_deliveries_ab_s7q4,</span>
-<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>    an_ew_at_least_1preg_ab,</span>
-<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>    an_ew_contra_modern_lst3y,</span>
-<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>    an_ew_coupon_use_s15q7,</span>
-<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>    ew_survey_date,               </span>
-<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Uniendo</span></span>
-<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a>datos_completos <span class="ot">&lt;-</span> baseline <span class="sc">%&gt;%</span> </span>
-<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(endline_listo, <span class="at">by =</span> <span class="st">&quot;new_womid_final&quot;</span>)</span>
-<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a>datos_completos <span class="ot">&lt;-</span> datos_completos <span class="sc">%&gt;%</span> </span>
-<span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">atricion =</span> <span class="fu">ifelse</span>(<span class="fu">is.na</span>(estuvo_endline), <span class="dv">1</span>, <span class="dv">0</span>))</span>
-<span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-33"><a href="#cb7-33" aria-hidden="true" tabindex="-1"></a>datos_completos <span class="ot">&lt;-</span> datos_completos <span class="sc">%&gt;%</span> </span>
-<span id="cb7-34"><a href="#cb7-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb7-35"><a href="#cb7-35" aria-hidden="true" tabindex="-1"></a>    <span class="at">Y1_nacimiento =</span> an_ew_any_deliveries_ab_s7q4,</span>
-<span id="cb7-36"><a href="#cb7-36" aria-hidden="true" tabindex="-1"></a>    <span class="at">Y2_embarazo   =</span> an_ew_at_least_1preg_ab,</span>
-<span id="cb7-37"><a href="#cb7-37" aria-hidden="true" tabindex="-1"></a>    <span class="at">Y3_uso_anti   =</span> an_ew_contra_modern_lst3y,</span>
-<span id="cb7-38"><a href="#cb7-38" aria-hidden="true" tabindex="-1"></a>    <span class="at">Y4_cupon      =</span> an_ew_coupon_use_s15q7,</span>
-<span id="cb7-39"><a href="#cb7-39" aria-hidden="true" tabindex="-1"></a>    <span class="at">D_i           =</span> arm_free </span>
-<span id="cb7-40"><a href="#cb7-40" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb7-41"><a href="#cb7-41" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-42"><a href="#cb7-42" aria-hidden="true" tabindex="-1"></a><span class="co"># Atrición por grupo de tratamiento</span></span>
-<span id="cb7-43"><a href="#cb7-43" aria-hidden="true" tabindex="-1"></a>atricion_grupos <span class="ot">&lt;-</span> datos_completos <span class="sc">%&gt;%</span></span>
-<span id="cb7-44"><a href="#cb7-44" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(D_i) <span class="sc">%&gt;%</span></span>
-<span id="cb7-45"><a href="#cb7-45" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
-<span id="cb7-46"><a href="#cb7-46" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">N Inicial</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">n</span>(),</span>
-<span id="cb7-47"><a href="#cb7-47" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">N Atrición</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">sum</span>(atricion),</span>
-<span id="cb7-48"><a href="#cb7-48" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">Tasa de Atrición (%)</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">round</span>(<span class="fu">mean</span>(atricion) <span class="sc">*</span> <span class="dv">100</span>, <span class="dv">2</span>)</span>
-<span id="cb7-49"><a href="#cb7-49" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
-<span id="cb7-50"><a href="#cb7-50" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Grupo =</span> <span class="fu">ifelse</span>(D_i <span class="sc">==</span> <span class="dv">1</span>, <span class="st">&quot;Tratamiento (100%)&quot;</span>, <span class="st">&quot;Control (10%)&quot;</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb7-51"><a href="#cb7-51" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(Grupo, <span class="st">`</span><span class="at">N Inicial</span><span class="st">`</span>, <span class="st">`</span><span class="at">N Atrición</span><span class="st">`</span>, <span class="st">`</span><span class="at">Tasa de Atrición (%)</span><span class="st">`</span>)</span>
-<span id="cb7-52"><a href="#cb7-52" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-53"><a href="#cb7-53" aria-hidden="true" tabindex="-1"></a><span class="co"># Atrición Total</span></span>
-<span id="cb7-54"><a href="#cb7-54" aria-hidden="true" tabindex="-1"></a>atricion_total <span class="ot">&lt;-</span> datos_completos <span class="sc">%&gt;%</span></span>
-<span id="cb7-55"><a href="#cb7-55" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
-<span id="cb7-56"><a href="#cb7-56" aria-hidden="true" tabindex="-1"></a>    <span class="at">Grupo =</span> <span class="st">&quot;Total Muestra&quot;</span>,</span>
-<span id="cb7-57"><a href="#cb7-57" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">N Inicial</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">n</span>(),</span>
-<span id="cb7-58"><a href="#cb7-58" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">N Atrición</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">sum</span>(atricion),</span>
-<span id="cb7-59"><a href="#cb7-59" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">Tasa de Atrición (%)</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">round</span>(<span class="fu">mean</span>(atricion) <span class="sc">*</span> <span class="dv">100</span>, <span class="dv">2</span>)</span>
-<span id="cb7-60"><a href="#cb7-60" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb7-61"><a href="#cb7-61" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-62"><a href="#cb7-62" aria-hidden="true" tabindex="-1"></a><span class="co"># Unimos las filas para crear la tabla final</span></span>
-<span id="cb7-63"><a href="#cb7-63" aria-hidden="true" tabindex="-1"></a>tabla_atricion <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(atricion_grupos, atricion_total)</span>
-<span id="cb7-64"><a href="#cb7-64" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-65"><a href="#cb7-65" aria-hidden="true" tabindex="-1"></a><span class="co">#generando tabla</span></span>
-<span id="cb7-66"><a href="#cb7-66" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-67"><a href="#cb7-67" aria-hidden="true" tabindex="-1"></a><span class="co"># Generamos la tabla para el PDF con kableExtra</span></span>
-<span id="cb7-68"><a href="#cb7-68" aria-hidden="true" tabindex="-1"></a>tabla_atricion <span class="sc">%&gt;%</span></span>
-<span id="cb7-69"><a href="#cb7-69" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kbl</span>(</span>
-<span id="cb7-70"><a href="#cb7-70" aria-hidden="true" tabindex="-1"></a>    <span class="at">caption =</span> <span class="st">&quot;Tasa de Atrición entre Línea Base y Seguimiento&quot;</span>,</span>
-<span id="cb7-71"><a href="#cb7-71" aria-hidden="true" tabindex="-1"></a>    <span class="at">align =</span> <span class="fu">c</span>(<span class="st">&quot;l&quot;</span>, <span class="st">&quot;c&quot;</span>, <span class="st">&quot;c&quot;</span>, <span class="st">&quot;c&quot;</span>),</span>
-<span id="cb7-72"><a href="#cb7-72" aria-hidden="true" tabindex="-1"></a>    <span class="at">booktabs =</span> <span class="cn">TRUE</span></span>
-<span id="cb7-73"><a href="#cb7-73" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
-<span id="cb7-74"><a href="#cb7-74" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling</span>(</span>
-<span id="cb7-75"><a href="#cb7-75" aria-hidden="true" tabindex="-1"></a>    <span class="at">latex_options =</span> <span class="st">&quot;hold_position&quot;</span>, </span>
-<span id="cb7-76"><a href="#cb7-76" aria-hidden="true" tabindex="-1"></a>    <span class="at">bootstrap_options =</span> <span class="st">&quot;condensed&quot;</span>,</span>
-<span id="cb7-77"><a href="#cb7-77" aria-hidden="true" tabindex="-1"></a>    <span class="at">full_width =</span> <span class="cn">FALSE</span></span>
-<span id="cb7-78"><a href="#cb7-78" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a><span class="co">#Seleccionando vars Endline</span></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>endline_listo <span class="ot">&lt;-</span> endline <span class="sc">%&gt;%</span> </span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">estuvo_endline =</span> <span class="dv">1</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(</span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>    new_womid_final, </span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>    estuvo_endline,</span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>    an_ew_any_deliveries_ab_s7q4,</span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>    an_ew_at_least_1preg_ab,</span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>    an_ew_contra_modern_lst3y,</span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>    an_ew_coupon_use_s15q7,</span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a>    ew_survey_date,               </span>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a><span class="co"># Uniendo</span></span>
+<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a>datos_completos <span class="ot">&lt;-</span> baseline <span class="sc">%&gt;%</span> </span>
+<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(endline_listo, <span class="at">by =</span> <span class="st">&quot;new_womid_final&quot;</span>)</span>
+<span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a>datos_completos <span class="ot">&lt;-</span> datos_completos <span class="sc">%&gt;%</span> </span>
+<span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">atricion =</span> <span class="fu">ifelse</span>(<span class="fu">is.na</span>(estuvo_endline), <span class="dv">1</span>, <span class="dv">0</span>))</span>
+<span id="cb7-33"><a href="#cb7-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-34"><a href="#cb7-34" aria-hidden="true" tabindex="-1"></a>datos_completos <span class="ot">&lt;-</span> datos_completos <span class="sc">%&gt;%</span> </span>
+<span id="cb7-35"><a href="#cb7-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb7-36"><a href="#cb7-36" aria-hidden="true" tabindex="-1"></a>    <span class="at">Y1_nacimiento =</span> an_ew_any_deliveries_ab_s7q4,</span>
+<span id="cb7-37"><a href="#cb7-37" aria-hidden="true" tabindex="-1"></a>    <span class="at">Y2_embarazo   =</span> an_ew_at_least_1preg_ab,</span>
+<span id="cb7-38"><a href="#cb7-38" aria-hidden="true" tabindex="-1"></a>    <span class="at">Y3_uso_anti   =</span> an_ew_contra_modern_lst3y,</span>
+<span id="cb7-39"><a href="#cb7-39" aria-hidden="true" tabindex="-1"></a>    <span class="at">Y4_cupon      =</span> an_ew_coupon_use_s15q7,</span>
+<span id="cb7-40"><a href="#cb7-40" aria-hidden="true" tabindex="-1"></a>    <span class="at">D_i           =</span> arm_free </span>
+<span id="cb7-41"><a href="#cb7-41" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb7-42"><a href="#cb7-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-43"><a href="#cb7-43" aria-hidden="true" tabindex="-1"></a><span class="co"># Atrición por grupo de tratamiento</span></span>
+<span id="cb7-44"><a href="#cb7-44" aria-hidden="true" tabindex="-1"></a>atricion_grupos <span class="ot">&lt;-</span> datos_completos <span class="sc">%&gt;%</span></span>
+<span id="cb7-45"><a href="#cb7-45" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(D_i) <span class="sc">%&gt;%</span></span>
+<span id="cb7-46"><a href="#cb7-46" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb7-47"><a href="#cb7-47" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">N Inicial</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">n</span>(),</span>
+<span id="cb7-48"><a href="#cb7-48" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">N Atrición</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">sum</span>(atricion),</span>
+<span id="cb7-49"><a href="#cb7-49" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">Tasa de Atrición (%)</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">round</span>(<span class="fu">mean</span>(atricion) <span class="sc">*</span> <span class="dv">100</span>, <span class="dv">2</span>)</span>
+<span id="cb7-50"><a href="#cb7-50" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb7-51"><a href="#cb7-51" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">Grupo =</span> <span class="fu">ifelse</span>(D_i <span class="sc">==</span> <span class="dv">1</span>, <span class="st">&quot;Tratamiento (100%)&quot;</span>, <span class="st">&quot;Control (10%)&quot;</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb7-52"><a href="#cb7-52" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(Grupo, <span class="st">`</span><span class="at">N Inicial</span><span class="st">`</span>, <span class="st">`</span><span class="at">N Atrición</span><span class="st">`</span>, <span class="st">`</span><span class="at">Tasa de Atrición (%)</span><span class="st">`</span>)</span>
+<span id="cb7-53"><a href="#cb7-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-54"><a href="#cb7-54" aria-hidden="true" tabindex="-1"></a><span class="co"># Atrición Total</span></span>
+<span id="cb7-55"><a href="#cb7-55" aria-hidden="true" tabindex="-1"></a>atricion_total <span class="ot">&lt;-</span> datos_completos <span class="sc">%&gt;%</span></span>
+<span id="cb7-56"><a href="#cb7-56" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb7-57"><a href="#cb7-57" aria-hidden="true" tabindex="-1"></a>    <span class="at">Grupo =</span> <span class="st">&quot;Total Muestra&quot;</span>,</span>
+<span id="cb7-58"><a href="#cb7-58" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">N Inicial</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">n</span>(),</span>
+<span id="cb7-59"><a href="#cb7-59" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">N Atrición</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">sum</span>(atricion),</span>
+<span id="cb7-60"><a href="#cb7-60" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">Tasa de Atrición (%)</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">round</span>(<span class="fu">mean</span>(atricion) <span class="sc">*</span> <span class="dv">100</span>, <span class="dv">2</span>)</span>
+<span id="cb7-61"><a href="#cb7-61" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb7-62"><a href="#cb7-62" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-63"><a href="#cb7-63" aria-hidden="true" tabindex="-1"></a><span class="co"># Unimos las filas para crear la tabla final</span></span>
+<span id="cb7-64"><a href="#cb7-64" aria-hidden="true" tabindex="-1"></a>tabla_atricion <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(atricion_grupos, atricion_total)</span>
+<span id="cb7-65"><a href="#cb7-65" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-66"><a href="#cb7-66" aria-hidden="true" tabindex="-1"></a><span class="co">#generando tabla</span></span>
+<span id="cb7-67"><a href="#cb7-67" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-68"><a href="#cb7-68" aria-hidden="true" tabindex="-1"></a><span class="co"># Generamos la tabla para el PDF con kableExtra</span></span>
+<span id="cb7-69"><a href="#cb7-69" aria-hidden="true" tabindex="-1"></a>tabla_atricion <span class="sc">%&gt;%</span></span>
+<span id="cb7-70"><a href="#cb7-70" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kbl</span>(</span>
+<span id="cb7-71"><a href="#cb7-71" aria-hidden="true" tabindex="-1"></a>    <span class="at">caption =</span> <span class="st">&quot;Tasa de Atrición entre Línea Base y Seguimiento&quot;</span>,</span>
+<span id="cb7-72"><a href="#cb7-72" aria-hidden="true" tabindex="-1"></a>    <span class="at">align =</span> <span class="fu">c</span>(<span class="st">&quot;l&quot;</span>, <span class="st">&quot;c&quot;</span>, <span class="st">&quot;c&quot;</span>, <span class="st">&quot;c&quot;</span>),</span>
+<span id="cb7-73"><a href="#cb7-73" aria-hidden="true" tabindex="-1"></a>    <span class="at">booktabs =</span> <span class="cn">TRUE</span></span>
+<span id="cb7-74"><a href="#cb7-74" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb7-75"><a href="#cb7-75" aria-hidden="true" tabindex="-1"></a>  <span class="fu">kable_styling</span>(</span>
+<span id="cb7-76"><a href="#cb7-76" aria-hidden="true" tabindex="-1"></a>    <span class="at">latex_options =</span> <span class="st">&quot;hold_position&quot;</span>, </span>
+<span id="cb7-77"><a href="#cb7-77" aria-hidden="true" tabindex="-1"></a>    <span class="at">bootstrap_options =</span> <span class="st">&quot;condensed&quot;</span>,</span>
+<span id="cb7-78"><a href="#cb7-78" aria-hidden="true" tabindex="-1"></a>    <span class="at">full_width =</span> <span class="cn">FALSE</span></span>
+<span id="cb7-79"><a href="#cb7-79" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
 <table class="table table-condensed caption-top table-sm table-striped small" data-quarto-postprocess="true">
@@ -5346,10 +5375,24 @@ Réplica basada en Panel B (Dupas et al., 2025).</td>
 <p>El efecto Hawthorne ocurre cuando los tratados modifican su conducta porque saben que están siendo observados. En el contexto de este experimento, las mujeres tanto del grupo de tratamiento como del grupo de control podrían prestar mayor atención a su planificación familiar y usar más anticonceptivos solo por recibir la visita de los encuestadores y responder preguntas detalladas sobre sus historiales de embarazo. Lo anterior causaría una subsetimación del efecto.</p>
 <p>Por otro lado el efecto John Henry aduce a cuando los no tratados cambian su conducta por el hecho de no recibir tratamiento. En este caso un podría suponer que al saber que no recibieron tratamiento las mujeres que recibieron el bono del 10% se esfuerzan para completar su tratamiento poniendo el 90% del costo, de esta manera modificarían sus comportamientos reproductivos causando una subestimación del efecto del programa en los tratados.</p>
 <p>El sesgo de demanda del experimentador ocurre cuando los participantes ajustan su comportamiento de acuerdo a lo que consideran que la persona investigadora espera. En este estudio, las mujeres tratadas podrían reportar en las encuestas un mayor deseo de usar anticonceptivos o intenciones de tener menos hijos, simplemente para complacer a los investigadores o encuestadores del proyecto. El sesgo generaría una sobreestimación del efecto del subsidio, haciendo que parezca más exitoso de lo que es.</p>
-<p>Por último el efecto placebo ocurre cuando los individuos saben que están hacindo parte de un experimento y solo por eso cambian su comportamiento. En este contexto, el simple hecho de entregar un un descuento del 10% a las mujeres del grupo de control podría hacerlas sentir apoyadas institucionalmente o servir como un recordatorio psicológico que las motive a visitar la clínica de salud. Esto podría causar una subestimación del efecto.</p>
+<p>Por último el efecto placebo ocurre cuando los individuos saben que están hacindo parte de un experimento y solo por eso cambian su comportamiento. En este contexto, el simple hecho de entregar un un descuento del 10% a las mujeres del grupo de control podría hacerlas sentir apoyadas institucionalmente o servir como un recordatorio psicológico que las motive a visitar la clínica de salud, uno podría pensar que esto podría causar una subestimación del efecto.</p>
 </section>
 <section id="punto-7-1" class="level2">
 <h2 class="anchored" data-anchor-id="punto-7-1">Punto 7</h2>
+<p><strong>Robustez del Hallazgo Nulo:</strong></p>
+<p><strong>El resultado principal es nulo: no hay efecto sobre fecundidad. Los nulos requieren cuidado especial.</strong></p>
+<ul>
+<li><strong>Revise su Tabla 2. ¿Aumentó el subsidio el uso de anticoncepción? ¿Y el uso de vouchers? Interpete estos reusltados conjuntamente.</strong></li>
+</ul>
+<p><strong>¿Son los resultados nulos consistentes? ¿Qué tan robusto es el hallazgo?</strong></p>
+<p><strong>R/:</strong></p>
+<ul>
+<li><p>Como se mencionó anteriormente, al replicar la Tabla 2 del paper, se encontraron resultados consistentes. Tal como concluyen los autores, no hay evidencia de efectos significativos ni en nacimientos de niños vivos, ni en embarazos, ni en el uso de anticonceptivos. Aunque sí hay evidencia de que las mujeres del grupo de tratamiento usaron más los cupones que las del grupo de control. Lo anterior, como se menciona en el paper es un indicio de que las mujeres que redimieron los cupones ya eran usuarias de los anticonceptivos y probablemente los hubieran comprado aún si solo tenían el cupón del 10%. En ese orden de ideas, el efecto observado se puede dar también porque algunas de las mujeres del grupo control que ya usaban anticonceptivos, los compraban en lugares diferentes a los centros de salud seleccionados, o tenían implantes que no requerían cambios. Al final, no se vio una diferencia en que nuevas usuarias iniciaran a consumir, significativamente, más anticonceptivos por tener acceso gratis.</p></li>
+<li><p>En primer lugar, como ya demostramos, la aleatorización estratificada fue correcta, los grupos quedaron balanceados y no hay evidencia de diferencias significativas por resultado de atrición entre el <em>baseline</em> y el <em>endline</em> entre grupos. En ese sentido, en un primer lugar, los resultados son confiables y el diseño del experimento es robusto. Ahora, los autores presentan estimaciones adicionales analizado grupos en los que posiblemente la intervención debió haber tenido efectos significativos, controlando por las intervenciones adicionales (debates en las aldeas e información entregada individualmente), y por los sesgos preexistentes de las participantes. En términos generales, los autores concluyen que los resultados de las estimaciones en las subpoblaciones del experimento no difieren significativamente de los resultados presentados en la Tabla 2.</p>
+<p>Únicamente, en la Tabla 6, se observa un efecto significativo en los nacimientos de niños vivos a un nivel de significancia del 90%, resultado sobre el cual comentan que si bien se podría interpretar que en ausencia de intervenciones a la demanda, se hubieran visto resultados significativos en la disminución de nacimientos, no obstante, como las intervenciones en sí no resultaron estadísticamente significativas y el efecto de todas maneras es moderado, se toman los resultados de la Tabla 2 debido a su mayor poder estadístico.</p>
+<p>Finalmente, los autores concluyen que las tasas de fertilidad se determinan principalmente por factores económicos arraigados, los cuales pueden determinar un mayor deseo por parte de las familias de tener más hijos para el cuidado de los padres o para trabajar las tierras de la familia. Este efecto se ve reflejado en las diferentes estimaciones tanto para la muestra completa, como para las submuestras, incluyendo aquellas que analizaban a las mujeres que habían respondido que tenían una necesidad insatisfecha por anticonceptivos o que tenían limitaciones financieras para conseguirlos.</p>
+<p>Por todo lo anterior, se puede afirmar que los resultados son suficientemente robustos para hablar de validez interna. Por los argumentos que presentan sobre la selección de la muestra, incluso se podría considerar que los resultados podrían extrapolarse a nivel nacional en Burkina Faso. Sin embargo, aunque se plantea que es un efecto que puede ser extrapolado a nivel internacional y que no es un caso aislado de los países de esa región, consideramos que no hay evidencia suficiente para generalizar la conclusión más allá del país en el que se realizó el experimento.</p></li>
+</ul>
 </section>
 </section>
 

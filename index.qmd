@@ -1,7 +1,10 @@
 ---
 title: "Taller 1. Econometría Avanzada"
+subtitle: "Profesor: Manuel Fernández - Universidad de los Andes"
 author: 
-  - "Daniel Ricardo Amaya Alba" 
+  - "Daniel Ricardo Amaya Alba - 202023156" 
+  - "Mauricio J. Aragón R. - 201729052"
+abstract: "Nota: Para el desarrollo de este taller se usó IA para garantizar el ajuste del formato de las tablas a PDF con la librería kableExtra y model summary pues al reportar los resultados en ocasiones obteniamos un errore en el codigo. Por ejemplo en el punto 4 del tercer ejercicio duramos bastante tiempo intentando entender como solucionar un problema al usa rbind con los outputs obtenidos con la funcion feols del paquete fixest. Para generar el bucle del punto 7 del ejercicio dos tambien nos apollamos en la IA, intentando comprender la sintaxis del proceso. En cuanto a notación es muy probable que se identifiquen incosistencias."
 format: 
   html:
     theme: flatly
@@ -21,6 +24,7 @@ editor:
   markdown: 
     wrap: 72
 ---
+
 
 # **Primer Ejercicio**
 
@@ -112,7 +116,7 @@ estudiante $i$ su resultado dado que participo $D_i = 1$ y su
 contrafactual $D_i = 0$.
 
 Es por lo anterior que para trabajar con nuestra muestra utilizaremos no
-el resultado del inddividuo $i$ sino que trabajaremos con el promedio de
+el resultado del individuo $i$ sino que trabajaremos con el promedio de
 los resultados potenciales, es decir buscaremos estumar los efectos
 promedio, bien sea el efecto promedio del tramaiento $ATE$, el efecto
 promedio del tratamiento en los tratados $ATT$ y el efecto promedio del
@@ -122,7 +126,7 @@ tratamiento en los no tratados $ATU$.
 
 **R/:**
 
-El $ATE$ se define como el efectro promedio del tratamiento:
+El $ATE$ se define como el efecto promedio del tratamiento:
 
 $$τ_{ATE} = E[Y_i(1)-Y_i(0)]$$ $$τ_{ATE} = E[Y_i(1)]-E[Y_i(0)]$$
 
@@ -132,26 +136,26 @@ población de estudiantes de tercer grado hubieran asistido a las aulas
 tecnológicas, frente al promedio si ninguno hubiera asisitido a dichas
 aulas.
 
-El $ATT$ se define como el efectro promedio del tratamiento en los
+El $ATT$ se define como el efecto promedio del tratamiento en los
 tratados:
 
 $$τ_{ATT} = E[Y_i(1)-Y_i(0)| D_i= 1]$$
 $$τ_{ATT} = E[Y_i(1)| D_i=1]-E[Y_i(0)| D_i=1]$$
 
 En este caso representa la diferencia en el puntaje promedio del test de
-habilidades cognitivas del salon que fue asignado a las aulas
+habilidades cognitivas del salón que fue asignado a las aulas
 tecnológicas y el resultado que esos mismos estudiantes hubieran
 obtenido si no hubieran sido asignados. Es decir, en este caso estamos
 restringiendo el efecto promedio al grupo que fue tratado.
 
-El $ATU$ se define como el efectro promedio del tratamiento en los no
+El $ATU$ se define como el efecto promedio del tratamiento en los no
 tratados:
 
 $$τ_{ATU} = E[Y_i(1)-Y_i(0)| D_i= 0]$$
 $$τ_{ATU} = E[Y_i(1)| D_i=0]-E[Y_i(0)| D_i=0]$$
 
 En este caso representa la diferencia en el puntaje promedio del test de
-habilidades cognitivas del salon que no fue asignado a las aulas
+habilidades cognitivas del salón que no fue asignado a las aulas
 tecnológicas y el resultado que esos mismos estudiantes hubieran
 obtenido si hubieran sido asignados. Es decir, en este caso estamos
 restringiendo el efecto promedio al grupo que no fue tratado.
@@ -176,7 +180,7 @@ $$
 \tau_{naive} &= E[Y_i | D_i=1] - E[Y_i | D_i=0] \\
 \tau_{naive} &= E[Y_i(1) | D_i=1] - E[Y_i(0) | D_i=0] + \color{red}{E[Y_i(0) | D_i=1]} - \color{red}{E[Y_i(0) | D_i=1]}\\
 \tau_{naive} &= \underbrace{E[Y_i(1) | D_i=1]- \color{red}{E[Y_i(0) | D_i=1]}}_{ATT} +\color{red}{E[Y_i(0) | D_i=1]} - E[Y_i(0) | D_i=0]\\
-\tau_{naive} &= ATT  +\color{red}{E[Y_i(0) | D_i=1]} - E[Y_i(0) | D_i=0]
+\tau_{naive} &= ATT  +\underbrace{\color{red}{E[Y_i(0) | D_i=1]} - E[Y_i(0) | D_i=0]}_{\text{Selection Bias}}
 \end{aligned}
 $$
 
@@ -189,9 +193,9 @@ $$\tau_{naive} = ATU + E[Y_i(1) | D_i=1]-E[Y_i (1)|D_i =0]$$
 $$
 \begin{aligned}
 \tau_{naive} &= E[Y_i | D_i=1] - E[Y_i | D_i=0] \\
-\tau_{naive} &= E[Y_i(1) | D_i=1] - E[Y_i(0) | D_i=0] + \color{red}{E[Y_i(0) | D_i=1]} - \color{red}{E[Y_i(0) | D_i=1]}\\
-\tau_{naive} &= \underbrace{E[Y_i(1) | D_i=0]- \color{red}{E[Y_i(0) | D_i=0]}}_{ATU} +\color{red}{E[Y_i(1) | D_i=1]} - E[Y_i(1) | D_i=0]\\
-\tau_{naive} &= ATU  +\color{red}{E[Y_i(1) | D_i=1]} - E[Y_i(1) | D_i=0]
+\tau_{naive} &= E[Y_i(1) | D_i=1] - E[Y_i(0) | D_i=0] + \color{red}{E[Y_i(1) | D_i=0]} - \color{red}{E[Y_i(1) | D_i=0]}\\
+\tau_{naive} &= \underbrace{\color{red}{E[Y_i(1) | D_i=0]} - E[Y_i(0) | D_i=0]}_{ATU} +E[Y_i(1) | D_i=1] - \color{red}{E[Y_i(1) | D_i=0]}\\
+\tau_{naive} &= ATU  +\underbrace{E[Y_i(1) | D_i=1] - \color{red}{E[Y_i(1) | D_i=0]}]}_{\text{Heterogeneity Bias}}
 \end{aligned}
 $$
 
@@ -201,7 +205,7 @@ $$ ATE = \pi ATT + (1-\pi) ATU$$
 
 **R/:** Esta demostración es diferente a las anteriores, es menos
 intuitiva. Sin embargo, podemos aplicar la ley de esperanzas iteradas a
-la definición de $ATE$:
+la definición de $ATE$. Recordemos que la ley de esperanzas iteradas $E[X]=E[E[X|Y]]$, de tal fomra tenemos: 
 
 $$
 \begin{aligned}
@@ -240,8 +244,8 @@ Esto ocurre cuando el resultado promedio de los estudiantes tratados
 $E[Y_i(1)|D_i=1]$ es igual al resultado promedio que hubieran obtenido
 los estudiantes del grupo de control si se les hubiera asignado el
 tratamiento $E[Y_i(1)|D_i=0]$. Esto quiere decir que el efecto de las
-computadoras sería el mismo, independientemente dle salon que hubiera
-sido seleccionado.
+computadoras sería el mismo, independientemente del salón que hubiera
+sido seleccionado. **PREGUNTAR A MANUEL**.
 
 **c).**
 
@@ -265,7 +269,7 @@ tenemos certeza al respecto de la comparabilidad de los grupos (sesgo de
 selección).
 
 Teniendo como base la descomposicón que se hace en libro Causal
-Inference: The Mixtape de Scott Cunningham podemos demostrar la relación
+Inference: The Mixtape Scott Cunningham podemos demostrar la relación
 entre estos parametros: 
 
 $$
@@ -286,7 +290,7 @@ del sesgo:
 $$
 \begin{aligned}
 \tau_{naive} &= ATT + \underbrace{E[Y_i(0) | D_i=1]-E[Y_i (0)|D_i =0]}_{\text{Selection Bias}}\\
-\tau_{naive} &= ATE+ \underbrace{(1-\pi).(ATT-ATU)}_{\text{Heterogenity Bias}} + \underbrace{E[Y_i(0) | D_i=1]-E[Y_i (0)|D_i =0]}_{\text{Selection Bias}}
+\tau_{naive} &= ATE+ \underbrace{(1-\pi).(ATT-ATU)}_{\text{Heterogeneity Bias}} + \underbrace{E[Y_i(0) | D_i=1]-E[Y_i (0)|D_i =0]}_{\text{Selection Bias}}
 \end{aligned}
 $$ 
 Por lo tanto en nuestro caso , es posible que el salón elegido fuera
@@ -450,7 +454,7 @@ Por lo tanto, para que nuestro estimador $\hat\tau_{DM}$ se insesgado
 necesitamos evitar el sesgo de selección lo cual se logra por medio de
 la aleatorización garantizando que $(Y_i(1),Y_i(0))\perp D_i$
 
-Ahora veamos esto como lo podemos obtener tambien de la recta de
+Ahora veamos esto como lo podemos obtener también de la recta de
 regresión. Recordemos que nuestra linea de regresión es:
 
 $$
@@ -480,12 +484,12 @@ tal que:
 
 $$E[\hat\tau_{DM}]=\tau+ \underbrace{E[U_i|D_i=1]-E[U-i|D_i=0]}_{\text{Selection Bias}}$$
 
-Por lo tanto en terminos de la recta de regresión el supuesto de
+Por lo tanto en términos de la recta de regresión el supuesto de
 independencia $(Y_i(1),Y_i(0))\perp D_i$ se traduce en el supuesto de
 exogenidad $E[U_i| D_i]=0$. Esto nos señala que, para tener un estimador
 insesgado, no debemos tener factores no observables correlacionados con
 el tratamiento que afecten el resultado, haciendo a los grupos
-diferentes."
+diferentes.
 
 ## Punto 4
 
@@ -537,6 +541,8 @@ $$
 
 que es lo mismo que $\hat\tau_{DM} \overset{p}{\longrightarrow} \mathbb{E}[Y_{i}(1) - Y_{i}(0) | D_i = 1]$
 
+**Entonces respecto a la definición intitutiva y explicación de la propieda de consistencia, podemos decir que esta permite que el efecto recuperado a nivel muestral sea una aproximación que converge en probabilidad al efecto poblacional, lo que permite estar seguros de que nos estamos aproximando al efecto real.** 
+
 # **Segundo Ejercicio**
 
 Tal como señalan [Abadie et al. (2022)](https://academic.oup.com/qje/article-abstract/138/1/1/6750017), los errores estándar clusterizados han adquirido un rol central en el trabajo empírico y esto no es casualidad. Si bien una parte sustancial de los esfuerzos de los investigadores se concentra en la obtención de estimadores consistentes e insesgados, resulta también fundamental poder realizar inferencia estadística válida sobre dichos estimadores. En este contexto, una de las prácticas más extendidas en la literatura empírica es el reporte de errores estándar clusterizados. No obstante, su uso plantea varias preguntas recurrentes en la práctica: ¿en qué situaciones es apropiado utilizar este tipo de errores estándar?, ¿cuándo tienen un impacto importante sobre la inferencia estadística? y ¿a qué nivel debería realizarse la clusterización?
@@ -553,19 +559,19 @@ Antes de abordar las decisiones empíricas que deberá tomar en su investigació
 
 **Realice un análisis crítico de los supuestos de homocedasticidad y no-correlación del término de error. Para ello:**
 
-* Defina ambos supuestos, tanto desde un punto de vista matemático como intuitivo, en el contexto del caso de estudio.
+* **Defina ambos supuestos, tanto desde un punto de vista matemático como intuitivo, en el contexto del caso de estudio.**
 
-* Discuta si resulta razonable asumir el cumplimiento de estos supuestos dada la pregunta de investigación. Justifique su respuesta utilizando un ejemplo intuitivo para cada supuesto.
+* **Discuta si resulta razonable asumir el cumplimiento de estos supuestos dada la pregunta de investigación. Justifique su respuesta utilizando un ejemplo intuitivo para cada supuesto.**
 
 **R/:**
 
-El supuesto de homocedasticidad implica que $E[e^{2}_i|x]=σ^2$ que tambien podría ser visto como $E[e^{2}_i|D_i=1]=σ^2$ y $E[e^{2}_i|D_i=0]=σ^2$, lo que quiere decir que la varianza de los errores es constante para cada estudiante independientemente de sus caracteristicas ($X$). En este caso, quiere decir que la dispersión en los resultados de la prueba SAT para cada estudiante es la misma para el grupo de estudiantes tratados y no tratados.
+El supuesto de homocedasticidad implica que $E[e^{2}_i|X]=σ^2$ que también podría ser visto como $E[e^{2}_i|D_i=1]=σ^2$ y $E[e^{2}_i|D_i=0]=σ^2$, lo que quiere decir que la varianza de los errores es constante para cada estudiante, independientemente de sus caracteristicas ($X$). En este caso, quiere decir que la dispersión en los resultados de la prueba SAT para cada estudiante es la misma para el grupo de estudiantes tratados y no tratados.
 
-Por otro lado, el supuesto de no-correlación implica que $E[e_ie_j]= 0$. Esto quiere decier que conocer el error del estudiante $i$ no me dice nada al respecto del resultado del estudiante $j$. Es decir, si a un estudiante le va muy bien en la prueba, por algun factor diferente al tratamiento,  eso no quiere decir que a otro estudiante le vaya a ir igual de bien. Es decir, si un estudiante el dia del examen se desperto con dolor de cabeza, eso no nos dice nada respecto de otros estudiantes.  
+Por otro lado, el supuesto de no-correlación implica que $E[e_ie_j]= 0$. Esto quiere decier que conocer el error del estudiante $i$ no me dice nada al respecto del resultado del estudiante $j$. Es decir, si a un estudiante le va muy bien en la prueba, por algun factor diferente al tratamiento,  eso no quiere decir que a otro estudiante le vaya a ir igual de bien. Es decir, si un estudiante el día del examen se despertó con dolor de cabeza, eso no nos dice nada respecto de otros estudiantes.  
 
-El supuesto de homocedasticidad resulta poco plausible en este escenario. Tal como lo señalan Angrist y Pischke (2009) en la vida real, aunque no conocemos la $CEF$, es viable pensar que esta no es lineal necesarimente, por lo que el hecho que no sea lineal ya va a generar por si mismo que tengamos variabilidad en la forma en que la línea de regresión se aproxima a la $CEF$. Así mismo, hay que tener en cuenta que una de nuestras variables dependientes es binaria (asístencia a la universidad), de acuerdo con los autores mencionados, esto anula el supusto de homocedasticidad porque por simple construcción va a haber variación en los errores.
+El supuesto de homocedasticidad resulta poco plausible en este escenario. Tal como lo señalan Angrist y Pischke (2009) en la vida real, aunque no conocemos la $CEF$, es viable pensar que esta no es lineal necesariamente, por lo que el hecho que no sea lineal ya va a generar por si mismo que tengamos variabilidad en la forma en que la línea de regresión se aproxima a la $CEF$. Así mismo, hay que tener en cuenta que una de nuestras variables dependientes es binaria (asístencia a la universidad), de acuerdo con los autores mencionados, esto anula el supuesto de homocedasticidad porque por simple construcción va a haber variación en los errores.
 
-Por otro lado, Abadie et al.(2023) señalan que el ajuste por cluster de errores estandar se debe hacer por nivel de muestreo y de asignación de tratamiento. En este caso el tratamiento fue asignado por salones, por lo que no solo no deberíamos asumir errores homocedasticos sino aplicar cluster. Esto tambien implica que debemos ser concientes de que es muy probable que el supuesto de no-correlación  $E[e_ie_j]= 0$ no se cumpla, pues en este caso pueden haber factores no observados en cada salon que si correlaciónen los resultados del estudiante $i$ con el estudiante $j$ que pertenecen al mismo salon, lo que vimos formalmente en clase como $E[e_{gi}e_{gh}]\neq 0$. Por ejemplo, si el profesor de un salón específico se enferma o, por el contrario, posee una motivación excepcional independientemente de su raza, estos factores afectarán simultáneamente el término de error de todos los estudiantes de ese curso, generando una correlación intra-clúster que debe ser corregida. 
+Por otro lado, Abadie et al.(2023) señalan que el ajuste por cluster de errores estándar se debe hacer por nivel de muestreo y de asignación de tratamiento. En este caso el tratamiento fue asignado por salones, por lo que no solo no deberíamos asumir errores homocedasticos sino aplicar cluster. Esto también implica que debemos ser cocientes de que es muy probable que el supuesto de no-correlación  $E[e_ie_j]= 0$ no se cumpla, pues en este caso pueden haber factores no observados en cada salón que si correlaciónen los resultados del estudiante $i$ con el estudiante $j$ que pertenecen al mismo salón, lo que vimos formalmente en clase como $E[e_{gi}e_{gh}]\neq 0, \forall i\neq h$. Por ejemplo, si el profesor de un salón específico se enferma o, por el contrario, posee una motivación excepcional independientemente de su raza, estos factores afectarán simultáneamente el término de error de todos los estudiantes de ese salón, generando una correlación intra-clúster que debe ser corregida. 
 
 
 ## Punto 2
@@ -578,11 +584,11 @@ $$Y_i = \beta X_i + \varepsilon_i$$
 
 **Donde $X_i$ es una variable determinística. Determine la varianza del estimador de $\beta$ bajo los siguientes escenarios:**
 
-* **Caso 1:** Se cumplen los supuestos de homocedasticidad y no-correlación del término de error.
-* **Caso 2:** Se cumple el supuesto de no-correlación, pero existe heterocedasticidad.
-* **Caso 3:** Existe heterocedasticidad y correlación entre las características no-observadas de los individuos que asisten al mismo colegio.
+* **Caso 1: Se cumplen los supuestos de homocedasticidad y no-correlación del término de error.**
+* **Caso 2: Se cumple el supuesto de no-correlación, pero existe heterocedasticidad.**
+* **Caso 3: Existe heterocedasticidad y correlación entre las características no-observadas de los individuos que asisten al mismo colegio.**
 
-**Para cada caso, identifique el estimando poblacional correspondiente y proponga un estimador adecuado de la varianza. Justifique brevemente su respuesta.**
+**Para cada caso, identifique el estimando población correspondiente y proponga un estimador adecuado de la varianza. Justifique brevemente su respuesta.**
 
 **R/:**
 
@@ -610,7 +616,7 @@ Ahora veamos la varianza en cada uno de los casos:
 
 el caso nos plantea que $Var(e_i|X)=\sigma^2$ y que $E[e_ie_j]= 0, ∀i\neq j$.
 
-Para encontrar la varianza peimro organicemos remplazando $Y_i$:
+Para encontrar la varianza primero organicemos remplazando $Y_i$:
 
 
 $$\hat\beta= \frac{∑_{i=1}^N ((\beta X_i+e_i) X_i)}{∑_{i=1}^N X_i^2} $$
@@ -632,7 +638,7 @@ Aplicamos la propiedad de la varianza $Var(aX+b)=a^2Var(X)$ y que cuando hay dis
 
 $$\operatorname{Var}(\hat\beta|X)= \operatorname{Var}\left( \frac{∑_{i=1}^N X_ie_i}{∑_{i=1}^N X_i^2};\middle|X \right)$$
 $$\operatorname{Var}(\hat\beta|X)= \frac{1}{\left(∑_{i=1}^N X_i^2\right)^2}\operatorname{Var}\left(∑_{i=1}^N X_ie_i;\middle|X \right)$$
-$$\operatorname{Var}(\hat\beta|X)= \frac{1}{\left(∑_{i=1}^N X_i^2\right)^2}\left[∑_{i=1}^N X_i^2\operatorname{Var}(e_i|X)+ \underbrace{\sum_{i=1}^N\sum_{i\neq j}^N\operatorname{Cov}(X_ie_iX_je_j)}_{0}\right] $$ 
+
 $$\operatorname{Var}(\hat\beta|X)= \frac{1}{\left(∑_{i=1}^N X_i^2\right)^2}\left[∑_{i=1}^N X_i^2\operatorname{Var}(e_i|X)+ \sum_{i=1}^N\sum_{i\neq j}^NX_iX_j\underbrace{\operatorname{Cov}(e_ie_j)}_{0}\right] $$ 
 
 
@@ -640,7 +646,7 @@ $$\operatorname{Var}(\hat\beta|X)= \frac{1}{\left(∑_{i=1}^N X_i^2\right)^2}∑
 
 $$\operatorname{Var}(\hat\beta|X)= \frac{\sigma^2}{∑_{i=1}^N X_i^2}$$
 
-Una vez obtenido nuestro estimando, como no conocemos $\sigma^2$ usamos su estimador $\hat\sigma^2$. Por lo tanto nuestro estimador de la varianza es:
+Una vez obtenido nuestro estimandor, como no conocemos $\sigma^2$ usamos su estimador $\hat\sigma^2$. Por lo tanto nuestro estimador de la varianza es:
 
 $$
 \widehat{\operatorname{Var}(\hat{\beta})} = \frac{\widehat{\sigma}^2}{\sum_{i=1}^{N} X_i^2}
@@ -651,7 +657,7 @@ $$\hat\sigma^2= \frac{∑_{i=1}^N e_i^2}{N-\underbrace{K}_{\text{en este caso = 
 
 * **Caso 2:** Se cumple el supuesto de no-correlación, pero existe heterocedasticidad.
 
-Este caso nos plantea que que $\operatorname{Var}(e_i|x_i)=\sigma^2_i$ y que $E[e_ie_j]= 0, ∀i\neq j$. Entonces: 
+Este caso nos plantea que que $\operatorname{Var}(e_i|X)=\sigma^2_i$ y que $E[e_ie_j]= 0, ∀i\neq j$. Entonces: 
 
 $$\operatorname{Var}(\hat\beta|X)= \frac{1}{\left(∑_{i=1}^N X_i^2\right)^2}\left[∑_{i=1}^N X_i^2\operatorname{Var}(e_i|X)+ \sum_{i=1}^N\sum_{i\neq j}^NX_iX_j\underbrace{\operatorname{Cov}(e_ie_j)}_{0}\right] $$
 
@@ -673,7 +679,7 @@ Donde $\hat e_i = (Y_i-\hat\beta X_i)$. Es importante tener en cuenta que  no po
 
 * **Caso 3:** Existe heterocedasticidad y correlación entre las características no-observadas de los individuos que asisten al mismo colegio.
 
-Este caso nos plantea que que $\operatorname{Var}(e_{gi}|X)=\sigma^2_{gi}$, que existe correlación dentro de los grupostal que $E[e_{gi}e_{gj}]\neq 0$ para estudiantes del mismo colegio, pero hay  independencia entre coelgios $E[e_{gi}e_{hj}]= 0$.
+Este caso nos plantea que que $\operatorname{Var}(e_{gi}|X)=\sigma^2_{gi}$, que existe correlación dentro de los grupos tal que $E[e_{gi}e_{gj}]\neq 0$ para estudiantes del mismo colegio, pero hay  independencia entre coelgios $E[e_{gi}e_{hj}]= 0$.
 
 entonces:
 
@@ -713,7 +719,7 @@ $$
 =
 \frac{\sum_{g=1}^{G}
 E\left[
-\left( \sum_{i \in g} X_{gi} e_{gi};\middle|\; X \right)^2
+\left( \sum_{i \in g} X_{gi} e_{gi} \middle|\; X \right)^2
 \right]}
 {\left(\sum_{i=1}^{N} X_i^2\right)^2}
 $$
@@ -786,7 +792,7 @@ soluciona el problema porque ordena y agrupa las operaciones de manera correcta.
 
 Para poder entender esto, centrémonos de nuevo el numerador $\sum_{g=1}^{G} \left( \sum_{i \in g} X_{gi} \hat e_{gi} \right)^2$.
 
-En primer lugar, calcula la suma de los productos cruzados para cada colegio $g$. En este caso, al ser la suma de cada colegio (local), se evita que la condición de ortogonalidad tenga efecto, pues no es la suma total de los productos; un colegio puede tener contribuciones positivas y otro negativas a los errores. Luego, al elevar eso al cuadrado, convertimos esos balances positivos y negativos en estrictamente positivos. Finalmente, aplicamos la sumatoria de todos los colegios, logrando así capturar la verdadera variabilidad intra-clúster y respetando la independencia entre colegios.
+En primer lugar, calcula la suma de los productos cruzados para cada colegio $g$. En este caso, al ser la suma de cada colegio, se evita que la condición de ortogonalidad tenga efecto, pues no es la suma total de los productos; un colegio puede tener contribuciones positivas y otro negativas a los errores. Luego, al elevar eso al cuadrado, convertimos esos balances positivos y negativos en estrictamente positivos. Finalmente, aplicamos la sumatoria de todos los colegios, logrando así capturar la verdadera variabilidad intra-clúster y respetando la independencia entre colegios.
 
 ## Punto 4
 
@@ -831,13 +837,13 @@ $$
 
 Como se puede notar, el término de la izquierda es la expresión del estimador dos, que reconoce la heterocedasticidad.
 
-Por otro lado, al verlo, se nota que es la parte del estimador de White **más** otra cosa, que representa la correlación intracluster. Por lo tanto, al permitir la correlación intracluster (generalmente positiva), solo viendo la ecuación podemos notar que la varianza va a ser mayor con el estimador de cluster.
+Por otro lado, al verlo, se nota que es la parte del estimador de White **más** otra cosa, que representa la correlación intracluster. Por lo tanto, al permitir la correlación intracluster, solo viendo la ecuación podemos notar que la varianza va a ser mayor con el estimador de cluster.
 
-Habiendo adquirido una mayor claridad sobre la teoría detrás de los errores estándar clusterizados, usted procede a intentar replicar algunos de los resultados del trabajo de [Gershenson et al. (2022)](https://www.aeaweb.org/articles?id=10.1257/pol.20190573), integrando los conocimientos sobre errores estándar clusterizados desarrollados en los incisos anteriores.  
+**Habiendo adquirido una mayor claridad sobre la teoría detrás de los errores estándar clusterizados, usted procede a intentar replicar algunos de los resultados del trabajo de [Gershenson et al. (2022)](https://www.aeaweb.org/articles?id=10.1257/pol.20190573), integrando los conocimientos sobre errores estándar clusterizados desarrollados en los incisos anteriores.**  
 
-En particular, recuerde que el experimento se llevó a cabo sobre estudiantes de kínder de raza negra y que la exposición a profesores de distinta raza fue aleatorizada *dentro de cada colegio*, asignando estudiantes y docentes a diferentes salones. Una ilustración intuitiva de este contexto puede verse en la serie *Abbott Elementary*, que retrata un colegio con una población estudiantil predominantemente negra cuyos docentes pertenecen a distintas razas. El experimento se implementó en múltiples condados y estados de E.E.U.U.  
+**En particular, recuerde que el experimento se llevó a cabo sobre estudiantes de kínder de raza negra y que la exposición a profesores de distinta raza fue aleatorizada *dentro de cada colegio*, asignando estudiantes y docentes a diferentes salones. Una ilustración intuitiva de este contexto puede verse en la serie *Abbott Elementary*, que retrata un colegio con una población estudiantil predominantemente negra cuyos docentes pertenecen a distintas razas. El experimento se implementó en múltiples condados y estados de E.E.U.U. ** 
 
-Bajo este diseño, los estudiantes de kínder de raza negra fueron expuestos de manera aleatoria a profesores de la misma raza o de razas distintas *condicional en el colegio*. En consecuencia, haciendo uso de sus conocimientos sobre diseños experimentales, usted estima la siguiente ecuación:
+**Bajo este diseño, los estudiantes de kínder de raza negra fueron expuestos de manera aleatoria a profesores de la misma raza o de razas distintas *condicional en el colegio*. En consecuencia, haciendo uso de sus conocimientos sobre diseños experimentales, usted estima la siguiente ecuación:**
 
 $$
 Y_i = \beta_0 + \beta_1 D_i + \varepsilon_i.
@@ -967,7 +973,7 @@ $$
 \sum_{g=1}^{G} \left[ \left( \sum_{i \in g} (D_{gi}-\bar{D})^2 \hat e_{gi}^2 \right) + \left(\sum_{i \in g}\sum_{j\in g, j \neq i} (D_{gi}-\bar{D}) (D_{gj}-\bar{D}) \hat e_{gi} \hat e_{gj} \right) \right]
 $$
 
-Veamos, el primer mecanismo asociado a la varianza individual. Como ya mencionamos  Se observa un incremento si hay factores residualesgrandes no explicados por el tratamiento. Por ejemplo, un shock exógeno, como una ola de desempleo o divorcios en las familias de un grupo específico de estudiantes, aumentaría sus residuos individuales inflando la varianza total.
+Veamos, el primer mecanismo asociado a la varianza individual. Como ya mencionamos, se observa un incremento si hay factores residuales grandes no explicados por el tratamiento. Por ejemplo, un shock exógeno, como una ola de desempleo o divorcios en las familias de un grupo específico de estudiantes, aumentaría sus residuos individuales inflando la varianza total.
 
 Por otro lado, en cuanto a la correlación intra-cluster, sabemos que a mayor correlación entre compañeros de colegio, mayor varianza. Supongamos que el colegio $g=1$ sufrió un fallo eléctrico y se quedó sin aire acondicionado durante los exámenes. Este factor ambiental afecta negativamente a todos los estudiantes de ese colegio simultáneamente. Sus errores estarán correlacionados positivamente, incrementando drásticamente el segundo término del numerador.
 
@@ -1049,9 +1055,9 @@ modelsummary(
 
 Siguiendo a Angrist y Pischke y los apuntes de Hansen, y considerando que la unidad de colegio se encuentra anidada dentro de condado y este a su vez en estado, la teoría predice el comportamiento de la varianza. Siempre que exista una correlación intra-cluster positiva a un nivel superior (es decir, que los colegios dentro del mismo condado o estado compartan choques comunes), la varianza estimada clusterizada a estos niveles debería ser mayor que la varianza robusta o clusterizada a niveles inferiores
 
-Respecto a la validez de esta inferencia, Angrist menciona que la corrección por cluster funciona adecuadamente cuando el número de grupos es suficientemente grande $G\approx 42$. Hansen advierte que con un G pequeño, los errores estándar clusterizados pueden volverse imprecisos y sufrir de un sesgo hacia abajo.
+Respecto a la validez de esta inferencia, Angrist menciona que la corrección por cluster funciona adecuadamente cuando el número de grupos es suficientemente grande $G\approx 42$. Hansen advierte que con un $G$ pequeño, los errores estándar clusterizados pueden volverse imprecisos y sufrir de un sesgo hacia abajo.
 
-En la práctica econométrica, se sugiere   clusterizar al nivel más agregado donde exista correlación de los errores o donde se haya asignado el tratamiento. Si al subir el nivel de clusterización  los errores estándar aumentan, estamos corrigiendo un sesgo negativo y evitando falsos positivos. Por otro lado, si los errores estándar permanecen estables al subir de nivel, es indica que no hay una correlación espacia a ese nivel. Sin embargo, considero que debe ser una buena práctica reportar estos niveles superiores como prueba de robustez por transparencia con los resultados.
+En la práctica econométrica, se sugiere   clusterizar al nivel más agregado donde exista correlación de los errores o donde se haya asignado el tratamiento. Si al subir el nivel de clusterización  los errores estándar aumentan, estamos corrigiendo un sesgo negativo y evitando falsos positivos. Por otro lado, si los errores estándar permanecen estables al subir de nivel, eso indica que no hay una correlación espacial a ese nivel. Sin embargo, consideramos que debe ser una buena práctica reportar estos niveles superiores como prueba de robustez por transparencia con los resultados.
 
 
 Ahora veamos la estimación del modelo tomando como variable $Y_i$ el puntaje en matematicas en la prueba SAT usando errores robustos para heterocedasticidad y errores clusterizados a nivel de  los modelos con errores robustos para heterocedasticidad y con cluster de errores estandar a nivel i) colegio, ii) condado y iii) estado: 
@@ -1120,9 +1126,9 @@ modelsummary(
 
 ```
 
-El resultado de nuestra estimación da cuenta de lo que dijimos anteriormente. El estimador puntual es idéntico en todos los casos $4.607$ con le mismo nivel de significacia estadistica $p<0.001$. Tambien podemos ver que  el error estándar aumenta  a $0.065$ cuando aplicamos cluste de colegio y a  $0.067$ cuando aplicamos cluster de condado. No obstante al agrupar por estado los eerores estandar caen $0.060$. 
+El resultado de nuestra estimación da cuenta de lo que dijimos anteriormente. El estimador puntual es idéntico en todos los casos $4.607$ con le mismo nivel de significacia estadistica $p<0.001$. Tambien podemos ver que  el error estándar aumenta  a $0.065$ cuando aplicamos cluster de colegio y a  $0.067$ cuando aplicamos cluster de condado. No obstante al agrupar por estado los eerores estandar caen $0.060$. 
 
-Entoces podemos decir que el incremento de colegio a condado da cuenta de la existencia de correlación positiva entre colegios del mismo condado, lo que nos indica que  el cluster a nivel Condado sería la estimación más adecuada sobreto si tenemos en cuenta que en nuestra muestra $G>500$ para el nivel de condado. Por su parte la disminución cuando se aplica cluster a nivel de estado seguramente tiene que ver con un sesgo en el calculo de los errores asociado a un $G=50$ que si bien es superior al aproximado mencionado por Angrist, como explica Hansen en sus notas, aún hay mucho por aprender sobre el correcto nivel para aplicar la correcta clusterización de los errores estandar. 
+Entoces podemos decir que el incremento de colegio a condado da cuenta de la existencia de correlación positiva entre colegios del mismo condado, lo que nos indica que  el cluster a nivel Condado sería la estimación más adecuada sobretodo si tenemos en cuenta que en nuestra muestra  $G>500$ para el nivel de condado. Por su parte la disminución cuando se aplica cluster a nivel de estado seguramente tiene que ver con un sesgo en el calculo de los errores asociado a un $G=50$ que si bien es superior al aproximado mencionado por Angrist, como explica Hansen en sus notas, aún hay mucho por aprender sobre el correcto nivel para aplicar la correcta clusterización de los errores estandar. 
 
 ## Punto 7 
 
@@ -1209,7 +1215,7 @@ population$Y <- population$school_effect * population$D
 
 #Tomando 1000 muestras y estimando modelos
 #___________________________________________________________________________
-library(fixest) #Usammos fixest por facilidad
+library(fixest) 
 
 # Semilla para replicación, ponemos nuestra propia semilla :3.
 set.seed(2896)
@@ -1217,7 +1223,7 @@ set.seed(2896)
 # Número de simulaciones.
 n_sim1 <- 1000
 
-#Definimos tamaño muestra 
+#Definimos tamaño muestra. 
 
 Tamano_muestra <- n_population*p_sample
 
@@ -1313,7 +1319,7 @@ tabla_final %>%
 
 
 ```
-Como podemos notar, el promedio de los errores estándar clusterizados es considerablemente mayor al promedio de los robustos. Esto ocurre porque los primeros capturan la correlación de los errores a nivel de colegio, evitando así la subestimación del error estándar evitando así que cometamos error tipo 1. En cuanto a la cobertura, los intervalos clusterizados incluyeron el cero el 100% de las veces, lo que confirma que son más conservadores y adecuados ante la heterogeneidad de los colegios.
+Como podemos notar, el promedio de los errores estándar clusterizados es considerablemente mayor al promedio de los robustos. Esto ocurre porque los primeros capturan la correlación de los errores a nivel de colegio, evitando así la subestimación del error estándar, evitando que cometamos error tipo 1. En cuanto a la cobertura, los intervalos clusterizados incluyeron el cero el 100% de las veces, lo que confirma que son más conservadores y adecuados ante la heterogeneidad de los colegios.
 
 Frente a la pregunta de si siempre es mejor clusterizar al nivel más agregado, la respuesta no es unívoca. Si bien clusterizar a un nivel agregado es necesario para reconocer la estructura de correlación y evitar falsos positivos, esto depende crucialmente del número de grupos ($G$) disponibles. Como sugiere la literatura, con un $G$ muy pequeño los estimadores de varianza clusterizados se vuelven sesgados e inestables, haciendo que nuestros tests de hipótesis sean poco confiables.
 
@@ -1328,7 +1334,7 @@ El comentario del referee es válido parcialmente pero su regla práctica es inc
 
 Esta aproximación conservadora resultó conveniente en nuestra investigación a nivel de colegio e incluso de condado. Como observamos en las regresiones del punto 6, en esos niveles se cuenta con un número de grupos ($G$) lo suficientemente grande para que la inferencia sea válida.
 
-Sin embargo, elevar la agregación arbitrariamente al nivel de estado demostró ser perjudicial. A ese nivel, el número de grupos $G$ cae al límite inferior recomendado por la literatura. Como evidenció nuestra regresión, esto genera inconsistencias y, en este caso específico, terminó subestimando los errores estándar en lugar de hacerlos más conservadores.Por lo tanto, el nivel de clusterización no debe elegirse a ciegas hacia arriba, sino que debe responder al diseño del muestreo a la asignación del tratamiento y la cantidad de grupos $G$ que se tiene aplicar el cluster. 
+Sin embargo, elevar la agregación arbitrariamente al nivel de estado demostró ser perjudicial. A ese nivel, el número de grupos $G$ cae al límite inferior recomendado por la literatura. Como evidenció nuestra regresión, esto genera inconsistencias y, en este caso específico, terminó subestimando los errores estándar en lugar de hacerlos más conservadores.Por lo tanto, el nivel de clusterización no debe elegirse a ciegas hacia arriba, sino que debe responder al diseño del muestreo a la asignación del tratamiento y la cantidad de grupos $G$ que se tienen para  aplicar el cluster. 
 
 # **Tercer Ejercicio**
 
@@ -1351,9 +1357,9 @@ El estudio de [Dupas et al. (2025)](https://www.aeaweb.org/articles?id=10.1257/a
 
 En la investigación entregaron cupones válidos por tres años que cubrían el 100% (subsidio total) o el 10% (grupo de comparación) del costo de cualquier método anticonceptivo moderno y servicios médicos asociados. Dado que los autores sospechaban que el costo financiero podría no ser la única barrera, introdujeron intervenciones para corregir fricciones de información en la demanda. Por un lado, proveyeron infografías sobre las tasas de mortalidad infantil locales para corregir la sobreestimación del riesgo de muerte supiniendo que al notar que la supervivencia había mejorado las familias no sentirían la necesidad de tener tantos hijos. Por otro lado, organizaron reuniones comunitarias con debates públicos y proyecciones audiovisuales para desafiar las normas sociales a favor de la natalidad y para tramitar los estigma frente a la anticoncepción.
 
-El diseño experimental consistió en tres niveles de aleatorización, empleando diferentes niveles de estratificación. En el primer nivel, se aleatorizaron 100 centros de salud, estratificando por provincia: 50 centros fueron asignados al subsidio total (100%) y los otros 50 al grupo de comparación con el subsidio del 10%. En el segundo nivel, se seleccionaron 5 aldeas por cada centro de salud, abarcando un total de 500 aldeas. Estratificando por centro de salud, tres de estas aldeas se asignaron a intervenciones grupales y dos a intervenciones individuales. Finalmente, en el tercer nivel y dentro de las aldeas de intervención individual, los hogares se aleatorizaron (estratificando por aldea) en tres brazos: información sobre mortalidad infantil, proyección privada del video de edu-entretenimiento, o un grupo de control puro. A traves de este diseño lograron aislar los efectos estimando así el efecto del subsidio,  de las intervenciones de demanda por sí solas, y el efecto del subsidio cuando se combina con las intervenciones de demanda.
+El diseño experimental consistió en tres niveles de aleatorización, empleando diferentes niveles de estratificación. En el primer nivel, se aleatorizaron 100 centros de salud, estratificando por provincia: 50 centros fueron asignados al subsidio total (100%) y los otros 50 al grupo de comparación con el subsidio del 10%. En el segundo nivel, se seleccionaron 5 aldeas por cada centro de salud (en torno a cada centro había aproximandamente 10), abarcando un total de 500 aldeas. Estratificando por centro de salud, tres de estas aldeas se asignaron a intervenciones grupales y dos a intervenciones individuales. Finalmente, en el tercer nivel y dentro de las aldeas de intervención individual, los hogares se aleatorizaron (estratificando por aldea) en tres brazos: información sobre mortalidad infantil, proyección privada del video de edu-entretenimiento, o un grupo de control puro. A traves de este diseño lograron aislar los efectos estimando así el efecto del subsidio,  de las intervenciones de demanda por sí solas, y el efecto del subsidio cuando se combina con las intervenciones de demanda.
 
-La implementación enfrentó tres principales obstaculos. En primer lugar la pendemia Covid-19 pospuso la recolección final de los datos, pues se tenia planeado el cierre a 2020 y se vieron obligados a ampliar un año. Ademas, en 2020 el gobierno de Burkina Faso anunció el lanzamiento de una política de planificación familiar gratis. Adicionalmente en 2019 se presentó un paro de trabajadores de la salud, sin embargo report que esto no afectó la provisión de servicios de acuerdo con el reporte de sus encuentas de monitoreo donde encontrar que el 92% de los centros de salud del experimento no presentaron falta de atención a los pacientes por estos motivos. Por último, cuatro centros de salud de la muestra fueron cerrados debido a condiciones de inseguridad. 
+La implementación enfrentó tres principales obstaculos. En primer lugar la pendemia Covid-19 pospuso la recolección final de los datos, pues se tenia planeado el cierre a 2020 y se vieron obligados a ampliar un año. Ademas, en 2020 el gobierno de Burkina Faso anunció el lanzamiento de una política de planificación familiar gratis. Adicionalmente en 2019 se presentó un paro de trabajadores de la salud, sin embargo reportaron que esto no afectó la provisión de servicios de acuerdo con el reporte de sus encuentas de monitoreo donde encontraron que el 92% de los centros de salud del experimento no presentaron falta de atención a los pacientes por estos motivos. Por último, cuatro centros de salud de la muestra fueron cerrados debido a condiciones de inseguridad. 
 
 ## Punto 2
 
@@ -1385,7 +1391,7 @@ Y_i(0) & \text{si } D_i = 0 \text{ (fue asignada al subsidio del 10\%)}
 
 Para cada mujer solo existe un resultado potencial que vemos de la siguiente manera: 
 $$Y_i=Y_i(1) D_i+(1-D_i) Y_i(0)$$
-- La decisión ética busca mitigar la injusticia de no otorgar nada a las mujeres del grupo control. El subsidio del 10% garantiza que todas las participantes obtengan una mejora en su acceso a la salud y actúa como reconocimiento por su tiempo al responder las encuestas. En este sentido, el efecto debe interpretarse estrictamente como el efecto marginal de ofrecer un subsidio completo frente a un subsidio pequeño.
+- La decisión ética busca mitigar la injusticia de no otorgar nada a las mujeres del grupo control. El subsidio del 10% garantiza que todas las participantes obtengan una mejora en su acceso a la salud y actúa como reconocimiento por su tiempo al responder las encuestas. En este sentido, el efecto debe interpretarse estrictamente como el efecto marginal de ofrecer un subsidio completo frente a un subsidio pequeño como lo señalan en el papper.
 
 ## Punto 3
 
@@ -1404,6 +1410,13 @@ El segundo supuesto es el de no spilovers, lo que quiere decir que el resultado 
 $$Y_i(D_i,D_{-i})=Y_i(D_i)$$
 
 El tercer supuesto es la consistencia en el tratamiento. Es decir Garantiza que el resultado empírico que observamos en los datos corresponde exactamente al resultado potencial del tratamiento y no a una doisificación del mismo. 
+
+- Este sería el supuesto de infependencia conficional 
+
+$$(Y_i(1),Y_i(0))\perp\!\!\!\perp D_i |X_i$$
+Lo que imploca que:
+
+$$E[Y_i|D_i,X_i]=E[Y_i|X_i]$$
 
 ## Punto 4
 
@@ -1517,35 +1530,38 @@ var_nombres <- c("Edad de la mujer",
                  "Necesidad de la mujer por anticonceptivos está insatisfecha", 
                  "No podría pagar por anticonceptivos si quisiera usarlos", 
                  "El hogar tiene radio")
-var_datos <- c("Edad_Mujer", "Esposo_poligamo"
-               ,"N_Hijos_desados"
-               ,"Uso_Actual_Anticoncep_Moderna"
-               ,"Insatisfaccion_Acceso_Anticoncep"
-               ,"No_puede_pagar_anticoncep"
-               ,"Hogar_Con_Radio")
+var_datos <- c("Edad_Mujer", "Esposo_poligamo", "N_Hijos_desados",
+               "Uso_Actual_Anticoncep_Moderna", "Insatisfaccion_Acceso_Anticoncep",
+               "No_puede_pagar_anticoncep", "Hogar_Con_Radio")
 
 # Creando matriz vacia para llenarla con un loop
 resultados <- matrix(ncol = 6, nrow = 0)
 
+# --- Loop Corregido ---
 for(i in 1:7) {
   m <- modelos[[i]]
   v <- var_datos[i]
   
   # Medias grupo control y tratamiento
-  media_c <- mean(baseline_sample_[[v]][baseline_sample_$D_i == 0], 
-                  na.rm = TRUE)
-  media_t <- mean(baseline_sample_[[v]][baseline_sample_$D_i == 1], 
-                  na.rm = TRUE)
+  media_c <- mean(baseline_sample_[[v]][baseline_sample_$D_i == 0], na.rm = TRUE)
+  media_t <- mean(baseline_sample_[[v]][baseline_sample_$D_i == 1], na.rm = TRUE)
+  
+  # EXTRACCIÓN SEGURA: Sacamos la tabla de coeficientes del modelo
+  tabla_coefs <- summary(m)$coeftable
+  coef_val <- tabla_coefs["D_i", "Estimate"]
+  se_val   <- tabla_coefs["D_i", "Std. Error"]
+  pval_val <- tabla_coefs["D_i", "Pr(>|t|)"]
   
   # Fila 1: Coeficiente e info
-  fila_coef <- c(var_nombres[i], round(media_c, 3), 
-                 round(media_t, 3), nobs(m), 
-                 round(coef(m)["D_i"], 3), 
-                 round(pvalue(m)["D_i"], 3))
+  fila_coef <- c(var_nombres[i], 
+                 round(media_c, 3), 
+                 round(media_t, 3), 
+                 nobs(m), 
+                 round(coef_val, 3), 
+                 round(pval_val, 3))
   
   # Fila 2: Error Estandar
-  fila_se <- c("", "", "", "", paste0("(", 
-                                      round(se(m)["D_i"], 3), ")"), "")
+  fila_se <- c("", "", "", "", paste0("(", round(se_val, 3), ")"), "")
   
   resultados <- rbind(resultados, fila_coef, fila_se)
 }
@@ -1553,27 +1569,22 @@ for(i in 1:7) {
 # Agregando el F al final de la matriz
 resultados <- rbind(resultados, 
                     c("", "", "", "", "", ""), 
-                    c("Estadístico F conjunto", "", 
-                      "", "", round(f_stat, 3), round(f_pval, 3)))
+                    c("Estadístico F conjunto", "", "", "", round(f_stat, 3), round(f_pval, 3)))
 
-# Convirtiendo a data.frame
+# Convirtiendo a data.frame garantizando que todo sea texto/número simple
 tabla_df <- as.data.frame(resultados, row.names = FALSE)
-names(tabla_df) <- c("Variable", "Control", "Tratamiento", 
-                     "N", "Coeficiente / (EE)", "Valor-p")
+names(tabla_df) <- c("Variable", "Control", "Tratamiento", "N", "Coeficiente / (EE)", "Valor-p")
 
 # 3. Construir y estilizar la tabla con kableExtra
 tabla_balance <- tabla_df %>%
   kbl(
-    col.names = c("Variable", "Control", "Tratamiento",
-                  "N", "Coeficiente / (EE)", "Valor-p"),
+    col.names = c("Variable", "Control", "Tratamiento", "N", "Coeficiente / (EE)", "Valor-p"),
     align = c("l", "c", "c", "c", "c", "c"),
     caption = "Tabla A.1: Pruebas de balance en la encuesta de línea base",
     booktabs = TRUE
   ) %>%
-  add_header_above(c(" " = 1, "Medias (Línea Base)" = 2, 
-                     " " = 1, "Diferencias" = 2)) %>%
+  add_header_above(c(" " = 1, "Medias (Línea Base)" = 2, " " = 1, "Diferencias" = 2)) %>%
   kable_styling(
-    
     latex_options = c("hold_position", "scale_down"), 
     bootstrap_options = c("hover", "condensed"),
     full_width = FALSE,
@@ -1582,7 +1593,6 @@ tabla_balance <- tabla_df %>%
   footnote(
     general = "EE agrupados a nivel de centro de salud entre paréntesis.",
     general_title = "Nota: ",
-    # footnote_as_chunk evita que la nota se parta de forma extraña en el PDF
     footnote_as_chunk = TRUE 
   )
 
@@ -1591,7 +1601,7 @@ tabla_balance
 
 - **Comparando resultado tablas:**
 
-Al comparar el resultado de la tabla de balanceo de nuestra muestra con la tabla original, observamos que los resultados son consistentes. A pesar de utilizar solo el 60% de la muestra, las medias de ambos grupos capturan la misma tendencia.
+Al comparar el resultado de la tabla de balanceo de nuestra muestra con la tabla original, observamos que los resultados son consistentes. A pesar de utilizar solo el 60% de la muestra, las medias  capturan la misma tendencia.
 
 En nuestro caso, casi todas las variables presentan un valor *p* > 0.10, lo que indica que no existen diferencias estadísticamente significativas entre los grupos. No obstante, se identificó que la variable que responde a “No podría pagar por anticonceptivos” sí mostró una diferencia estadísticamente significativa, lo cual también se evidencia den la tabla del estudio original.
 
@@ -1601,9 +1611,9 @@ Por último, nuestra prueba definitiva es el estadístico F de significancia con
 
 - **Analizando estadisticas descriptivas:**
 
-Las estadísticas descriptivas de nuestra muestra muestran que las mujeres tienen, en promedio, 28 años y desean tener 6 hijos. Sin embargo, solo el 30% utiliza métodos anticonceptivos modernos. Aproximadamente el 38% manifiesta tener una demanda insatisfecha de anticonceptivos modernos y entre el 38% y el 42% señala que no podría pagarlos.
+Las estadísticas descriptivas de nuestra muestra muestran que las mujeres tienen, en promedio, 28 años y desean tener 6 hijos. Sin embargo, solo aproximandamente el 30% utiliza métodos anticonceptivos modernos, aproximadamente el 38% manifiesta tener una demanda insatisfecha de anticonceptivos modernos y entre el 38% y el 42% aproximadaamente señala que no podría pagarlos.
 
-Dado que se trata de mujeres en edades de alta fertilidad, que además expresan una demanda insatisfecha y dificultades para cubrir el costo de los anticonceptivos, es razonable esperar que,aumente significativamente el uso de anticonceptivos modernos y, en consecuencia, al eliminar esta barrera mediante un subsidio del 100% para las mujeres tratadas, el número de hijos nacidos después de la intervención sea menor.
+Dado que se trata de mujeres en edades de alta fertilidad, que además expresan una demanda insatisfecha y dificultades para cubrir el costo de los anticonceptivos, es razonable esperar que,aumente significativamente el uso de anticonceptivos modernos y, en consecuencia, al eliminar esta barrera mediante un subsidio del 100% para las mujeres tratadas, el número de hijos nacidos después de la intervención sea menor. Como vimos en el resultado del papper esta intición resulto no ser cierta. 
 
 ## Punto 5
 
@@ -1633,6 +1643,7 @@ baseline<- read_dta("baseline_sample.dta")
 endline <- read_dta("endline_sample.dta")
 
 #Haciendo el merge de las bases y calculando atrición 
+#Seleccionando vars Endline
 
 endline_listo <- endline %>% 
   mutate(estuvo_endline = 1) %>%
@@ -1646,7 +1657,7 @@ endline_listo <- endline %>%
     ew_survey_date,               
   )
 
-# 2. Uniendo
+# Uniendo
 datos_completos <- baseline %>% 
   left_join(endline_listo, by = "new_womid_final")
 datos_completos <- datos_completos %>% 
@@ -1834,10 +1845,82 @@ Por otro lado el efecto John Henry aduce a cuando los no tratados cambian su con
 
 El sesgo de demanda del experimentador ocurre cuando los participantes ajustan su comportamiento de acuerdo a lo que consideran que la persona investigadora espera. En este estudio, las mujeres tratadas podrían reportar en las encuestas un mayor deseo de usar anticonceptivos o intenciones de tener menos hijos, simplemente para complacer a los investigadores o encuestadores del proyecto. El sesgo generaría una sobreestimación del efecto del subsidio, haciendo que parezca más exitoso de lo que es. 
 
-Por último el efecto placebo ocurre cuando los individuos saben que están hacindo parte de un experimento y solo por eso cambian su comportamiento. En este contexto, el simple hecho de entregar un  un descuento del 10% a las mujeres del grupo de control  podría hacerlas sentir apoyadas institucionalmente o servir como un recordatorio psicológico que las motive a visitar la clínica de salud. Esto podría causar una subestimación del efecto. 
+Por último el efecto placebo ocurre cuando los individuos saben que están hacindo parte de un experimento y solo por eso cambian su comportamiento. En este contexto, el simple hecho de entregar un  un descuento del 10% a las mujeres del grupo de control  podría hacerlas sentir apoyadas institucionalmente o servir como un recordatorio psicológico que las motive a visitar la clínica de salud, uno podría pensar que esto podría causar una subestimación del efecto. 
 
 ## Punto 7
 
+**Robustez del Hallazgo Nulo:**
 
+**El resultado principal es nulo: no hay efecto sobre fecundidad. Los
+nulos requieren cuidado especial.**
 
+- **Revise su Tabla 2. ¿Aumentó el subsidio el uso de anticoncepción? ¿Y
+el uso de vouchers? Interpete estos reusltados conjuntamente.**
 
+- **¿Son los resultados nulos consistentes? ¿Qué tan robusto es el
+hallazgo?**
+    
+**R/:**
+
+- Como se mencionó anteriormente, al replicar la Tabla 2 del paper, se
+  encontraron resultados consistentes. Tal como concluyen los autores,
+  no hay evidencia de efectos significativos ni en nacimientos de
+  niños vivos, ni en embarazos, ni en el uso de anticonceptivos.
+  Aunque sí hay evidencia de que las mujeres del grupo de tratamiento
+  usaron más los cupones que las del grupo de control. Lo anterior,
+  como se menciona en el paper es un indicio de que las mujeres que
+  redimieron los cupones ya eran usuarias de los anticonceptivos y
+  probablemente los hubieran comprado aún si solo tenían el cupón del
+  10%. En ese orden de ideas, el efecto observado se puede dar también
+  porque algunas de las mujeres del grupo control que ya usaban
+  anticonceptivos, los compraban en lugares diferentes a los centros
+  de salud seleccionados, o tenían implantes que no requerían cambios.
+  Al final, no se vio una diferencia en que nuevas usuarias iniciaran
+  a consumir, significativamente, más anticonceptivos por tener acceso
+  gratis.
+
+- En primer lugar, como ya demostramos, la aleatorización
+  estratificada fue correcta, los grupos quedaron balanceados y no hay
+  evidencia de diferencias significativas por resultado de atrición
+  entre el *baseline* y el *endline* entre grupos. En ese sentido, en
+  un primer lugar, los resultados son confiables y el diseño del
+  experimento es robusto. Ahora, los autores presentan estimaciones
+  adicionales analizado grupos en los que posiblemente la intervención
+  debió haber tenido efectos significativos, controlando por las
+  intervenciones adicionales (debates en las aldeas e información
+  entregada individualmente), y por los sesgos preexistentes de las
+  participantes. En términos generales, los autores concluyen que los
+  resultados de las estimaciones en las subpoblaciones del experimento
+  no difieren significativamente de los resultados presentados en la
+  Tabla 2.
+
+  Únicamente, en la Tabla 6, se observa un efecto significativo en los
+  nacimientos de niños vivos a un nivel de significancia del 90%,
+  resultado sobre el cual comentan que si bien se podría interpretar
+  que en ausencia de intervenciones a la demanda, se hubieran visto
+  resultados significativos en la disminución de nacimientos, no
+  obstante, como las intervenciones en sí no resultaron
+  estadísticamente significativas y el efecto de todas maneras es
+  moderado, se toman los resultados de la Tabla 2 debido a su mayor
+  poder estadístico.
+
+  Finalmente, los autores concluyen que las tasas de fertilidad se
+  determinan principalmente por factores económicos arraigados, los
+  cuales pueden determinar un mayor deseo por parte de las familias de
+  tener más hijos para el cuidado de los padres o para trabajar las
+  tierras de la familia. Este efecto se ve reflejado en las diferentes
+  estimaciones tanto para la muestra completa, como para las
+  submuestras, incluyendo aquellas que analizaban a las mujeres que
+  habían respondido que tenían una necesidad insatisfecha por
+  anticonceptivos o que tenían limitaciones financieras para
+  conseguirlos.
+
+  Por todo lo anterior, se puede afirmar que los resultados son
+  suficientemente robustos para hablar de validez interna. Por los
+  argumentos que presentan sobre la selección de la muestra, incluso
+  se podría considerar que los resultados podrían extrapolarse a nivel
+  nacional en Burkina Faso. Sin embargo, aunque se plantea que es un
+  efecto que puede ser extrapolado a nivel internacional y que no es
+  un caso aislado de los países de esa región, consideramos que no hay
+  evidencia suficiente para generalizar la conclusión más allá del
+  país en el que se realizó el experimento.
