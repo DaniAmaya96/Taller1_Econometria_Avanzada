@@ -245,7 +245,7 @@ $E[Y_i(1)|D_i=1]$ es igual al resultado promedio que hubieran obtenido
 los estudiantes del grupo de control si se les hubiera asignado el
 tratamiento $E[Y_i(1)|D_i=0]$. Esto quiere decir que el efecto de las
 computadoras sería el mismo, independientemente del salón que hubiera
-sido seleccionado. **PREGUNTAR A MANUEL**.
+sido seleccionado.
 
 **c).**
 
