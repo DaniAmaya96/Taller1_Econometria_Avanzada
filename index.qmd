@@ -1051,7 +1051,13 @@ modelsummary(
 - **Repita las estimaciones del inciso 5, concentrándose únicamente en la variable $Y_i$ correspondiente al puntaje de matemáticas en la prueba SAT. Reporte los coeficientes estimados junto con errores estándar robustos a heterocedasticidad y errores estándar clusterizados a nivel de: i) salón, ii) colegio, iii) condado y iv) estado**
 - **interprete los resultados obtenidos. ¿Las estimaciones son consistentes con lo que usted encuentra teóricamente?**
 
-**(Pendiente demostración matematica la hago después no se como hacerla)**
+Esto no es tan facil de demostrar dada la notación pero se puede resumir en que 
+
+$$
+\operatorname{Var}(\hat{\beta})_{\text{cluster colegio}} 
+\;\in\; 
+\operatorname{Var}(\hat{\beta})_{\text{cluster condado}}
+$$
 
 Siguiendo a Angrist y Pischke y los apuntes de Hansen, y considerando que la unidad de colegio se encuentra anidada dentro de condado y este a su vez en estado, la teoría predice el comportamiento de la varianza. Siempre que exista una correlación intra-cluster positiva a un nivel superior (es decir, que los colegios dentro del mismo condado o estado compartan choques comunes), la varianza estimada clusterizada a estos niveles debería ser mayor que la varianza robusta o clusterizada a niveles inferiores
 
