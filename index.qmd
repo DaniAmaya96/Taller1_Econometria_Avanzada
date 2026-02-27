@@ -4,7 +4,7 @@ subtitle: "Profesor: Manuel Fernández - Universidad de los Andes"
 author: 
   - "Daniel Ricardo Amaya Alba - 202023156" 
   - "Mauricio J. Aragón R. - 201729052"
-abstract: "Nota: Para el desarrollo de este taller se usó IA para garantizar el ajuste del formato de las tablas a PDF con la librería kableExtra y model summary pues al reportar los resultados en ocasiones obteniamos un errore en el codigo. Por ejemplo en el punto 4 del tercer ejercicio duramos bastante tiempo intentando entender como solucionar un problema al usa rbind con los outputs obtenidos con la funcion feols del paquete fixest. Para generar el bucle del punto 7 del ejercicio dos tambien nos apollamos en la IA, intentando comprender la sintaxis del proceso. En cuanto a notación es muy probable que se identifiquen incosistencias."
+abstract: "Nota: Para el desarrollo de este taller se usó IA para garantizar el ajuste del formato de las tablas a PDF con la librería kableExtra y model summary, pues al reportar los resultados en ocasiones obteniamos un errore en el codigo. Tambien se uso en casoc como  el punto 4 del tercer ejercicio, donde duramos bastante tiempo intentando entender como solucionar un problema al usa rbind con los outputs obtenidos con la funcion feols del paquete fixest. Para generar el bucle del punto 7 del ejercicio dos tambien usamos la  IA como apoyo,  siempre intentando comprender la sintaxis del proceso. En cuanto a notación es muy probable que se identifiquen incosistencias."
 format: 
   html:
     theme: flatly
@@ -117,9 +117,9 @@ contrafactual $D_i = 0$.
 
 Es por lo anterior que para trabajar con nuestra muestra utilizaremos no
 el resultado del individuo $i$ sino que trabajaremos con el promedio de
-los resultados potenciales, es decir buscaremos estumar los efectos
-promedio, bien sea el efecto promedio del tramaiento $ATE$, el efecto
-promedio del tratamiento en los tratados $ATT$ y el efecto promedio del
+los resultados potenciales, es decir buscaremos estimar los efectos
+promedio. De tal forma estimamos el efecto promedio del tratamiento $ATE$, el efecto
+promedio del tratamiento en los tratados $ATT$ o el efecto promedio del
 tratamiento en los no tratados $ATU$.
 
 **b) Define en lenguaje matemático el $ATE$, el $ATT$ y el $ATU$. Interprete cada uno de estos conceptos de acuerdo al contexto del caso**
@@ -133,7 +133,7 @@ $$τ_{ATE} = E[Y_i(1)-Y_i(0)]$$ $$τ_{ATE} = E[Y_i(1)]-E[Y_i(0)]$$
 Que para el caso de nuestra investigación representa la diferencia entre
 el puntaje promedio en el test de habilidad cognitivas si toda la
 población de estudiantes de tercer grado hubieran asistido a las aulas
-tecnológicas, frente al promedio si ninguno hubiera asisitido a dichas
+tecnológicas, frente al promedio si ninguno hubiera asistido a dichas
 aulas.
 
 El $ATT$ se define como el efecto promedio del tratamiento en los
